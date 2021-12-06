@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         binding.profileImageView.setOnClickListener {
             fileManager()
         }
-
+/*
         binding.deleteAccountTextView.setOnClickListener {
             val intent = Intent(this, DeleteAccountActivity::class.java)
             startActivity(intent)
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         binding.updatePasswordTextView.setOnClickListener {
             val intent = Intent(this, UpdatePasswordActivity::class.java)
             startActivity(intent)
-        }
+        }*/
 
         updateUI()
     }

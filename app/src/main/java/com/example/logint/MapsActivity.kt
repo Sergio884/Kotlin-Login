@@ -16,10 +16,13 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -54,6 +57,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        var im_home: ImageView  = findViewById(R.id.im_home)
+
+
+        im_home.setOnClickListener {
+            val intent = Intent(this,MainPanel::class.java)
+            startActivity(intent)
+        }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         geofencingClient = LocationServices.getGeofencingClient(this)
@@ -63,6 +73,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map.uiSettings.isZoomControlsEnabled = true
+
 
         if(!isLocationPermissionGranted()){
             val permissions = mutableListOf(
