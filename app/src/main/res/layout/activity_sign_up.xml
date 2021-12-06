@@ -17,6 +17,7 @@
         app:srcCompat="@drawable/ic_back"
         tools:ignore="VectorDrawableCompat"
         android:contentDescription="@string/all"
+
         android:layout_marginStart="16dp" />
 
     <LinearLayout

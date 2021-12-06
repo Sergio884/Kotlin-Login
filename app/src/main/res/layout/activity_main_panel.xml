@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="?attr/actionBarSize"
+    android:background="@drawable/style_background_main"
+    >
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="#54D8FF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+
+    <fragment
+        android:id="@+id/nav_host_fragment_activity_main_panel"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/nav_view"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:navGraph="@navigation/mobile_navigation" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/style_button_background"
+        android:drawableStart="@drawable/ic_location_plus"
+        android:drawablePadding="10dp"
+        android:padding="15dp"
+        android:text="Añadir Ubicaciones"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="30dp"
+        tools:layout_editor_absoluteY="400dp" />
+    <TextView
+        android:id="@+id/textView_2"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/style_button_background"
+        android:drawableStart="@drawable/ic_fly"
+        android:drawablePadding="10dp"
+        android:padding="15dp"
+        android:text="Fija una ruta destino"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="30dp"
+        tools:layout_editor_absoluteY="320dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        app:srcCompat="@drawable/ic_sos"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="79dp"
+        tools:layout_editor_absoluteY="65dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_logo"
+        tools:layout_editor_absoluteX="15dp"
+        tools:layout_editor_absoluteY="7dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="!Presiona para pedir ayuda!"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="24dp"
+        android:textStyle="bold"
+
+        tools:layout_editor_absoluteX="58dp"
+        tools:layout_editor_absoluteY="259dp"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:cardCornerRadius="80dp"
+        tools:ignore="MissingConstraints"
+
+        tools:layout_editor_absoluteX="320dp"
+        tools:layout_editor_absoluteY="7dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/profile_photo">
+
+        </ImageView>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
