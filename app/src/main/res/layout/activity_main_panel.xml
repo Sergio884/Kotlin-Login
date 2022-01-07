@@ -5,21 +5,22 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/style_background_main"
-    >
+    android:background="@drawable/style_background_main">
 
     <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="15dp">
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
             app:srcCompat="@drawable/ic_logo"
-            tools:ignore="MissingConstraints"
-            android:layout_marginLeft="15dp"/>
+            tools:ignore="MissingConstraints" />
 
         <Space
             android:layout_width="wrap_content"
@@ -29,17 +30,15 @@
         <androidx.cardview.widget.CardView
             android:layout_width="64dp"
             android:layout_height="64dp"
-            app:cardCornerRadius="80dp"
             android:layout_marginRight="15dp"
+            app:cardCornerRadius="80dp"
             tools:ignore="MissingConstraints">
 
             <ImageButton
                 android:id="@+id/profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/profile_photo">
-            </ImageButton>
-
+                app:srcCompat="@drawable/profile_photo"></ImageButton>
 
 
         </androidx.cardview.widget.CardView>
@@ -50,18 +49,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="vertical"
-        tools:layout_editor_absoluteY="675dp"
-        android:gravity="center">
+        tools:layout_editor_absoluteY="675dp">
 
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="-100dp"
             android:background="@null"
             app:srcCompat="@drawable/ic_sos"
-            tools:ignore="MissingConstraints"
-            android:layout_marginTop="-100dp"/>
+            tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/textView2"
@@ -83,17 +82,18 @@
             android:drawableStart="@drawable/ic_location_plus"
             android:drawablePadding="10dp"
             android:padding="15dp"
+
             android:text="Añadir Ubicaciones"
             android:textColor="@color/white"
             android:textSize="18dp"
             android:textStyle="bold"
-            tools:ignore="MissingConstraints"
-            />
+            tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/tv_fijarDestino"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:background="@drawable/style_button_background"
             android:drawableStart="@drawable/ic_fly"
             android:drawablePadding="10dp"
@@ -102,14 +102,12 @@
             android:textColor="@color/white"
             android:textSize="18dp"
             android:textStyle="bold"
-            android:layout_marginTop="15dp"
             tools:ignore="MissingConstraints" />
-
 
 
     </LinearLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <!-- <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -121,6 +119,34 @@
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_nav_menu" >
 
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+    </com.google.android.material.bottomnavigation.BottomNavigationView> -->
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/container_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/nav_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout4"/>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:background="#54D8FF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:menu="@menu/bottom_nav_menu"
+
+        />
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

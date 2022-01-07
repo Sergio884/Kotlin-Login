@@ -1,44 +1,46 @@
 package com.example.logint
-
+import menu_bottom.ContactsFragment
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.Menu
+import android.view.View
+import android.widget.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.logint.databinding.ActivityMainPanelBinding
+import kotlinx.android.synthetic.main.activity_main_panel.*
 
 class MainPanel : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainPanelBinding
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main_panel)
 
-        binding = ActivityMainPanelBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        val navView: BottomNavigationView = binding.navView
         var tv_fijarDestino:TextView=findViewById(R.id.tv_fijarDestino)
         var profile: ImageButton = findViewById(R.id.profile)
 
-        //val navController = findNavController(R.id.nav_host_fragment_activity_main_panel)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-            )
-        )
-        //setupActionBarWithNavController(navController, appBarConfiguration)
-       // navView.setupWithNavController(navController)
+        var contactsFragment = ContactsFragment()
+        bottomNavigationView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.navigation_contactos->{
+                    val intentContactos= Intent(this,ContactActivity::class.java)
+                    startActivity(intentContactos)
+                    true
+                }
+                else -> false
+            }
+        }
 
         tv_fijarDestino.setOnClickListener {
             val intent = Intent(this,MapsActivity::class.java)
@@ -51,5 +53,17 @@ class MainPanel : AppCompatActivity() {
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
         }
+
+
+
     }
+
+    //Navegar entre Fragmentos
+    private fun setCurrentFragment(fragment: Fragment){
+        supportFragmentManager.beginTransaction().apply{
+            replace(R.id.container_view,fragment)
+            commit()
+        }
+    }
+
 }
