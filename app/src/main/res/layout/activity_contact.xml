@@ -90,7 +90,6 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         android:clickable="true"
-
         app:srcCompat="@drawable/ic_add_contact" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
