@@ -14,11 +14,17 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.logint.databinding.ActivityMainPanelBinding
+import com.bumptech.glide.Glide
+import com.example.logint.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+//import com.example.logint.databinding.ActivityMainPanelBinding
 import kotlinx.android.synthetic.main.activity_main_panel.*
 
 class MainPanel : AppCompatActivity() {
-
+    private lateinit var auth: FirebaseAuth
+    private lateinit var binding: ActivityMainBinding
 
 
 
@@ -26,9 +32,19 @@ class MainPanel : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_panel)
 
+        auth = Firebase.auth
+        val user = auth.currentUser
+        val profile: ImageView= findViewById(R.id.profilePhoto)
+
+        Glide
+            .with(this)
+            .load(user!!.photoUrl)
+            .centerCrop()
+            .placeholder(R.drawable.profile_photo)
+            .into(profile)
 
         var tv_fijarDestino:TextView=findViewById(R.id.tv_fijarDestino)
-        var profile: ImageButton = findViewById(R.id.profile)
+
 
         var contactsFragment = ContactsFragment()
         bottomNavigationView.setOnItemSelectedListener {
@@ -38,6 +54,7 @@ class MainPanel : AppCompatActivity() {
                     startActivity(intentContactos)
                     true
                 }
+
                 else -> false
             }
         }

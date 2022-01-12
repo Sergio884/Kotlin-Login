@@ -66,6 +66,8 @@ dependencies {
     //Maps
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'com.google.android.gms:play-services-location:17.1.0'
+    //Fire Strore
     implementation 'com.google.firebase:firebase-firestore-ktx:24.0.0'
-
+    //RecyclerView
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
 }

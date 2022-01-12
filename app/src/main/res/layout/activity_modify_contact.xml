@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ModifyContact"
+    android:background="@drawable/style_background_main">
+
+    <TextView
+        android:id="@+id/tv_tituloModificar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Modificar Contacto"
+        android:textSize="36dp"
+        android:padding="16dp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/et_nameContact"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toStartOf="@id/tv_tituloModificar"
+        app:layout_constraintEnd_toEndOf="@+id/tv_tituloModificar"
+        app:layout_constraintTop_toBottomOf="@id/tv_tituloModificar"
+        android:background="@drawable/ic_field"
+        android:layout_marginTop="56dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:drawableStart="@drawable/ic_user3"
+        android:padding="16dp"
+        android:textColor="@color/white"
+        android:drawablePadding="10dp"
+        android:hint="Nombre de Contacto"
+        android:textColorHint="@color/white"
+        />
+
+    <EditText
+        android:id="@+id/et_numberContact"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toStartOf="@id/tv_tituloModificar"
+        app:layout_constraintEnd_toEndOf="@+id/tv_tituloModificar"
+        app:layout_constraintTop_toBottomOf="@id/et_nameContact"
+        android:background="@drawable/ic_field"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:drawableStart="@drawable/ic_baseline_phone_24"
+        android:padding="16dp"
+        android:drawablePadding="10dp"
+        android:hint="Numero de contacto"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        />
+
+    <TextView
+        android:id="@+id/tv_guardarContacto"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/style_button_background"
+        android:padding="15dp"
+        android:text="Guardar Contacto"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        tools:ignore="MissingConstraints"
+        app:layout_constraintStart_toStartOf="@id/tv_tituloModificar"
+        app:layout_constraintEnd_toEndOf="@+id/tv_tituloModificar"
+        app:layout_constraintTop_toBottomOf="@+id/et_numberContact"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
