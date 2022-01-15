@@ -22,6 +22,7 @@ class GeofenceReceiver: BroadcastReceiver() { // GeofenceReceiver extiende Broad
 
         if(geofencingTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
             geofencingTransition == Geofence.GEOFENCE_TRANSITION_DWELL){
+
             if(intent != null){
                 key = intent.getStringExtra("key")!!
                 message = intent.getStringExtra("message")!!
@@ -52,5 +53,6 @@ class GeofenceReceiver: BroadcastReceiver() { // GeofenceReceiver extiende Broad
             val child = reference.child(key)
             child.addValueEventListener(reminderLister)
         }
+
     }
 }

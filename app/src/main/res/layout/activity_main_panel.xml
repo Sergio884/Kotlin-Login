@@ -57,7 +57,7 @@
         tools:layout_editor_absoluteY="675dp">
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/imageButtonSOS"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-100dp"

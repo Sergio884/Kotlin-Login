@@ -107,7 +107,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 return
             }
             map.isMyLocationEnabled = true
-            // Obtener la ultimas ubicacion conocida
+            // Obtener la ultimas ubicacion conocida  SEGUNDO PLANO ****************************
             fusedLocationClient.lastLocation.addOnSuccessListener {
                 if(it != null) {
                     with(map) {
