@@ -93,13 +93,13 @@ class SendLocation : Service() {
                         if(location!=null){
                            // requestNewLocationData()
                            println("Latitudd = ${location.latitude} Longitud = ${location.longitude}")
-                           /* val database = Firebase.database
+                           val database = Firebase.database
                             val reference = database.getReference("reminders")
                             val key = reference.push().key
                                 if(key != null){
                                     val reminder = Reminder(key, location.latitude,location.longitude)
                                     reference.child(key).setValue(reminder)
-                                } */
+                                }
                             i++
                             }
                         else{
@@ -158,7 +158,13 @@ class SendLocation : Service() {
             override fun onLocationResult(locationResult: LocationResult) {
                 val location : Location = locationResult.lastLocation
                 println("Latituds = ${location.latitude} Longitud = ${location.longitude}")
-
+                val database = Firebase.database
+                val reference = database.getReference("reminders")
+                val key = reference.push().key
+                if(key != null){
+                    val reminder = Reminder(key, location.latitude,location.longitude)
+                    reference.child(key).setValue(reminder)
+                }
 
             }
         }
