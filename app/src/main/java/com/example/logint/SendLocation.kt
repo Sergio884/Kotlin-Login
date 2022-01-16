@@ -25,7 +25,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat.isLocationEnabled
 //import com.Login.ejgps.databinding.ActivityMainBinding
 import com.google.android.gms.location.*
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
 import java.util.*
@@ -59,7 +61,7 @@ class SendLocation : Service() {
         override fun run(){
             super.run()
             //startLocationUpdates()
-            while(i<10){
+            while(i<100){
                 sleep(5000)
                 pun.mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(pun)
                 if (ActivityCompat.checkSelfPermission(
@@ -93,12 +95,15 @@ class SendLocation : Service() {
                         if(location!=null){
                            // requestNewLocationData()
                            println("Latitudd = ${location.latitude} Longitud = ${location.longitude}")
-                           val database = Firebase.database
-                            val reference = database.getReference("reminders")
-                            val key = reference.push().key
-                                if(key != null){
-                                    val reminder = Reminder(key, location.latitude,location.longitude)
-                                    reference.child(key).setValue(reminder)
+                           val database = Firebase.database//("http://10.0.2.2:9002?ns=tttt-d4047")
+
+                            val auth = Firebase.auth
+                            val user = auth.currentUser
+                            val reference = database.getReference("users")
+                            //val key = reference.push().key
+                                if(user != null){
+                                    val reminder = Reminder(user.uid, location.latitude,location.longitude)
+                                    reference.child(user.uid).setValue(reminder)
                                 }
                             i++
                             }
@@ -158,13 +163,23 @@ class SendLocation : Service() {
             override fun onLocationResult(locationResult: LocationResult) {
                 val location : Location = locationResult.lastLocation
                 println("Latituds = ${location.latitude} Longitud = ${location.longitude}")
-                val database = Firebase.database
-                val reference = database.getReference("reminders")
-                val key = reference.push().key
-                if(key != null){
-                    val reminder = Reminder(key, location.latitude,location.longitude)
-                    reference.child(key).setValue(reminder)
+                val database = Firebase.database //("http://10.0.2.2:9002?ns=tttt-d4047")
+
+                val auth = Firebase.auth
+                val user = auth.currentUser
+                val reference = database.getReference("users")
+                //val key = reference.push().key
+                if(user != null){
+                    val reminder = Reminder(user.uid, location.latitude,location.longitude)
+                    reference.child(user.uid).setValue(reminder)
                 }
+//                val database = Firebase.database
+//                val reference = database.getReference("reminders")
+//                val key = reference.push().key
+//                if(key != null){
+//                    val reminder = Reminder(key, location.latitude,location.longitude)
+//                    reference.child(key).setValue(reminder)
+//                }
 
             }
         }
