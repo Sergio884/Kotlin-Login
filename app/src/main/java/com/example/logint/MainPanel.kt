@@ -97,6 +97,8 @@ class MainPanel : AppCompatActivity() {
         imageButtonSOS.setOnClickListener {
             locationPermission.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
             locationPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            locationPermission.launch(Manifest.permission.SEND_SMS)
+            locationPermission.launch(Manifest.permission.READ_PHONE_STATE)
             locationPermission.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
             val intentSOS = Intent(this,SendLocation::class.java)
             startService(intentSOS)
@@ -113,9 +115,15 @@ class MainPanel : AppCompatActivity() {
     }
 
     //pedir permisos de Ubicacion
-    val locationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()){isGranted ->
+    private val locationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()){isGranted ->
         if(isGranted) Toast.makeText(this, "acepto", Toast.LENGTH_SHORT).show()
         else Toast.makeText(this, "No acepto", Toast.LENGTH_SHORT).show()
     }
+    private fun hashPermission(context : Context,permissions: String){
+        
+
+    }
+
+
 
 }

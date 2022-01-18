@@ -20,6 +20,8 @@ import android.os.HandlerThread
 import android.os.Looper
 import android.os.SystemClock.sleep
 import android.provider.Settings
+import android.telephony.SmsManager
+import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat.isLocationEnabled
@@ -30,6 +32,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
+import java.lang.Exception
 import java.util.*
 import java.util.logging.Handler
 
@@ -43,6 +46,8 @@ class SendLocation : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
+
        val hilo = Hilo(this)
        hilo.start()
         return START_STICKY
@@ -60,8 +65,11 @@ class SendLocation : Service() {
 
         override fun run(){
             super.run()
-            //startLocationUpdates()
-            while(i<100){
+
+            sendSMS()
+
+
+            while(i<4){
                 sleep(5000)
                 pun.mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(pun)
                 if (ActivityCompat.checkSelfPermission(
@@ -182,6 +190,31 @@ class SendLocation : Service() {
 //                }
 
             }
+        }
+
+        private fun sendSMS(){
+
+            val auth = Firebase.auth
+            val db = FirebaseFirestore.getInstance()
+            val user = auth.currentUser
+            val docs = db.collection("contacts-${user!!.uid}")
+            val info = "Alerta de Emergencia\n ${user.displayName} se encuentra en peligro te compartimos un link con el cual podras acceder a su ubicacion \n url: http://tt2021/location?uid=${user.uid}"
+            docs.get().addOnSuccessListener { documents ->
+                for(document in documents){
+                    Log.d("contacto: ", "${document.id} => ${document.data}")
+
+                    try{
+                        val sms :SmsManager= SmsManager.getDefault()
+                        sms.sendTextMessage(document.id,null,info,null,null)
+                    }catch (e :Exception){
+                        e.printStackTrace()
+                    }
+
+
+                }
+            }
+
+
         }
     }
 }
