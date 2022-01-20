@@ -39,6 +39,8 @@ import java.util.logging.Handler
 class SendLocation : Service() {
     lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     var estado=true
+    lateinit var hilo :Hilo
+    var banderaStop=1
     //lateinit var location: Location
 
     override fun onBind(intent: Intent): IBinder {
@@ -48,14 +50,14 @@ class SendLocation : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
 
-       val hilo = Hilo(this)
+       hilo= Hilo(this)
        hilo.start()
         return START_STICKY
     }
 
     override fun onDestroy() {
         super.onDestroy()
-
+        banderaStop=0
     }
 
     class Hilo(p:SendLocation):Thread(){
@@ -66,10 +68,10 @@ class SendLocation : Service() {
         override fun run(){
             super.run()
 
-            sendSMS()
+            //sendSMS()
 
 
-            while(i<4){
+            while(pun.banderaStop==1 ){
                 sleep(5000)
                 pun.mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(pun)
                 if (ActivityCompat.checkSelfPermission(
@@ -201,11 +203,11 @@ class SendLocation : Service() {
             val info = "Alerta de Emergencia\n ${user.displayName} se encuentra en peligro te compartimos un link con el cual podras acceder a su ubicacion \n url: http://tt2021/location?uid=${user.uid}"
             docs.get().addOnSuccessListener { documents ->
                 for(document in documents){
-                    Log.d("contacto: ", "${document.id} => ${document.data}")
-
+                    //Log.d("contacto: ", "${document.id} => ${document.data}")
+                    println("${document.id.toString()} ${document.data.toString()}")
                     try{
                         val sms :SmsManager= SmsManager.getDefault()
-                        sms.sendTextMessage(document.id,null,info,null,null)
+                        sms.sendTextMessage(document.id.toString(),null,info,null,null)
                     }catch (e :Exception){
                         e.printStackTrace()
                     }

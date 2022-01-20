@@ -32,21 +32,31 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Looper
 import android.provider.Settings
+import android.telephony.SmsManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat.isLocationEnabled
 //import com.marjasoft.ejgps.databinding.ActivityMainBinding
 import com.google.android.gms.location.*
+import com.google.firebase.firestore.FirebaseFirestore
+import java.lang.Exception
 import java.util.*
+import android.app.ActivityManager
+
+
+
 
 class MainPanel : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityMainBinding
+    private var globalClass =  GlobalClass()
 
 
     val PERMISSION_ID = 1
@@ -94,14 +104,40 @@ class MainPanel : AppCompatActivity() {
             startActivity(intent)
         }
 
+        if( isMyServiceRunning(SendLocation::class.java) == true){
+            imageButtonSOS.setImageResource(R.drawable.ic_sos_green)
+
+        }
         imageButtonSOS.setOnClickListener {
-            locationPermission.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-            locationPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-            locationPermission.launch(Manifest.permission.SEND_SMS)
-            locationPermission.launch(Manifest.permission.READ_PHONE_STATE)
-            locationPermission.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-            val intentSOS = Intent(this,SendLocation::class.java)
-            startService(intentSOS)
+
+
+            if(isMyServiceRunning(SendLocation::class.java) == false){
+                imageButtonSOS.setImageResource(R.drawable.ic_sos_green)
+                locationPermission.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+                locationPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                locationPermission.launch(Manifest.permission.SEND_SMS)
+                locationPermission.launch(Manifest.permission.READ_PHONE_STATE)
+                locationPermission.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                sendSMS()
+                val intentSOS = Intent(this,SendLocation::class.java)
+                startService(intentSOS)
+                globalClass.setBandera(1)
+
+            }
+            else{
+                imageButtonSOS.setImageResource(R.drawable.ic_sos)
+                val intentSOS = Intent(this,SendLocation::class.java)
+                stopService(intentSOS)
+
+                globalClass.setBandera(0)
+            }
+
+            //val permissions = arrayOf("${Manifest.permission.ACCESS_COARSE_LOCATION}","${Manifest.permission.ACCESS_FINE_LOCATION}",
+            //"${Manifest.permission.SEND_SMS}","${Manifest.permission.READ_PHONE_STATE}","${Manifest.permission.ACCESS_BACKGROUND_LOCATION}")
+
+
+
+
         }
     }
 
@@ -119,11 +155,49 @@ class MainPanel : AppCompatActivity() {
         if(isGranted) Toast.makeText(this, "acepto", Toast.LENGTH_SHORT).show()
         else Toast.makeText(this, "No acepto", Toast.LENGTH_SHORT).show()
     }
-    private fun hashPermission(context : Context,permissions: String){
-        
 
+    private fun sendSMS(){
+
+
+        val auth = Firebase.auth
+        val db = FirebaseFirestore.getInstance()
+        val user = auth.currentUser
+        val docs = db.collection("contacts-${user!!.uid}")
+        val uid :String = user!!.uid
+        val informacion = "¡ALERTA DE EMERGENCIA!\n "+user.displayName.toString()+" se encuentra en peligro te compartimos un link con el cual podras acceder a su ubicacion".replace("ñ","n").replace("á","a").replace("é","e").replace("í","i").replace("ó","o")
+        val url = " tt21.online/mapa.php?u=${uid}"
+
+        docs.get().addOnSuccessListener { documents ->
+            for(document in documents){
+                //Log.d("contacto: ", "${document.id} => ${document.data}")
+                println("${document.id.toString()} ${document.data.toString()}")
+
+                    val sms = SmsManager.getDefault()
+                    sms.sendTextMessage(document.id.toString(),null,informacion,null,null)
+                    sms.sendTextMessage(document.id.toString(),null,url,null,null)
+
+
+
+
+            }
+        }
+
+
+    }
+
+    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
     }
 
 
 
+
 }
+
