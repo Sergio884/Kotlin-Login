@@ -65,70 +65,75 @@ class SendLocation : Service() {
         var pun = p
         var i = 0
 
-        override fun run(){
+        override fun run() {
             super.run()
 
             //sendSMS()
+            if (ActivityCompat.checkSelfPermission(
+                    pun,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    pun,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    pun,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return
+            } else{
 
 
-            while(pun.banderaStop==1 ){
-                sleep(5000)
-                pun.mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(pun)
-                if (ActivityCompat.checkSelfPermission(
-                        pun,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                        pun,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return
-                }
-                else{
-                    val mLocationRequest = LocationRequest()
-                    mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                    mLocationRequest.interval = 0
-                    mLocationRequest.fastestInterval = 0
-                    mLocationRequest.numUpdates = 1
-                    pun.mFusedLocationProviderClient.flushLocations()
-                    pun.mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallBack, Looper.getMainLooper())
+                while (pun.banderaStop == 1) {
+                    sleep(10000)
+                    pun.mFusedLocationProviderClient =
+                        LocationServices.getFusedLocationProviderClient(pun)
+                        val mLocationRequest = LocationRequest()
+                        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                        mLocationRequest.interval = 0
+                        mLocationRequest.fastestInterval = 0
+                        mLocationRequest.numUpdates = 1
+                        pun.mFusedLocationProviderClient.flushLocations()
+                        pun.mFusedLocationProviderClient.requestLocationUpdates(
+                            mLocationRequest,
+                            mLocationCallBack,
+                            Looper.getMainLooper()
+                        )
 
-                    pun.mFusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
-                        val location= task.result
-                        if(location!=null){
-                           // requestNewLocationData()
-                           println("Latitudd = ${location.latitude} Longitud = ${location.longitude}")
-                           val database = Firebase.database//("http://10.0.2.2:9002?ns=tttt-d4047")
-
-                            val auth = Firebase.auth
-                            val user = auth.currentUser
-                            val reference = database.getReference("users")
-                            //val key = reference.push().key
-                                if(user != null){
-                                    val reminder = Reminder(user.uid, location.latitude,location.longitude)
+                        pun.mFusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
+                            val location = task.result
+                            if (location != null) {
+                                // requestNewLocationData()
+                                println("Latitudd = ${location.latitude} Longitud = ${location.longitude}")
+                                val database =
+                                    Firebase.database//("http://10.0.2.2:9002?ns=tttt-d4047")
+                                val auth = Firebase.auth
+                                val user = auth.currentUser
+                                val reference = database.getReference("users")
+                                //val key = reference.push().key
+                                if (user != null) {
+                                    val reminder =
+                                        Reminder("1", location.latitude, location.longitude)
                                     reference.child(user.uid).setValue(reminder)
                                 }
-                            i++
-                            }
-                        else{
 
-                            i++
+                            }
+
+
                         }
 
 
-                    }
 
 
                 }
-
-            }
+        }
 
         }
 

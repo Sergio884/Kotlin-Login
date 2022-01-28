@@ -7,12 +7,16 @@
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_config.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_contacts.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_email.xml" value="0.22552083333333334" />
+        <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_field.xml" value="0.11614583333333334" />
+        <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_field_none.xml" value="0.11614583333333334" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_information.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_lock.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_logo.xml" value="0.22552083333333334" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_pencil.xml" value="0.2890625" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_points.xml" value="0.2890625" />
+        <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_record.xml" value="0.2942708333333333" />
+        <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_record2.xml" value="0.2942708333333333" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_sos.xml" value="0.196875" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_sos_green.xml" value="0.196875" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/drawable/ic_trash.xml" value="0.2890625" />
@@ -29,6 +33,7 @@
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/layout/activity_main_panel.xml" value="0.33" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/layout/activity_maps.xml" value="0.18072916666666666" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/layout/activity_modify_contact.xml" value="0.33" />
+        <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/layout/activity_record_route.xml" value="0.33" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/layout/activity_sign_in.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/layout/activity_sign_up.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/Kotlin-Login/app/src/main/res/layout/activity_update_password.xml" value="0.18072916666666666" />

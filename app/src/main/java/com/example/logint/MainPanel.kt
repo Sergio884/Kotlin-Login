@@ -87,6 +87,11 @@ class MainPanel : AppCompatActivity() {
                     startActivity(intentContactos)
                     true
                 }
+                R.id.navigation_home->{
+                    val intentHome= Intent(this,MainPanel::class.java)
+                    startActivity(intentHome)
+                    true
+                }
 
                 else -> false
             }
@@ -108,6 +113,7 @@ class MainPanel : AppCompatActivity() {
             imageButtonSOS.setImageResource(R.drawable.ic_sos_green)
 
         }
+
         imageButtonSOS.setOnClickListener {
 
 
@@ -121,7 +127,7 @@ class MainPanel : AppCompatActivity() {
                 sendSMS()
                 val intentSOS = Intent(this,SendLocation::class.java)
                 startService(intentSOS)
-                globalClass.setBandera(1)
+                //globalClass.setBandera(1)
 
             }
             else{
@@ -129,7 +135,7 @@ class MainPanel : AppCompatActivity() {
                 val intentSOS = Intent(this,SendLocation::class.java)
                 stopService(intentSOS)
 
-                globalClass.setBandera(0)
+                //globalClass.setBandera(0)
             }
 
             //val permissions = arrayOf("${Manifest.permission.ACCESS_COARSE_LOCATION}","${Manifest.permission.ACCESS_FINE_LOCATION}",
@@ -137,6 +143,12 @@ class MainPanel : AppCompatActivity() {
 
 
 
+
+        }
+
+        tv_grabarRuta.setOnClickListener {
+            val intent = Intent(this,RecordRouteActivity::class.java)
+            startActivity(intent)
 
         }
     }
@@ -152,8 +164,8 @@ class MainPanel : AppCompatActivity() {
 
     //pedir permisos de Ubicacion
     private val locationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()){isGranted ->
-        if(isGranted) Toast.makeText(this, "acepto", Toast.LENGTH_SHORT).show()
-        else Toast.makeText(this, "No acepto", Toast.LENGTH_SHORT).show()
+        if(isGranted) println("acepto") //Toast.makeText(this, "acepto", Toast.LENGTH_SHORT).show()
+        else println("no acepto")//Toast.makeText(this, "No acepto", Toast.LENGTH_SHORT).show()
     }
 
     private fun sendSMS(){
@@ -165,7 +177,8 @@ class MainPanel : AppCompatActivity() {
         val docs = db.collection("contacts-${user!!.uid}")
         val uid :String = user!!.uid
         val informacion = "¡ALERTA DE EMERGENCIA!\n "+user.displayName.toString()+" se encuentra en peligro te compartimos un link con el cual podras acceder a su ubicacion".replace("ñ","n").replace("á","a").replace("é","e").replace("í","i").replace("ó","o")
-        val url = " tt21.online/mapa.php?u=${uid}"
+        val url = "safesos.online/mapa.php?u=${uid}&n="+user.displayName.toString()
+        print(url)
 
         docs.get().addOnSuccessListener { documents ->
             for(document in documents){

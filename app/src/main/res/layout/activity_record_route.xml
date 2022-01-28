@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RecordRouteActivity"
+    android:background="@drawable/style_background_main">
+
+    <TextView
+        android:id="@+id/tv_tituloGrabarRuta"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Grabar Ruta"
+        android:textColor="@color/white"
+        android:textSize="48dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        tools:ignore="InvalidId"></TextView>
+
+    <TextView
+        android:id="@+id/tv_instrucciones"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tv_tituloGrabarRuta"
+        app:layout_constraintEnd_toEndOf="@+id/tv_tituloGrabarRuta"
+        app:layout_constraintTop_toBottomOf="@+id/tv_tituloGrabarRuta"
+        android:text="Presiona el botón para grabar la ruta y vuelve a presionar para dejar de grabar y guardar la ruta"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        tools:ignore="InvalidId"
+        ></TextView>
+
+    <EditText
+        android:id="@+id/et_nombreRuta"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:autofillHints="Escribe el nombre de tu ruta"
+        android:background="@drawable/ic_field"
+        android:drawableStart="@drawable/ic_fly"
+        android:drawableLeft="@drawable/ic_fly"
+        android:drawablePadding="16dp"
+        android:ems="10"
+        android:hint="Escribe el nombre de tu ruta"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:inputType="textEmailAddress"
+        android:padding="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_tituloGrabarRuta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_instrucciones"
+
+        />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/recordImageView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="@+id/tv_instrucciones"
+        app:layout_constraintStart_toStartOf="@+id/tv_instrucciones"
+        app:layout_constraintTop_toBottomOf="@+id/et_nombreRuta"
+        app:srcCompat="@drawable/ic_record2"
+
+
+        ></com.airbnb.lottie.LottieAnimationView>
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/white"
+        android:background="@drawable/style_button_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/bottom_nav_menu"></com.google.android.material.bottomnavigation.BottomNavigationView>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

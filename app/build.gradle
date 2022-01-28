@@ -75,4 +75,7 @@ dependencies {
 
     implementation 'androidx.activity:activity-ktx:1.4.0'
 
+    //Lotie
+    implementation 'com.airbnb.android:lottie:4.2.2'
+
 }
