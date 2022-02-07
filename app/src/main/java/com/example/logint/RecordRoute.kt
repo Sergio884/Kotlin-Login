@@ -1,45 +1,28 @@
 package com.example.logint
 
-import android.app.Service
-import android.content.Intent
-import android.os.IBinder
-import androidx.core.app.ActivityCompat
-import com.example.logint.databinding.ActivityAccountRecoveryBinding
-import com.example.logint.databinding.ActivityMainBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
+import android.app.ActivityManager
+import android.app.Service
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.HandlerThread
+import android.os.IBinder
 import android.os.Looper
-import android.os.SystemClock.sleep
-import android.provider.Settings
 import android.telephony.SmsManager
-import android.util.Log
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.location.LocationManagerCompat.isLocationEnabled
-//import com.Login.ejgps.databinding.ActivityMainBinding
+import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.delay
 import java.lang.Exception
-import java.util.*
-import java.util.logging.Handler
 
-class SendLocation : Service() {
+class RecordRoute : Service() {
+
     lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     var estado=true
-    lateinit var hilo :Hilo
+    lateinit var hilo : HiloRecord
     var banderaStop=1
     private var operation=0
     private var nameRoute=""
@@ -47,20 +30,22 @@ class SendLocation : Service() {
 
     override fun onBind(intent: Intent): IBinder {
         TODO("Return the communication channel to the service.")
-
-
     }
 
-    /*
-    override fun onCreate() {
-        super.onCreate()
-    }*/
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-            hilo= Hilo(this)
+        if (intent != null) {
+            nameRoute = intent.getStringExtra("nameRoute")!!
+        }
+        println("El valor del intent es: *************************************** "+nameRoute)
+            hilo= HiloRecord(this)
             hilo.start()
             return START_STICKY
+
+
+
+
     }
 
     override fun onDestroy() {
@@ -68,16 +53,26 @@ class SendLocation : Service() {
         banderaStop=0
     }
 
+    public fun getNameRoute():String{
+        return nameRoute
+    }
 
-    class Hilo(p:SendLocation):Thread(){
+    public fun setNameRoute(nameRoute :String){
+        this.nameRoute=nameRoute
+    }
+
+
+
+    class HiloRecord(puntero:RecordRoute):Thread(){
         private lateinit var locationCallback: LocationCallback
-        var pun = p
+        var pun = puntero
         override fun run() {
             super.run()
-                sendSOSLocation()
+            sendSOSLocation()
         }
 
         private fun sendSOSLocation(){
+            var idLatLngRoute=0
             //sendSMS()
             if (ActivityCompat.checkSelfPermission(
                     pun,
@@ -120,20 +115,18 @@ class SendLocation : Service() {
                     pun.mFusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
                         val location = task.result
                         if (location != null) {
-                                // requestNewLocationData()
-                                println("Latitudd = ${location.latitude} Longitud = ${location.longitude}")
-                                val database =
-                                    Firebase.database//("http://10.0.2.2:9002?ns=tttt-d4047")
-                                val auth = Firebase.auth
-                                val user = auth.currentUser
-                                val reference = database.getReference("users")
-                                //val key = reference.push().key
-                                if (user != null) {
-                                    val reminder =
-                                        Reminder("1", location.latitude, location.longitude)
-                                    reference.child(user.uid).setValue(reminder)
-                                }
 
+                                println("Latitudddd = ${location.latitude} Longitudddd = ${location.longitude} y nombre:${pun.getNameRoute()}")
+                                var auth = Firebase.auth
+                                val db = FirebaseFirestore.getInstance()
+                                val user = auth.currentUser
+                                db.collection("users").
+                                document(user!!.uid.toString()).
+                                collection("routes").
+                                document(pun.getNameRoute()).
+                                collection(""+idLatLngRoute).
+                                document(""+idLatLngRoute).set(hashMapOf("lat" to "${location.latitude}","lng" to "${location.longitude}"))
+                                idLatLngRoute = idLatLngRoute +1
 
                         }
 
@@ -166,7 +159,8 @@ class SendLocation : Service() {
                 // for ActivityCompat#requestPermissions for more details.
                 return
             }
-            pun.mFusedLocationProviderClient.requestLocationUpdates(LocationRequest(),
+            pun.mFusedLocationProviderClient.requestLocationUpdates(
+                LocationRequest(),
                 LocationCallback(),
                 Looper.getMainLooper())
         }
@@ -219,9 +213,9 @@ class SendLocation : Service() {
                     //Log.d("contacto: ", "${document.id} => ${document.data}")
                     println("${document.id.toString()} ${document.data.toString()}")
                     try{
-                        val sms :SmsManager= SmsManager.getDefault()
+                        val sms : SmsManager = SmsManager.getDefault()
                         sms.sendTextMessage(document.id.toString(),null,info,null,null)
-                    }catch (e :Exception){
+                    }catch (e : Exception){
                         e.printStackTrace()
                     }
 

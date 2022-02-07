@@ -49,8 +49,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.lang.Exception
 import java.util.*
 import android.app.ActivityManager
-
-
+import android.os.Build
+import androidx.annotation.RequiresApi
 
 
 class MainPanel : AppCompatActivity() {
@@ -60,6 +60,7 @@ class MainPanel : AppCompatActivity() {
 
 
     val PERMISSION_ID = 1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,9 +114,13 @@ class MainPanel : AppCompatActivity() {
             imageButtonSOS.setImageResource(R.drawable.ic_sos_green)
 
         }
+        if(isMyServiceRunning(RecordRoute::class.java)==true){
+            val intentRecord = Intent(this,RecordRouteActivity::class.java)
+            startActivity(intentRecord)
+        }
+
 
         imageButtonSOS.setOnClickListener {
-
 
             if(isMyServiceRunning(SendLocation::class.java) == false){
                 imageButtonSOS.setImageResource(R.drawable.ic_sos_green)
