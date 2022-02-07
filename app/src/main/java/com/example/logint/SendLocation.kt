@@ -2,7 +2,6 @@ package com.example.logint
 
 import android.app.Service
 import android.content.Intent
-import android.os.IBinder
 import androidx.core.app.ActivityCompat
 import com.example.logint.databinding.ActivityAccountRecoveryBinding
 import com.example.logint.databinding.ActivityMainBinding
@@ -10,19 +9,25 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.NotificationManager.IMPORTANCE_HIGH
+import android.app.NotificationManager.IMPORTANCE_LOW
+import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.HandlerThread
-import android.os.Looper
 import android.os.SystemClock.sleep
 import android.provider.Settings
 import android.telephony.SmsManager
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat.isLocationEnabled
 //import com.Login.ejgps.databinding.ActivityMainBinding
@@ -58,6 +63,24 @@ class SendLocation : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChanel(notificationManager)
+        }
+
+
+        val notificationBuilder = NotificationCompat.Builder(this,"Tracking")
+                .setAutoCancel(false)
+                .setOngoing(true)
+                .setSmallIcon(R.drawable.ic_logo)
+                .setContentTitle("Transmitiendo Recorrido")
+                .setContentText("Enviando tus cordenadas")
+                .setContentIntent(getMainActivityPendingIntent())
+
+            startForeground(1,notificationBuilder.build())
+
+
             hilo= Hilo(this)
             hilo.start()
             return START_STICKY
@@ -67,6 +90,23 @@ class SendLocation : Service() {
         super.onDestroy()
         banderaStop=0
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChanel(notificationManager: NotificationManager){
+        val chanel = NotificationChannel(
+            "Tracking",
+            "Tracking Route",
+            IMPORTANCE_HIGH
+        )
+            notificationManager.createNotificationChannel(chanel)
+    }
+
+    private fun getMainActivityPendingIntent() = PendingIntent.getActivity(
+        this,
+        0,
+        Intent(this,MainPanel::class.java),
+        FLAG_UPDATE_CURRENT
+    )
 
 
     class Hilo(p:SendLocation):Thread(){

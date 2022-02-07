@@ -131,7 +131,13 @@ class MainPanel : AppCompatActivity() {
                 locationPermission.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
                 sendSMS()
                 val intentSOS = Intent(this,SendLocation::class.java)
-                startService(intentSOS)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(intentSOS)
+
+                }else{
+                    startService(intentSOS)
+                }
+                //startService(intentSOS)
                 //globalClass.setBandera(1)
 
             }
