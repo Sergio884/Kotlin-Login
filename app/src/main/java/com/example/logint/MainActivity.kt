@@ -14,6 +14,7 @@ import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.activity_contact.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -51,6 +52,35 @@ class MainActivity : AppCompatActivity() {
         }*/
 
         updateUI()
+
+        //****************************** Nav Bar *************************************
+        bottomNavigationView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.navigation_contactos->{
+                    val intentContactos= Intent(this,ContactActivity::class.java)
+                    startActivity(intentContactos)
+                    true
+                }
+                R.id.navigation_home->{
+                    val intentHome= Intent(this,MainPanel::class.java)
+                    startActivity(intentHome)
+                    true
+                }
+                R.id.navigation_ajustes ->{
+                    val intentAjustes = Intent(this,MainActivity::class.java)
+                    startActivity(intentAjustes)
+                    true
+                }
+                R.id.navigation_informacion ->{
+                    val intentInfo = Intent(this,InfoActivity::class.java)
+                    startActivity(intentInfo)
+                    true
+                }
+
+
+                else -> false
+            }
+        }
     }
 
     private fun fileManager() {

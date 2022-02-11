@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import com.airbnb.lottie.LottieAnimationView
+import kotlinx.android.synthetic.main.activity_contact.*
 import kotlinx.android.synthetic.main.activity_main_panel.*
 import kotlinx.android.synthetic.main.activity_main_panel.bottomNavigationView
 import kotlinx.android.synthetic.main.activity_record_route.*
@@ -49,7 +50,6 @@ class RecordRouteActivity : AppCompatActivity() {
             }
 
 
-
         }
 
 
@@ -57,6 +57,7 @@ class RecordRouteActivity : AppCompatActivity() {
 
 
 
+        //****************************** Nav Bar *************************************
         bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.navigation_contactos->{
@@ -69,6 +70,17 @@ class RecordRouteActivity : AppCompatActivity() {
                     startActivity(intentHome)
                     true
                 }
+                R.id.navigation_ajustes ->{
+                    val intentAjustes = Intent(this,MainActivity::class.java)
+                    startActivity(intentAjustes)
+                    true
+                }
+                R.id.navigation_informacion ->{
+                    val intentInfo = Intent(this,InfoActivity::class.java)
+                    startActivity(intentInfo)
+                    true
+                }
+
 
                 else -> false
             }

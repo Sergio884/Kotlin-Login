@@ -23,6 +23,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_contact.*
+import kotlinx.android.synthetic.main.activity_contact.bottomNavigationView
+import kotlinx.android.synthetic.main.activity_main_panel.*
 import kotlinx.android.synthetic.main.item_contacto.view.*
 import java.util.jar.Manifest
 
@@ -57,6 +59,7 @@ class ContactActivity : AppCompatActivity(){
             for(dc in snapshot!!.documentChanges){
                 if(dc.type==DocumentChange.Type.REMOVED){
                     renderContacts()
+
                 }
             }
         }
@@ -106,6 +109,34 @@ class ContactActivity : AppCompatActivity(){
                 contactosLauncher.launch(intentAdds)
             }
 
+        }
+
+        bottomNavigationView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.navigation_contactos->{
+                    val intentContactos= Intent(this,ContactActivity::class.java)
+                    startActivity(intentContactos)
+                    true
+                }
+                R.id.navigation_home->{
+                    val intentHome= Intent(this,MainPanel::class.java)
+                    startActivity(intentHome)
+                    true
+                }
+                R.id.navigation_ajustes ->{
+                    val intentAjustes = Intent(this,MainActivity::class.java)
+                    startActivity(intentAjustes)
+                    true
+                }
+                R.id.navigation_informacion ->{
+                    val intentInfo = Intent(this,InfoActivity::class.java)
+                    startActivity(intentInfo)
+                    true
+                }
+
+
+                else -> false
+            }
         }
 
     }
@@ -175,6 +206,7 @@ class ContactActivity : AppCompatActivity(){
     fun onClickRecicler(){
         renderContacts()
     }
+
     /*
     @SuppressLint("Range")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

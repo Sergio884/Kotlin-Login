@@ -14,7 +14,7 @@
     <item
         android:id="@+id/navigation_ajustes"
         android:icon="@drawable/ic_config"
-        android:title="@string/title_dashboard" />
+        android:title= "Ajustes" />
 
     <item
         android:id="@+id/navigation_informacion"

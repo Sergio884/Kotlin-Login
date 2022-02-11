@@ -51,6 +51,8 @@ import java.util.*
 import android.app.ActivityManager
 import android.os.Build
 import androidx.annotation.RequiresApi
+import kotlinx.android.synthetic.main.activity_contact.*
+import kotlinx.android.synthetic.main.activity_main_panel.bottomNavigationView
 
 
 class MainPanel : AppCompatActivity() {
@@ -81,6 +83,7 @@ class MainPanel : AppCompatActivity() {
 
 
         var contactsFragment = ContactsFragment()
+        //****************************** Nav Bar *************************************
         bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.navigation_contactos->{
@@ -93,6 +96,17 @@ class MainPanel : AppCompatActivity() {
                     startActivity(intentHome)
                     true
                 }
+                R.id.navigation_ajustes ->{
+                    val intentAjustes = Intent(this,MainActivity::class.java)
+                    startActivity(intentAjustes)
+                    true
+                }
+                R.id.navigation_informacion ->{
+                    val intentInfo = Intent(this,InfoActivity::class.java)
+                    startActivity(intentInfo)
+                    true
+                }
+
 
                 else -> false
             }

@@ -11,10 +11,12 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+
     <uses-feature android:name="android.hardware.location.gps" />
+
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".GlobalClass"
@@ -24,11 +26,14 @@
         android:roundIcon="@mipmap/ic_logo_principal_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Logint">
+        <activity
+            android:name=".InfoActivity"
+            android:exported="false" />
+
         <service
             android:name=".RecordRoute"
             android:enabled="true"
-            android:exported="true"
-            ></service>
+            android:exported="true" />
 
         <activity
             android:name=".RecordRouteActivity"
@@ -38,8 +43,7 @@
             android:name=".SendLocation"
             android:enabled="true"
             android:exported="true"
-            android:foregroundServiceType="location"
-            />
+            android:foregroundServiceType="location" />
         <service
             android:name=".RecordRoute"
             android:enabled="true"
@@ -59,7 +63,7 @@
         <activity
             android:name=".MainPanel"
             android:exported="true"
-            android:label="@string/title_activity_main_panel"></activity>
+            android:label="@string/title_activity_main_panel" />
         <activity
             android:name=".DeleteAccountActivity"
             android:exported="true" />
