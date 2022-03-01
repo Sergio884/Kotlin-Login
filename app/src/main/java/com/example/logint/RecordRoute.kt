@@ -2,15 +2,18 @@ package com.example.logint
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.ActivityManager
-import android.app.Service
+import android.app.*
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
 import android.os.IBinder
 import android.os.Looper
 import android.telephony.SmsManager
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
@@ -35,6 +38,20 @@ class RecordRoute : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChanel(notificationManager)
+        }
+        val notificationBuilder = NotificationCompat.Builder(this,"Tracking")
+            .setAutoCancel(false)
+            .setOngoing(true)
+            .setSmallIcon(R.drawable.ic_logo)
+            .setContentTitle("Grabando Recorrido")
+            .setContentText("Enviando tus cordenadas")
+            .setContentIntent(getMainActivityPendingIntent())
+
+        startForeground(1,notificationBuilder.build())
+
         if (intent != null) {
             nameRoute = intent.getStringExtra("nameRoute")!!
         }
@@ -42,9 +59,6 @@ class RecordRoute : Service() {
             hilo= HiloRecord(this)
             hilo.start()
             return START_STICKY
-
-
-
 
     }
 
@@ -57,8 +71,24 @@ class RecordRoute : Service() {
         return nameRoute
     }
 
+    private fun getMainActivityPendingIntent() = PendingIntent.getActivity(
+        this,
+        0,
+        Intent(this,MainPanel::class.java),
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
     public fun setNameRoute(nameRoute :String){
         this.nameRoute=nameRoute
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChanel(notificationManager: NotificationManager){
+        val chanel = NotificationChannel(
+            "Tracking",
+            "Tracking Route",
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        notificationManager.createNotificationChannel(chanel)
     }
 
 
