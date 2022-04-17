@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.IBinder
 import android.os.Looper
 import android.telephony.SmsManager
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -29,6 +30,7 @@ class RecordRoute : Service() {
     var banderaStop=1
     private var operation=0
     private var nameRoute=""
+
     //lateinit var location: Location
 
     override fun onBind(intent: Intent): IBinder {
@@ -96,6 +98,7 @@ class RecordRoute : Service() {
     class HiloRecord(puntero:RecordRoute):Thread(){
         private lateinit var locationCallback: LocationCallback
         var pun = puntero
+        var contador = 0
         override fun run() {
             super.run()
             sendSOSLocation()
@@ -128,6 +131,7 @@ class RecordRoute : Service() {
 
                 while (pun.banderaStop == 1) {
                     sleep(5000)
+                    contador+=5
                     pun.mFusedLocationProviderClient =
                         LocationServices.getFusedLocationProviderClient(pun)
                     val mLocationRequest = LocationRequest()
@@ -154,9 +158,14 @@ class RecordRoute : Service() {
                                 document(user!!.uid.toString()).
                                 collection("routes").
                                 document(pun.getNameRoute()).
-                                collection(""+idLatLngRoute).
-                                document(""+idLatLngRoute).set(hashMapOf("lat" to "${location.latitude}","lng" to "${location.longitude}"))
+                                collection(pun.getNameRoute()).
+                                document(""+idLatLngRoute).
+                                set(hashMapOf("lat" to "${location.latitude}","lng" to "${location.longitude}","segundos" to contador))
                                 idLatLngRoute = idLatLngRoute +1
+
+                               /* collection(""+idLatLngRoute).
+                                document(""+idLatLngRoute).set(hashMapOf("lat" to "${location.latitude}","lng" to "${location.longitude}"))
+                                idLatLngRoute = idLatLngRoute +1*/
 
                         }
 

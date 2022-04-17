@@ -38,6 +38,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
 import java.lang.Exception
+import java.time.Instant
+import java.time.ZoneId
 import java.util.*
 import java.util.logging.Handler
 
@@ -170,7 +172,11 @@ class SendLocation : Service() {
                                 //val key = reference.push().key
                                 if (user != null) {
                                     val reminder =
-                                        Reminder("1", location.latitude, location.longitude)
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                            Reminder("1", location.latitude, location.longitude,Instant.now().atZone(ZoneId.of("Mexico/General")).toString())
+                                        } else {
+                                            Reminder("1", location.latitude, location.longitude,"00-00-00T00:00:00")
+                                        }
                                     reference.child(user.uid).setValue(reminder)
                                 }
 
