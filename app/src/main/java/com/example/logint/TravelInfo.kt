@@ -25,24 +25,12 @@ class TravelInfo : AppCompatActivity() {
 
         etRadioTolerancia.setText(radioTolerancia)
         etTiempoTolerancia.setText(tiempoTolerancia)
-
+        val stringcito = "caca"
         tvIrARecorrido.setOnClickListener {
-            val auth = Firebase.auth
-            val db = FirebaseFirestore.getInstance()
-            val user = auth.currentUser
-            db.collection("contacts-${user!!.uid}").document("${tiempoTolerancia}").delete()
-            db.collection("contacts-${user.uid}").document("${etTiempoTolerancia.text}").set(
-                hashMapOf("name" to "${etRadioTolerancia.text}")
-            )
-            Toast.makeText(
-                this,
-                "Radio de Tolerancia: ${etRadioTolerancia.text} Tiempo de Tolerancia: ${etTiempoTolerancia.text}",
-                Toast.LENGTH_SHORT
-            ).show()
-            val intentss: Intent = Intent(this, ContactActivity::class.java)
-            ContextCompat.startActivity(this, intentss, null)
-
-
+            val intent = Intent(this,TravelInfo::class.java)
+            intent.putExtra("radioTolerancia",stringcito)
+            //intent.putExtra("tiempoTolerancia",tiempoTolerancia)
+            startActivity(intent)
         }
     }
 }

@@ -61,6 +61,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var currentLocation: LatLng
     private lateinit var destinyLocation: LatLng
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
@@ -72,8 +73,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         geofencingClient = LocationServices.getGeofencingClient(this)
-    }
 
+        if (savedInstanceState != null) {
+            print(savedInstanceState.getString("radioTolerancia"))
+        }
+    }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
@@ -118,9 +122,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         val latlng = LatLng(it.latitude, it.longitude)
                         currentLocation = LatLng(latlng.latitude, latlng.longitude)
                         moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, CAMERA_ZOOM_LEVEL))
-                        //readData(destino)
+                        /*readData(destino)
                         val URL = getDirectionURL(currentLocation,destinyLocation)
-                        GetDirection(URL).execute()
+                        GetDirection(URL).execute()*/
                     }
                 }
                 else { // Si no tenemos la ultima ubicacion conocida
@@ -173,8 +177,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.d(TAG, "Error getting documents: ", exception)
         }
 
-
-
+        graficaRuta(coordenadas)
 
     }
 
