@@ -11,26 +11,36 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.example.logint.databinding.ActivityMapsBinding
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.AsyncTask
 import android.os.Build
-import android.widget.ImageView
-import android.widget.TextView
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.*
 import com.google.android.gms.location.Geofence.GEOFENCE_TRANSITION_DWELL
 import com.google.android.gms.maps.model.CircleOptions
+import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import kotlin.random.Random
 
 const val LOCATION_REQUEST_CODE = 123
@@ -48,6 +58,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var geofencingClient: GeofencingClient
+    private lateinit var currentLocation: LatLng
+    private lateinit var destinyLocation: LatLng
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,13 +69,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        var im_home: ImageView  = findViewById(R.id.im_home)
-
-
-        im_home.setOnClickListener {
-            val intent = Intent(this,MainPanel::class.java)
-            startActivity(intent)
-        }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         geofencingClient = LocationServices.getGeofencingClient(this)
@@ -73,7 +78,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map.uiSettings.isZoomControlsEnabled = true
-
 
         if(!isLocationPermissionGranted()){
             val permissions = mutableListOf(
@@ -107,12 +111,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 return
             }
             map.isMyLocationEnabled = true
-            // Obtener la ultimas ubicacion conocida  SEGUNDO PLANO ****************************
+            // Obtener la ultimas ubicacion conocida
             fusedLocationClient.lastLocation.addOnSuccessListener {
                 if(it != null) {
                     with(map) {
                         val latlng = LatLng(it.latitude, it.longitude)
+                        currentLocation = LatLng(latlng.latitude, latlng.longitude)
                         moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, CAMERA_ZOOM_LEVEL))
+                        //readData(destino)
+                        val URL = getDirectionURL(currentLocation,destinyLocation)
+                        GetDirection(URL).execute()
                     }
                 }
                 else { // Si no tenemos la ultima ubicacion conocida
@@ -129,6 +137,45 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         SetLongClick(map)
+    }
+
+    fun graficaRuta(coordenadas: ArrayList<LatLng>){
+        val lineoption = PolylineOptions()
+        lineoption.addAll(coordenadas)
+        lineoption.width(10f)
+        lineoption.color(Color.BLUE)
+        lineoption.geodesic(true)
+        map.addPolyline(lineoption)
+    }
+
+
+    private fun readData(destino: String) {
+        /*fAuth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        var userId: String? = this.fAuth.currentUser?.uid
+        var documentReference = db.collection("users/").document(userId.toString()+"/routes/"+destino+"/"+opcion+"/"+opcion)
+        destinyLocation = LatLng(documentReference.get("lat").value as Double, documentReference.get("lng").value as Double) */
+
+        var auth = Firebase.auth
+        val db = FirebaseFirestore.getInstance()
+        val user = auth.currentUser
+        val coordenadas = ArrayList<LatLng>()
+        var routeReference = db.collection("users").
+        document(user!!.uid.toString()).
+        collection("routes").
+        document(destino).
+        collection(destino).get().addOnSuccessListener {
+                result ->
+            for(documento in result){
+                coordenadas.add(LatLng(documento.data.get("lat") as Double, documento.data.get("lng") as Double))
+            }
+        }.addOnFailureListener { exception ->
+            Log.d(TAG, "Error getting documents: ", exception)
+        }
+
+
+
+
     }
 
     private fun isLocationPermissionGranted(): Boolean {
@@ -152,7 +199,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .radius(GEOFENCE_RADIUS.toDouble())
             )
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, CAMERA_ZOOM_LEVEL))
-
+            destinyLocation = LatLng(latlng.latitude, latlng.longitude)
+            val URL = getDirectionURL(currentLocation,destinyLocation)
+            GetDirection(URL).execute()
             val database = Firebase.database
             val reference = database.getReference("reminders")
             val key = reference.push().key
@@ -160,8 +209,91 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 val reminder = Reminder(key, latlng.latitude, latlng.longitude) //Objeto de la base de datos
                 reference.child(key).setValue(reminder)
             }
+
+
             createGeofence(latlng, key!!, geofencingClient)
         }
+    }
+
+    fun getDirectionURL(origin:LatLng,dest:LatLng) : String{
+        return "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&sensor=false&mode=driving&key=AIzaSyAGKhhjhbxvZft5yaeMKC3v0UbAkUPxoKM"
+    }
+
+    private inner class GetDirection(val url : String) : AsyncTask<Void, Void, List<List<LatLng>>>(){
+        override fun doInBackground(vararg params: Void?): List<List<LatLng>> {
+            val client = OkHttpClient()
+            val request = Request.Builder().url(url).build()
+            val response = client.newCall(request).execute()
+            val data = response.body!!.string()
+            Log.d("GoogleMap" , " data : $data")
+            val result =  ArrayList<List<LatLng>>()
+            try{
+                val respObj = Gson().fromJson(data, GoogleMapDTO::class.java)
+
+                val path =  ArrayList<LatLng>()
+
+                for (i in 0 until respObj.routes[0].legs[0].steps.size){
+//                    val startLatLng = LatLng(respObj.routes[0].legs[0].steps[i].start_location.lat.toDouble()
+//                            ,respObj.routes[0].legs[0].steps[i].start_location.lng.toDouble())
+//                    path.add(startLatLng)
+//                    val endLatLng = LatLng(respObj.routes[0].legs[0].steps[i].end_location.lat.toDouble()
+//                            ,respObj.routes[0].legs[0].steps[i].end_location.lng.toDouble())
+                    path.addAll(decodePolyline(respObj.routes[0].legs[0].steps[i].polyline.points))
+                }
+                result.add(path)
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
+            return result
+        }
+
+        override fun onPostExecute(result: List<List<LatLng>>) {
+            val lineoption = PolylineOptions()
+            for (i in result.indices){
+                lineoption.addAll(result[i])
+                lineoption.width(10f)
+                lineoption.color(Color.BLUE)
+                lineoption.geodesic(true)
+            }
+            map.addPolyline(lineoption)
+        }
+    }
+
+    public fun decodePolyline(encoded: String): List<LatLng> {
+
+        val poly = ArrayList<LatLng>()
+        var index = 0
+        val len = encoded.length
+        var lat = 0
+        var lng = 0
+
+        while (index < len) {
+            var b: Int
+            var shift = 0
+            var result = 0
+            do {
+                b = encoded[index++].code - 63
+                result = result or (b and 0x1f shl shift)
+                shift += 5
+            } while (b >= 0x20)
+            val dlat = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+            lat += dlat
+
+            shift = 0
+            result = 0
+            do {
+                b = encoded[index++].code - 63
+                result = result or (b and 0x1f shl shift)
+                shift += 5
+            } while (b >= 0x20)
+            val dlng = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+            lng += dlng
+
+            val latLng = LatLng((lat.toDouble() / 1E5),(lng.toDouble() / 1E5))
+            poly.add(latLng)
+        }
+
+        return poly
     }
 
     private fun createGeofence(location: LatLng, key:String, geofencingClient: GeofencingClient){
