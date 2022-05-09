@@ -74,9 +74,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         geofencingClient = LocationServices.getGeofencingClient(this)
 
-        if (savedInstanceState != null) {
-            print(savedInstanceState.getString("radioTolerancia"))
-        }
+
+            println(this.getIntent().getStringExtra("radioTolerancia")+"_________")
+            println(intent.getStringExtra("radioTolerancia")+"!!!!!!!!!!!!!!!")
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
