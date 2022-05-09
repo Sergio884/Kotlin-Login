@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/style_background_main"
+    tools:context=".MapDistanceActivity">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnDestiny"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ic_field"
+        android:layout_marginTop="5dp"
+        android:text="¿A dónde vamos?"
+        android:textSize="19dp"
+        android:textColor="@color/white"/>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/map"
+        tools:context=".MapsActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment">
+        <ImageView
+            android:id="@+id/btnOrigin"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="375dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/bg_set_location"
+            android:contentDescription="@string/all"
+            app:srcCompat="@drawable/ic_set_location"
+            tools:ignore="VectorDrawableCompat" />
+
+    </fragment>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="17dp"
+            android:textColor="@color/white"
+            android:text="Seleccione un medio de transporte"></TextView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/driving"
+                android:layout_width="42dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_border"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="@string/all"
+                app:srcCompat="@drawable/press_driving"
+                tools:ignore="VectorDrawableCompat" />
+            <ImageView
+                android:id="@+id/transit"
+                android:layout_width="42dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/bg_border"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="@string/all"
+                app:srcCompat="@drawable/press_transit"
+                tools:ignore="VectorDrawableCompat" />
+            <ImageView
+                android:id="@+id/walking"
+                android:layout_width="42dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/bg_border"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="@string/all"
+                app:srcCompat="@drawable/press_walking"
+                tools:ignore="VectorDrawableCompat" />
+            <ImageView
+                android:id="@+id/bicycling"
+                android:layout_width="42dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/bg_border"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="@string/all"
+                app:srcCompat="@drawable/press_bicycling"
+                tools:ignore="VectorDrawableCompat" />
+
+        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/ic_buttom"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:text="Comenzar recorrido"/>
+    </LinearLayout>
+
+</LinearLayout>
