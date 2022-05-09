@@ -37,8 +37,8 @@ class ContactsAdapter(val contactos: kotlin.collections.MutableList<Contactos>,v
     class ContactsHolder(val view: View,val act: Activity):RecyclerView.ViewHolder(view){
 
         fun render(contactos: Contactos){
-            view.name_contact.text=contactos.name
-            view.number_contact.text=contactos.phone
+            view.location_name.text=contactos.name
+            view.location.text=contactos.phone
             view.points_menu.setOnClickListener {
                 PopupMenu(act, view).apply {
                     inflate(R.menu.menu_contactos)
@@ -51,10 +51,10 @@ class ContactsAdapter(val contactos: kotlin.collections.MutableList<Contactos>,v
                                 val user = auth.currentUser
                                 Toast.makeText(
                                     act,
-                                    "Eliminando Contacto ${view.name_contact.text} and ${view.number_contact.text}",
+                                    "Eliminando Contacto ${view.location_name.text} and ${view.location.text}",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                db.collection("contacts-${user!!.uid}").document("${view.number_contact.text}").delete()
+                                db.collection("contacts-${user!!.uid}").document("${view.location.text}").delete()
 
                                 true
                             }
@@ -65,8 +65,8 @@ class ContactsAdapter(val contactos: kotlin.collections.MutableList<Contactos>,v
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 val intentss: Intent = Intent(act,ModifyContact::class.java)
-                                intentss.putExtra("name","${view.name_contact.text}")
-                                intentss.putExtra("number","${view.number_contact.text}")
+                                intentss.putExtra("name","${view.location_name.text}")
+                                intentss.putExtra("number","${view.location.text}")
                                 startActivity(act,intentss,null)
                                 true
                             }
