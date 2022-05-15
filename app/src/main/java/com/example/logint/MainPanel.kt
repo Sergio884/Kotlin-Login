@@ -50,6 +50,8 @@ import java.lang.Exception
 import java.util.*
 import android.app.ActivityManager
 import android.os.Build
+import android.util.Log
+import android.view.KeyEvent
 import androidx.annotation.RequiresApi
 import kotlinx.android.synthetic.main.activity_contact.*
 import kotlinx.android.synthetic.main.activity_main_panel.bottomNavigationView
@@ -159,16 +161,10 @@ class MainPanel : AppCompatActivity() {
                 imageButtonSOS.setImageResource(R.drawable.ic_sos)
                 val intentSOS = Intent(this,SendLocation::class.java)
                 stopService(intentSOS)
-
                 //globalClass.setBandera(0)
             }
-
             //val permissions = arrayOf("${Manifest.permission.ACCESS_COARSE_LOCATION}","${Manifest.permission.ACCESS_FINE_LOCATION}",
             //"${Manifest.permission.SEND_SMS}","${Manifest.permission.READ_PHONE_STATE}","${Manifest.permission.ACCESS_BACKGROUND_LOCATION}")
-
-
-
-
         }
 
         tv_grabarRuta.setOnClickListener {
@@ -194,8 +190,6 @@ class MainPanel : AppCompatActivity() {
     }
 
     private fun sendSMS(){
-
-
         val auth = Firebase.auth
         val db = FirebaseFirestore.getInstance()
         val user = auth.currentUser
@@ -204,28 +198,40 @@ class MainPanel : AppCompatActivity() {
         val informacion = "¡ALERTA DE EMERGENCIA!\n "+user.displayName.toString()+" se encuentra en peligro te compartimos un link con el cual podras acceder a su ubicacion".replace("ñ","n").replace("á","a").replace("é","e").replace("í","i").replace("ó","o")
         val url = "safesos.online/mapa.php?u=${uid}&n="+user.displayName.toString()
         print(url)
-
         docs.get().addOnSuccessListener { documents ->
             for(document in documents){
-                //Log.d("contacto: ", "${document.id} => ${document.data}")
-                println("${document.id.toString()} ${document.data.toString()}")
-
+                    //Log.d("contacto: ", "${document.id} => ${document.data}")
+                    println("${document.id.toString()} ${document.data.toString()}")
                     val sms = SmsManager.getDefault()
                     sms.sendTextMessage(document.id.toString(),null,informacion,null,null)
                     sms.sendTextMessage(document.id.toString(),null,url,null,null)
+                    /*val sendWhats = Intent(Intent.ACTION_SEND)
+                    sendWhats.type = "text/plain"
+                    sendWhats.setPackage("com.whatsapp")
+                    sendWhats.putExtra("jid", "525587355557" + "@s.whatsapp.net");
+                    sendWhats.putExtra(Intent.EXTRA_TEXT,"Prueba Api");
+                    startActivity(sendWhats);*/
+
+                    val auth = Firebase.auth
+                    val db = FirebaseFirestore.getInstance()
+                    val user = auth.currentUser
+                    db.collection("users").document("${user!!.uid}").get().addOnSuccessListener { doc->
 
 
+                            print("sdsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"doc.id)
+                            Log.d("1", "${} => ${document.data}")
 
+                    }
+                        .addOnFailureListener { exception ->
 
+                            Log.d("", "Error getting documentsddddddddddddddddddddd: ", exception)
+                        }
             }
         }
-
-
     }
 
     private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
         val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
-
         for (service in manager.getRunningServices(Int.MAX_VALUE)) {
             if (serviceClass.name == service.service.className) {
                 return true
@@ -233,6 +239,8 @@ class MainPanel : AppCompatActivity() {
         }
         return false
     }
+
+
 
 
 

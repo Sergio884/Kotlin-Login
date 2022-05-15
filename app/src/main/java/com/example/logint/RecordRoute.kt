@@ -127,8 +127,6 @@ class RecordRoute : Service() {
                 // for ActivityCompat#requestPermissions for more details.
                 return
             } else{
-
-
                 while (pun.banderaStop == 1) {
                     sleep(5000)
                     contador+=5
@@ -145,11 +143,9 @@ class RecordRoute : Service() {
                         mLocationCallBack,
                         Looper.getMainLooper()
                     )
-
                     pun.mFusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
                         val location = task.result
                         if (location != null) {
-
                                 println("Latitudddd = ${location.latitude} Longitudddd = ${location.longitude} y nombre:${pun.getNameRoute()}")
                                 var auth = Firebase.auth
                                 val db = FirebaseFirestore.getInstance()
