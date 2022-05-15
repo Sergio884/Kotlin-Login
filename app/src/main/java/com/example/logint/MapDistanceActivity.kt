@@ -9,12 +9,14 @@ import android.telecom.Call
 import android.Manifest
 import android.graphics.Color
 import android.os.AsyncTask
+import android.os.Build
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.android.volley.Response
 import com.example.logint.io.ApiService
 import com.example.logint.io.response.DistanceResponse
@@ -47,6 +49,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
     private var markerTo : Marker? = null
     private var fromLatLng: LatLng? = null
     private var toLatLng: LatLng? = null
+    private lateinit var currentLocation: LatLng
     lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -141,6 +144,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
         btnOrigin.setOnClickListener {
             //autocompleStart(FROM_REQUEST_CODE)
             //fetchLocation()
+            //onMapReady(mMap)
             startActivityForResult(intent, FROM_REQUEST_CODE)
         }
 
@@ -212,6 +216,60 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setMinZoomPreference(10f)
         mMap.setMaxZoomPreference(17f)
         // Add a marker in Sydney and move the camera
+
+        mMap.uiSettings.isZoomControlsEnabled = true
+
+        if(!isLocationPermissionGranted()){
+            val permissions = mutableListOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                permissions.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+            }
+            ActivityCompat.requestPermissions(
+                this,
+                permissions.toTypedArray(),
+                LOCATION_REQUEST_CODE
+            )
+        } else {    //Si ya teniamos acceso a la ubicacion
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return
+            }
+            mMap.isMyLocationEnabled = true
+            // Obtener la ultimas ubicacion conocida
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                if(it != null) {
+                    with(map) {
+                        val latlng = LatLng(it.latitude, it.longitude)
+                        currentLocation = LatLng(latlng.latitude, latlng.longitude)
+                        fromLatLng = currentLocation
+                        setMarkerFrom(currentLocation)
+                    }
+                }
+            }
+        }
+    }
+    private fun isLocationPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            applicationContext, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+            applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun addMarker(latLng : LatLng , title : String): Marker{
