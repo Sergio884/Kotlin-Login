@@ -11,38 +11,45 @@
         android:id="@+id/textView10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:layout_marginBottom="499dp"
         android:text="Ingresa el tiempo de tolerancia"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="24dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="232dp" />
+        tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
         android:text="Ingresa el radio de tolereancia"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="24dp"
         android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="101dp" />
+        tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/tv_tituloDatosViaje"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="651dp"
         android:padding="16dp"
         android:text="Datos del Viaje"
         android:textColor="@color/white"
         android:textSize="36dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <EditText
@@ -50,8 +57,9 @@
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="48dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="547dp"
         android:background="@drawable/ic_field"
         android:drawableStart="@drawable/ic_user3"
         android:drawablePadding="10dp"
@@ -59,6 +67,7 @@
         android:padding="16dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tv_tituloDatosViaje"
         app:layout_constraintStart_toStartOf="@id/tv_tituloDatosViaje"
         app:layout_constraintTop_toBottomOf="@id/tv_tituloDatosViaje" />
@@ -68,8 +77,9 @@
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="60dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="430dp"
         android:background="@drawable/ic_field"
         android:drawableStart="@drawable/ic_alarm_24"
         android:drawablePadding="10dp"
@@ -77,27 +87,30 @@
         android:padding="16dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tv_tituloDatosViaje"
         app:layout_constraintStart_toStartOf="@id/tv_tituloDatosViaje"
         app:layout_constraintTop_toBottomOf="@id/et_radioTolerancia" />
 
     <TextView
         android:id="@+id/tv_irARecorrido"
-        android:layout_width="0dp"
+        android:layout_width="379dp"
         android:layout_height="56dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="232dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="546dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="130dp"
         android:background="@drawable/style_button_background"
         android:gravity="center"
         android:padding="15dp"
-        android:text="Ir a viaje"
+        android:text="Continuar"
         android:textColor="@color/white"
         android:textSize="18dp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/tv_tituloDatosViaje"
-        app:layout_constraintStart_toStartOf="@id/tv_tituloDatosViaje"
-        app:layout_constraintTop_toBottomOf="@+id/et_tiempoTolerancia"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -114,18 +127,16 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleView"
-        android:layout_width="379dp"
-        android:layout_height="146dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="396dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="189dp"
+        android:layout_width="380dp"
+        android:layout_height="167dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="331dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="233dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
