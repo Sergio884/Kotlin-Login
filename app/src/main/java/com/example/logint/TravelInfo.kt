@@ -52,8 +52,11 @@ class TravelInfo : AppCompatActivity() {
     }
 
     private fun EventChangeListener(){
+        var auth = Firebase.auth
+        val user = auth.currentUser
         db = FirebaseFirestore.getInstance()
-        db.collection("users").
+        //db.collection("users").
+        db.collection("users-${user!!.uid}-routes").
                 addSnapshotListener(object: EventListener<QuerySnapshot>{
                     override fun onEvent(
                         value: QuerySnapshot?,
@@ -65,7 +68,9 @@ class TravelInfo : AppCompatActivity() {
 
                         for(dc: DocumentChange in value?.documentChanges!!){
                             if(dc.type == DocumentChange.Type.ADDED){
-                                locationArrayList.add(dc.document.toObject(UserLocation::class.java))
+                                //locationArrayList.add(dc.document.toObject(UserLocation::class.java))
+                                val userLocation = UserLocation(dc.document.id,"")
+                                locationArrayList.add(userLocation)
                             }
                         }
 
