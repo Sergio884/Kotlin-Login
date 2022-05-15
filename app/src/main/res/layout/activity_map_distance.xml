@@ -27,17 +27,6 @@
         android:id="@+id/map"
         tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment">
-        <ImageView
-            android:id="@+id/btnOrigin"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="375dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/bg_set_location"
-            android:contentDescription="@string/all"
-            app:srcCompat="@drawable/ic_set_location"
-            tools:ignore="VectorDrawableCompat" />
 
     </fragment>
 

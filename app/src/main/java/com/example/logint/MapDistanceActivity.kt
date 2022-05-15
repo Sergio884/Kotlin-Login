@@ -55,7 +55,6 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map_distance)
-        val btnOrigin = findViewById<ImageView>(R.id.btnOrigin)
         val btnDestiny = findViewById<Button>(R.id.btnDestiny)
 
         val driving = findViewById<ImageView>(R.id.driving)
@@ -140,14 +139,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun setupPlace(){
         Places.initialize(applicationContext, getString(R.string.api_key ))
-
-        btnOrigin.setOnClickListener {
-            //autocompleStart(FROM_REQUEST_CODE)
-            //fetchLocation()
-            //onMapReady(mMap)
-            startActivityForResult(intent, FROM_REQUEST_CODE)
-        }
-
+        
         btnDestiny.setOnClickListener {
             autocompleStart(TO_REQUEST_CODE)
         }
