@@ -139,7 +139,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun setupPlace(){
         Places.initialize(applicationContext, getString(R.string.api_key ))
-        
+
         btnDestiny.setOnClickListener {
             autocompleStart(TO_REQUEST_CODE)
         }
@@ -158,13 +158,9 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == FROM_REQUEST_CODE ) {
-            val origin = LatLng(19.358833808569347, -98.97688365466838)
-            fromLatLng = origin
-            setMarkerFrom(origin)
-            return
-        }else if (requestCode == TO_REQUEST_CODE)
-            autocompleteProccess(resultCode,data){ place ->
+        if (requestCode == TO_REQUEST_CODE)
+            mMap.clear()
+        autocompleteProccess(resultCode,data){ place ->
                 //tvDestiny.text = "Destino : ${place.address}"
                 place.latLng?.let{
                     toLatLng = it
@@ -274,12 +270,10 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setMarkerFrom(latLng: LatLng){
-        markerFrom?.remove()
         markerFrom = addMarker(latLng,"Origen: ")
     }
 
     private fun setMarkerTo(latLng: LatLng){
-        markerTo?.remove()
         markerTo = addMarker(latLng,"Destino: ")
     }
 
@@ -351,7 +345,6 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     public fun decodePolyline(encoded: String): List<LatLng> {
-
         val poly = ArrayList<LatLng>()
         var index = 0
         val len = encoded.length
