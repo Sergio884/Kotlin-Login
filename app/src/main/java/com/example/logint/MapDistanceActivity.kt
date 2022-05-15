@@ -71,6 +71,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
             transit.isSelected = false
             walking.isSelected = false
             bicycling.isSelected = false
+            changeTravelMode()
         }
 
         transit.setOnClickListener {
@@ -79,6 +80,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
             driving.isSelected = false
             walking.isSelected = false
             bicycling.isSelected = false
+            changeTravelMode()
         }
 
         walking.setOnClickListener {
@@ -87,6 +89,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
             driving.isSelected = false
             transit.isSelected = false
             bicycling.isSelected = false
+            changeTravelMode()
         }
 
         bicycling.setOnClickListener {
@@ -95,6 +98,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
             driving.isSelected = false
             transit.isSelected = false
             walking.isSelected = false
+            changeTravelMode()
         }
 
         setupMap()
@@ -173,6 +177,13 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
         return
 
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun changeTravelMode(){
+        mMap.clear()
+        val URL = getDirectionURL()
+        Log.d("GoogleMap", "URL : $URL")
+        GetDirection(URL).execute()
     }
 
     private fun autocompleteProccess(resultCode: Int,data: Intent?, callback: (Place)->Unit){
@@ -306,6 +317,8 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
     fun getDirectionURL() : String{
         val from = fromLatLng?.let { latLngToString(it) }
         val to = toLatLng?.let { latLngToString(it) }
+        toLatLng?.let { setMarkerTo(it) }
+        fromLatLng?.let { setMarkerFrom(it) }
         return "https://maps.googleapis.com/maps/api/directions/json?origin=${from}&destination=${to}&sensor=false&mode=${travelMode}&key=AIzaSyAGKhhjhbxvZft5yaeMKC3v0UbAkUPxoKM"
     }
 
