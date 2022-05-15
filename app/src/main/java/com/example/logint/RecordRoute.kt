@@ -156,7 +156,7 @@ class RecordRoute : Service() {
                                 document(pun.getNameRoute()).
                                 collection(pun.getNameRoute()).
                                 document(""+idLatLngRoute).
-                                set(hashMapOf("lat" to "${location.latitude}","lng" to "${location.longitude}","segundos" to contador))
+                                set(hashMapOf("lat" to "${location.latitude}","lng" to "${location.longitude}","segundos" to contador,"idNumber" to idLatLngRoute))
                                 idLatLngRoute = idLatLngRoute +1
 
                                /* collection(""+idLatLngRoute).

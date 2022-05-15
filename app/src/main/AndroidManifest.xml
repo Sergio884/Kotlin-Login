@@ -56,7 +56,14 @@
             android:name=".ModifyContact"
             android:exported="false" />
         <activity
+            android:name=".MapDistanceActivity"
+            android:exported="false" />
+        <activity
             android:name=".ContactActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".TravelInfo"
             android:exported="true" />
 
         <meta-data
@@ -105,6 +112,13 @@
             android:exported="true" />
 
         <receiver android:name=".GeofenceReceiver" />
+
+        <receiver android:name=".ShutdownReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <action android:name="android.intent.action.QUICKBOOT_POWEROFF" />
+            </intent-filter> </receiver>
     </application>
 
 </manifest>

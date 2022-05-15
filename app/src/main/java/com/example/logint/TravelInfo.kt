@@ -28,12 +28,12 @@ class TravelInfo : AppCompatActivity() {
         val etTiempoTolerancia: EditText = findViewById(R.id.et_tiempoTolerancia)
         val tvIrARecorrido: TextView = findViewById(R.id.tv_irARecorrido)
 
-        recyclerView = findViewById(R.id.recycleView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
+        recyclerView = findViewById<RecyclerView>(R.id.recycleView)
+        //recyclerView.setHasFixedSize(true)
 
         locationArrayList = arrayListOf()
         myAdapter = LocationAdapter(locationArrayList)
+        recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = myAdapter
         EventChangeListener()
 
@@ -44,7 +44,7 @@ class TravelInfo : AppCompatActivity() {
         etTiempoTolerancia.setText(tiempoTolerancia)
         val stringcito = "caca"
         tvIrARecorrido.setOnClickListener {
-            val intents = Intent(this,MapsActivity::class.java)
+            val intents = Intent(this,MapDistanceActivity::class.java)
             intents.putExtra("radioTolerancia",stringcito)
             //intent.putExtra("tiempoTolerancia",tiempoTolerancia)
             startActivity(intents)
@@ -69,7 +69,10 @@ class TravelInfo : AppCompatActivity() {
                         for(dc: DocumentChange in value?.documentChanges!!){
                             if(dc.type == DocumentChange.Type.ADDED){
                                 //locationArrayList.add(dc.document.toObject(UserLocation::class.java))
+                                //dc.document.getData().orderBy("name", Query.Direction.ASCENDING).limit(1)
                                 val userLocation = UserLocation(dc.document.id,"")
+                                //dc.document.getDocumentReference()
+                                Log.e("Pene", dc.document.id)
                                 locationArrayList.add(userLocation)
                             }
                         }

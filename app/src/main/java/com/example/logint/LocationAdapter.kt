@@ -27,8 +27,9 @@ class LocationAdapter(private val locationList: ArrayList<UserLocation>): Recycl
     }
 
     public class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val location: TextView = itemView.findViewById(R.id.location)
-        val location_name: TextView = itemView.findViewById(R.id.location_name)
+
+        var location: TextView = itemView.findViewById(R.id.location)
+        var location_name: TextView = itemView.findViewById(R.id.location_name)
 
     }
 }
