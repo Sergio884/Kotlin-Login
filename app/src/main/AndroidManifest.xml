@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.logint">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -26,6 +27,9 @@
         android:roundIcon="@mipmap/ic_logo_principal_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Logint">
+        <activity
+            android:name=".OnRouteActivity"
+            android:exported="false" />
         <activity
             android:name=".InfoActivity"
             android:exported="false" />
@@ -58,7 +62,6 @@
         <activity
             android:name=".ContactActivity"
             android:exported="true" />
-
         <activity
             android:name=".TravelInfo"
             android:exported="true" />
@@ -69,8 +72,7 @@
 
         <activity
             android:name=".MainPanel"
-            android:exported="true"
-            android:label="@string/title_activity_main_panel" />
+            android:exported="false" />
         <activity
             android:name=".DeleteAccountActivity"
             android:exported="true" />
@@ -91,6 +93,9 @@
             android:exported="true"
             android:theme="@style/Theme.Main" />
         <activity
+            android:name=".TravelInfo"
+            android:exported="true" />
+        <activity
             android:name=".SignInActivity"
             android:exported="true">
             <intent-filter>
@@ -104,13 +109,14 @@
             android:exported="true" />
 
         <receiver android:name=".GeofenceReceiver" />
-
-        <receiver android:name=".ShutdownReceiver"
+        <receiver
+            android:name=".ShutdownReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_SHUTDOWN" />
                 <action android:name="android.intent.action.QUICKBOOT_POWEROFF" />
-            </intent-filter> </receiver>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

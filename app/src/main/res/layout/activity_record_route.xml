@@ -61,14 +61,15 @@
         app:layout_constraintEnd_toEndOf="@+id/tv_tituloGrabarRuta"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_instrucciones"
+        app:layout_constraintBottom_toTopOf="@id/recordImageView"
 
         />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/recordImageView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="@+id/tv_instrucciones"
         app:layout_constraintStart_toStartOf="@+id/tv_instrucciones"
@@ -89,6 +90,7 @@
         app:itemIconTint="@color/white"
         android:background="@drawable/style_button_background"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recordImageView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_nav_menu"></com.google.android.material.bottomnavigation.BottomNavigationView>

@@ -94,15 +94,18 @@
                 tools:ignore="VectorDrawableCompat" />
 
         </LinearLayout>
+
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_start_route"
             android:layout_width="300dp"
             android:layout_height="45dp"
+            android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:background="@drawable/ic_buttom"
-            android:layout_gravity="center"
+            android:text="Comenzar recorrido"
             android:textColor="@color/white"
-            android:textSize="20dp"
-            android:text="Comenzar recorrido"/>
+            android:textSize="20dp" />
+
     </LinearLayout>
 
 </LinearLayout>

@@ -37,6 +37,7 @@ import com.google.gson.Gson
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
 import kotlinx.android.synthetic.main.activity_map_distance.*
+import kotlinx.android.synthetic.main.fragment_contacts.*
 import javax.security.auth.callback.Callback
 
 class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -101,11 +102,20 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
             changeTravelMode()
         }
 
+        btn_start_route.setOnClickListener{
+            val intents = Intent(this,OnRouteActivity::class.java)
+            //intent.putExtra("tiempoTolerancia",tiempoTolerancia)
+            startActivity(intents)
+        }
+
         setupMap()
 
         setupPlace()
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+
+
     }
 
     private fun fetchLocation(){
