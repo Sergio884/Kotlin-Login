@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/style_background_main"
     tools:context=".SignUpActivity">
 
     <ImageView
@@ -17,7 +18,6 @@
         app:srcCompat="@drawable/ic_back"
         tools:ignore="VectorDrawableCompat"
         android:contentDescription="@string/all"
-
         android:layout_marginStart="16dp" />
 
     <LinearLayout
@@ -45,8 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/title_active_login"
-            android:textColor="@color/black"
+            android:text="SafeSOS"
+            android:textColor="@color/white"
             android:textSize="24sp" />
     </LinearLayout>
 
@@ -76,6 +76,9 @@
             android:drawablePadding="16dp"
             android:ems="10"
             android:hint="@string/email"
+
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:inputType="textEmailAddress"
             android:padding="16dp" />
 
@@ -87,6 +90,8 @@
             android:layout_marginTop="24dp"
             android:layout_marginRight="24dp"
             android:autofillHints="@string/password"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:background="@drawable/ic_field"
             android:drawableStart="@drawable/ic_lock"
             android:drawableLeft="@drawable/ic_lock"
@@ -108,6 +113,8 @@
             android:background="@drawable/ic_field"
             android:drawableStart="@drawable/ic_lock"
             android:drawableLeft="@drawable/ic_lock"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:drawablePadding="16dp"
             android:ems="10"
             android:hint="@string/repeat_password"

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/style_background_main"
     tools:context=".AccountRecoveryActivity">
 
     <LinearLayout
@@ -23,7 +24,7 @@
             android:layout_marginLeft="24dp"
             android:layout_marginTop="24dp"
             android:gravity="center"
-            android:textColor="@color/black_500"
+            android:textColor="@color/white"
             android:layout_marginRight="24dp"
             android:text="@string/title_account_recovery" />
 
@@ -33,6 +34,7 @@
             android:textSize="16sp"
             android:gravity="center"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginRight="24dp"
@@ -49,6 +51,8 @@
             android:background="@drawable/ic_field"
             android:drawableStart="@drawable/ic_email"
             android:drawableLeft="@drawable/ic_email"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:drawablePadding="16dp"
             android:ems="10"
             android:hint="@string/email"
