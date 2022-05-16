@@ -105,7 +105,14 @@ class RecordRoute : Service() {
         }
 
         private fun sendSOSLocation(){
-            var idLatLngRoute=0
+            var idLatLngRoute=0;
+            var auth = Firebase.auth;
+            val db = FirebaseFirestore.getInstance();
+            val user = auth.currentUser;
+            db.collection("routes-"+user!!.uid.toString()).document(pun.getNameRoute()).set(
+                hashMapOf("name" to pun.getNameRoute())
+            )
+
             //sendSMS()
             if (ActivityCompat.checkSelfPermission(
                     pun,
@@ -127,6 +134,7 @@ class RecordRoute : Service() {
                 // for ActivityCompat#requestPermissions for more details.
                 return
             } else{
+
                 while (pun.banderaStop == 1) {
                     sleep(5000)
                     contador+=5
@@ -158,6 +166,8 @@ class RecordRoute : Service() {
                                 document(""+idLatLngRoute).
                                 set(hashMapOf("lat" to "${location.latitude}","lng" to "${location.longitude}","segundos" to contador,"idNumber" to idLatLngRoute))
                                 idLatLngRoute = idLatLngRoute +1
+
+
 
                                /* collection(""+idLatLngRoute).
                                 document(""+idLatLngRoute).set(hashMapOf("lat" to "${location.latitude}","lng" to "${location.longitude}"))

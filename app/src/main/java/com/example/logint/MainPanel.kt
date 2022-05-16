@@ -212,33 +212,21 @@ class MainPanel : AppCompatActivity() {
                     sendWhats.putExtra(Intent.EXTRA_TEXT,"Prueba Api");
                     startActivity(sendWhats);*/
 
-                    val auth = Firebase.auth
-                    val db = FirebaseFirestore.getInstance()
-                    val user = auth.currentUser
-                    db.collection("users").document("${user!!.uid}").get().addOnSuccessListener { doc->
 
-
-                            print("sdsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"doc.id)
-                            Log.d("1", "${} => ${document.data}")
-
-                    }
-                        .addOnFailureListener { exception ->
-
-                            Log.d("", "Error getting documentsddddddddddddddddddddd: ", exception)
-                        }
             }
         }
+
     }
 
-    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
-        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
-        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
-            if (serviceClass.name == service.service.className) {
-                return true
+        private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+            val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+            for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+                if (serviceClass.name == service.service.className) {
+                    return true
+                }
             }
+            return false
         }
-        return false
-    }
 
 
 
