@@ -19,8 +19,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-
-
     <application
         android:name=".GlobalClass"
         android:allowBackup="true"
@@ -29,6 +27,9 @@
         android:roundIcon="@mipmap/ic_logo_principal_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Logint">
+        <activity
+            android:name=".OnRouteActivity"
+            android:exported="false" />
         <activity
             android:name=".InfoActivity"
             android:exported="false" />
@@ -61,7 +62,6 @@
         <activity
             android:name=".ContactActivity"
             android:exported="true" />
-
         <activity
             android:name=".TravelInfo"
             android:exported="true" />
@@ -72,8 +72,7 @@
 
         <activity
             android:name=".MainPanel"
-            android:exported="true"
-            android:label="@string/title_activity_main_panel" />
+            android:exported="false" />
         <activity
             android:name=".DeleteAccountActivity"
             android:exported="true" />
@@ -95,9 +94,7 @@
             android:theme="@style/Theme.Main" />
         <activity
             android:name=".TravelInfo"
-            android:exported="true"
-
-            />
+            android:exported="true" />
         <activity
             android:name=".SignInActivity"
             android:exported="true">
@@ -112,13 +109,14 @@
             android:exported="true" />
 
         <receiver android:name=".GeofenceReceiver" />
-
-        <receiver android:name=".ShutdownReceiver"
+        <receiver
+            android:name=".ShutdownReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_SHUTDOWN" />
                 <action android:name="android.intent.action.QUICKBOOT_POWEROFF" />
-            </intent-filter> </receiver>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
