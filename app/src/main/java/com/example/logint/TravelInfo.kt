@@ -1,6 +1,7 @@
 package com.example.logint
 
 import android.content.Intent
+import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
@@ -23,7 +24,7 @@ class TravelInfo : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_travel_info)
-
+        //println("**********************\n\n\n\n\n**********************\nPene")
         val etRadioTolerancia: EditText = findViewById(R.id.et_radioTolerancia)
         val etTiempoTolerancia: EditText = findViewById(R.id.et_tiempoTolerancia)
         val tvIrARecorrido: TextView = findViewById(R.id.tv_irARecorrido)
@@ -35,6 +36,11 @@ class TravelInfo : AppCompatActivity() {
         myAdapter = LocationAdapter(locationArrayList)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = myAdapter
+
+        var auth = Firebase.auth
+        val user = auth.currentUser
+        db = FirebaseFirestore.getInstance()
+
         EventChangeListener()
 
         val radioTolerancia = intent.getStringExtra("name")
@@ -44,43 +50,66 @@ class TravelInfo : AppCompatActivity() {
         etTiempoTolerancia.setText(tiempoTolerancia)
         val stringcito = "caca"
         tvIrARecorrido.setOnClickListener {
-            val intents = Intent(this,MapDistanceActivity::class.java)
-            intents.putExtra("radioTolerancia",stringcito)
+            val intents = Intent(this, MapDistanceActivity::class.java)
+            intents.putExtra("radioTolerancia", stringcito)
             //intent.putExtra("tiempoTolerancia",tiempoTolerancia)
             startActivity(intents)
         }
     }
 
-    private fun EventChangeListener(){
+    private fun EventChangeListener() {
         var auth = Firebase.auth
         val user = auth.currentUser
         db = FirebaseFirestore.getInstance()
-        //db.collection("users").
-        db.collection("users-${user!!.uid}-routes").
-                addSnapshotListener(object: EventListener<QuerySnapshot>{
-                    override fun onEvent(
-                        value: QuerySnapshot?,
-                        error: FirebaseFirestoreException?
-                    ){
-                        if(error != null){
-                            Log.e("Error de Firestore", error.message.toString())
-                        }
 
-                        for(dc: DocumentChange in value?.documentChanges!!){
-                            if(dc.type == DocumentChange.Type.ADDED){
-                                //locationArrayList.add(dc.document.toObject(UserLocation::class.java))
-                                //dc.document.getData().orderBy("name", Query.Direction.ASCENDING).limit(1)
-                                val userLocation = UserLocation(dc.document.id,"")
-                                //dc.document.getDocumentReference()
-                                Log.e("Pene", dc.document.id)
-                                locationArrayList.add(userLocation)
+        db.collection("routes-"+"${user!!.uid}").get().addOnSuccessListener{ result ->
+            result.forEach { document ->
+                //locationArrayList.add(UserLocation(document.id, ""))//get().addOnSuccessListener{ result ->
+
+                db.collection("users/"+"${user!!.uid}/"+"routes/"+document.id+"/"+document.id).orderBy("idNumber",Query.Direction.DESCENDING)
+                    .limit(1).addSnapshotListener(object: EventListener<QuerySnapshot>{
+                        override fun onEvent(
+                            value: QuerySnapshot?,
+                            error: FirebaseFirestoreException?
+                        ) {
+                            if(error!=null) {
+                                Log.e("Firestore error", error.message.toString())
+                            }
+                            for(dc: DocumentChange in value?.documentChanges!!){
+                                if(dc.type == DocumentChange.Type.ADDED){
+
+                                    var lat = dc.document.get("lat").toString().toDouble()
+                                    var lng = dc.document.get("lng").toString().toDouble()
+                                    var result: String = null.toString()
+                                    val geoCoder = Geocoder(this@TravelInfo)
+                                    val addressList = geoCoder.getFromLocation(lat, lng, 1)
+                                    if ((addressList != null && addressList.size > 0)) {
+                                        val address = addressList.get(0)
+                                        val sb = StringBuilder()
+                                        for (i in 0 until address.maxAddressLineIndex) {
+                                            sb.append(address.getAddressLine(i)).append(", ")
+                                        }
+                                        sb.append(address.locality).append(", ")
+                                        sb.append(address.postalCode).append(", ")
+                                        sb.append(address.countryName).append(".")
+                                        result = sb.toString()
+                                    }
+                                    locationArrayList.add(UserLocation(result, document.id))
+                                }
                             }
                         }
+                    })
 
-                        myAdapter.notifyDataSetChanged()
 
-                    }
-                })
+                }
+            }
+        }
 
     }
-}
+
+
+
+
+
+
+
