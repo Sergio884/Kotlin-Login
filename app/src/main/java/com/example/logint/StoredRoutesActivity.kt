@@ -27,9 +27,6 @@ class StoredRoutesActivity : AppCompatActivity() {
         myAdapter = LocationAdapter(locationArrayList)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = myAdapter
-        var auth = Firebase.auth
-        val user = auth.currentUser
-        db = FirebaseFirestore.getInstance()
         EventChangeListener()
 
     }
@@ -56,6 +53,7 @@ class StoredRoutesActivity : AppCompatActivity() {
 
                                     var lat = dc.document.get("lat").toString().toDouble()
                                     var lng = dc.document.get("lng").toString().toDouble()
+                                    println("JajaHola ++"+dc.document.get("lat"))
                                     var result: String = null.toString()
                                     val geoCoder = Geocoder(this@StoredRoutesActivity)
                                     val addressList = geoCoder.getFromLocation(lat, lng, 1)
@@ -70,6 +68,8 @@ class StoredRoutesActivity : AppCompatActivity() {
                                         sb.append(address.countryName).append(".")
                                         result = sb.toString()
                                     }
+                                    println("JajaHolad xdxd"+document.id)
+                                    println("JajaHola --"+result)
                                     locationArrayList.add(UserLocation(result, document.id))
                                 }
                             }
