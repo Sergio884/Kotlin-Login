@@ -77,20 +77,7 @@
             android:textStyle="bold"
             tools:ignore="MissingConstraints" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/style_button_background"
-            android:drawableStart="@drawable/ic_location_plus"
-            android:drawablePadding="10dp"
-            android:padding="15dp"
-            android:text="Añadir Ubicaciones"
-            android:textColor="@color/white"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            tools:ignore="MissingConstraints" />
+
 
         <TextView
             android:id="@+id/tv_fijarDestino"
@@ -101,7 +88,7 @@
             android:drawableStart="@drawable/ic_fly"
             android:drawablePadding="10dp"
             android:padding="15dp"
-            android:text="Fija una ruta destino"
+            android:text="Comenzar recorrido"
             android:textColor="@color/white"
             android:textSize="18dp"
             android:textStyle="bold"
@@ -116,7 +103,7 @@
             android:drawableStart="@drawable/ic_record"
             android:drawablePadding="10dp"
             android:padding="15dp"
-            android:text="Grabar una Ruta"
+            android:text="Grabar una ruta"
             android:textColor="@color/white"
             android:textSize="18dp"
             android:textStyle="bold"

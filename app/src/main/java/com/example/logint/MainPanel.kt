@@ -115,7 +115,7 @@ class MainPanel : AppCompatActivity() {
         }
 
         tv_fijarDestino.setOnClickListener {
-            val intent = Intent(this,TravelInfo::class.java)
+            val intent = Intent(this,TravelSelectionActivity::class.java)
             startActivity(intent)
         }
 

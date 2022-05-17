@@ -103,7 +103,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         btn_start_route.setOnClickListener{
-            val intents = Intent(this,OnRouteActivity::class.java)
+            val intents = Intent(this,TravelInfo::class.java)
             //intent.putExtra("tiempoTolerancia",tiempoTolerancia)
             startActivity(intents)
         }

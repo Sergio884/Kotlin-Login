@@ -17,7 +17,7 @@
         android:textColor="@color/white"
         android:textSize="28dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,8 +26,8 @@
         android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Digite la tolerancia en Km del cual se puede salir de su ruta"
+        android:layout_marginTop="80dp"
+        android:text="Digite la tolerancia en metros de la cual se puede salir de su ruta"
         app:layout_constraintTop_toBottomOf="@+id/tv_tituloDatosViaje"
         android:textColor="@color/white"
         android:textSize="16dp"
@@ -35,7 +35,6 @@
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         />
-
 
     <EditText
         android:id="@+id/et_radioTolerancia"
@@ -47,7 +46,7 @@
         android:background="@drawable/ic_field"
         android:drawableStart="@drawable/ic_compas"
         android:drawablePadding="10dp"
-        android:hint="50"
+        android:hint="100"
         android:padding="16dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
@@ -55,32 +54,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
-    <TextView
-        android:id="@+id/textView_ind_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="DEJAR EN BLANCO EN CASO DE OMITIR LA TOLERANCIA"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="20dp"
-        android:textColor="@color/white"
-        android:textSize="12dp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/et_radioTolerancia"
-        />
+
 
     <TextView
         android:id="@+id/textView10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Digite la tolerancia en minutos del cual se puede salir de su ruta"
+        android:layout_marginTop="100dp"
+        android:text="Digite la tolerancia en minutos de la cual se puede salir de su ruta"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         android:textColor="@color/white"
         android:textSize="16dp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/textView_ind_1"
+        app:layout_constraintTop_toBottomOf="@+id/et_radioTolerancia"
          />
 
     <EditText
@@ -93,7 +80,7 @@
         android:background="@drawable/ic_field"
         android:drawableStart="@drawable/ic_time"
         android:drawablePadding="10dp"
-        android:hint="45"
+        android:hint="5"
         android:padding="16dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
@@ -107,22 +94,22 @@
     <TextView
         android:id="@+id/tv_irARecorrido"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="56dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="50dp"
         android:background="@drawable/style_button_background"
         android:gravity="center"
         android:padding="15dp"
-        android:text="Continuar"
+        android:text="Comenzar recorrido"
         android:textColor="@color/white"
         android:textSize="18dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintBottom_toBottomOf="parent"
          />
 
 
-    <androidx.recyclerview.widget.RecyclerView
+    <!--<androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -136,23 +123,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_tiempoTolerancia"
         tools:listitem="@layout/item_location"
-        />
+        />-->
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        app:itemTextColor="@color/white"
-        app:itemIconTint="@color/white"
-        android:background="@drawable/style_button_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/bottom_nav_menu"
 
-        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

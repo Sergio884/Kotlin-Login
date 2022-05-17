@@ -28,6 +28,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Logint">
         <activity
+            android:name=".StoredRoutesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TravelSelectionActivity"
+            android:exported="false" />
+        <activity
             android:name=".OnRouteActivity"
             android:exported="false" />
         <activity
