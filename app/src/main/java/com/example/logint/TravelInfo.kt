@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_main_panel.*
 
 class TravelInfo : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -54,6 +55,32 @@ class TravelInfo : AppCompatActivity() {
             intents.putExtra("radioTolerancia", stringcito)
             //intent.putExtra("tiempoTolerancia",tiempoTolerancia)
             startActivity(intents)
+        }
+        //*****************************************Nav Bottom
+        bottomNavigationView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.navigation_contactos->{
+                    val intentContactos= Intent(this,ContactActivity::class.java)
+                    startActivity(intentContactos)
+                    true
+                }
+                R.id.navigation_home->{
+                    val intentHome= Intent(this,MainPanel::class.java)
+                    startActivity(intentHome)
+                    true
+                }
+                R.id.navigation_ajustes ->{
+                    val intentAjustes = Intent(this,MainActivity::class.java)
+                    startActivity(intentAjustes)
+                    true
+                }
+                R.id.navigation_informacion ->{
+                    val intentInfo = Intent(this,InfoActivity::class.java)
+                    startActivity(intentInfo)
+                    true
+                }
+                else -> false
+            }
         }
     }
 

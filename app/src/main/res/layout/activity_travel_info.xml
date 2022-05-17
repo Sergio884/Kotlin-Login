@@ -5,100 +5,112 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/style_background_main"
-    tools:context=".ModifyContact">
+    tools:context=".ModifyContact"
+
+    >
 
     <TextView
-        android:id="@+id/textView10"
-        android:layout_width="match_parent"
+        android:id="@+id/tv_tituloDatosViaje"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:layout_marginBottom="499dp"
-        android:text="Ingresa el tiempo de tolerancia"
-        android:textAlignment="center"
+        android:text="Configuración del Viaje"
         android:textColor="@color/white"
-        android:textSize="24dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="28dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp" />
-
+        />
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:text="Ingresa el radio de tolereancia"
-        android:textAlignment="center"
+        android:layout_marginTop="20dp"
+        android:text="Digite la tolerancia en Km del cual se puede salir de su ruta"
+        app:layout_constraintTop_toBottomOf="@+id/tv_tituloDatosViaje"
         android:textColor="@color/white"
-        android:textSize="24dp"
+        android:textSize="16dp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp" />
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        />
 
-    <TextView
-        android:id="@+id/tv_tituloDatosViaje"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="651dp"
-        android:padding="16dp"
-        android:text="Datos del Viaje"
-        android:textColor="@color/white"
-        android:textSize="36dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/et_radioTolerancia"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="547dp"
         android:background="@drawable/ic_field"
-        android:drawableStart="@drawable/ic_user3"
+        android:drawableStart="@drawable/ic_compas"
         android:drawablePadding="10dp"
         android:hint="50"
         android:padding="16dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tv_tituloDatosViaje"
-        app:layout_constraintStart_toStartOf="@id/tv_tituloDatosViaje"
-        app:layout_constraintTop_toBottomOf="@id/tv_tituloDatosViaje" />
+        app:layout_constraintTop_toBottomOf="@+id/textView1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+    <TextView
+        android:id="@+id/textView_ind_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="DEJAR EN BLANCO EN CASO DE OMITIR LA TOLERANCIA"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/white"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/et_radioTolerancia"
+        />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Digite la tolerancia en minutos del cual se puede salir de su ruta"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/textView_ind_1"
+         />
 
     <EditText
         android:id="@+id/et_tiempoTolerancia"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="430dp"
         android:background="@drawable/ic_field"
-        android:drawableStart="@drawable/ic_alarm_24"
+        android:drawableStart="@drawable/ic_time"
         android:drawablePadding="10dp"
         android:hint="45"
         android:padding="16dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tv_tituloDatosViaje"
-        app:layout_constraintStart_toStartOf="@id/tv_tituloDatosViaje"
-        app:layout_constraintTop_toBottomOf="@id/et_radioTolerancia" />
+        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+
 
     <TextView
         android:id="@+id/tv_irARecorrido"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="460dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="130dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/style_button_background"
         android:gravity="center"
         android:padding="15dp"
@@ -106,36 +118,41 @@
         android:textColor="@color/white"
         android:textSize="18dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+         />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="#54D8FF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/bottom_nav_menu">
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleView"
-        android:layout_width="380dp"
-        android:layout_height="167dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="348dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="15dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_irARecorrido"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/et_tiempoTolerancia"
+        tools:listitem="@layout/item_location"
+        />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/white"
+        android:background="@drawable/style_button_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/bottom_nav_menu"
+
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,38 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-             android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:maxHeight="200dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         tools:ignore="MissingConstraints"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/style_button_background"
-        android:padding="16dp">
+        android:background="@drawable/style_border_white"
+        android:padding="16dp"
+        >
 
         <ImageView
             android:id="@+id/icon_users"
             android:layout_width="56dp"
             android:layout_height="56dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_user2"></ImageView>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:srcCompat="@drawable/ic_location"></ImageView>
 
         <TextView
             android:id="@+id/location_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
+
             android:text="ESCOM"
             android:textColor="@color/white"
             android:textSize="24dp"
             app:layout_constraintEnd_toStartOf="@+id/points_menu"
             app:layout_constraintStart_toEndOf="@+id/icon_users"
-            tools:layout_editor_absoluteY="16dp"></TextView>
+            ></TextView>
 
         <TextView
             android:id="@+id/location"
@@ -41,6 +47,8 @@
             android:text="ESCOM IPN, Unidad Profesional Adolfo López Mateos, 07320 Ciudad de México, CDMX"
             android:textColor="@color/white"
             android:textSize="18dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="7dp"
             app:layout_constraintEnd_toStartOf="@+id/points_menu"
             app:layout_constraintStart_toStartOf="@+id/location_name"
             app:layout_constraintTop_toBottomOf="@+id/location_name"></TextView>
@@ -60,4 +68,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
