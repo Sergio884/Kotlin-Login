@@ -5,20 +5,17 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.telecom.Call
 import android.Manifest
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Build
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.android.volley.Response
-import com.example.logint.io.ApiService
 import com.example.logint.io.response.DistanceResponse
 import com.example.logint.model.Step
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -38,7 +35,6 @@ import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
 import kotlinx.android.synthetic.main.activity_map_distance.*
 import kotlinx.android.synthetic.main.fragment_contacts.*
-import javax.security.auth.callback.Callback
 
 class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
     private val FROM_REQUEST_CODE = 1
@@ -202,6 +198,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
                 data?.let {
                     val place = Autocomplete.getPlaceFromIntent(data)
                     Log.i(TAG, "Place: ${place.name}, ${place.id}")
+                    btnDestiny.text = place.name
                     callback(place)
                 }
             }
@@ -228,6 +225,17 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mMap.uiSettings.isZoomControlsEnabled = true
 
+
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                        this, R.raw.style));
+
+        } catch (e: Resources.NotFoundException) {
+            Log.e(TAG, "Can't find style. Error: ", e)
+        }
         if(!isLocationPermissionGranted()){
             val permissions = mutableListOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -281,21 +289,32 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun addMarker(latLng : LatLng , title : String): Marker{
+    private fun addMarkerFrom(latLng : LatLng , title : String): Marker{
         val markerOptions = MarkerOptions()
             .position(latLng)
             .title(title)
+            .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_white_30))
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        return mMap.addMarker(markerOptions)
+    }
+
+    private fun addMarkerTo(latLng : LatLng , title : String): Marker{
+        val markerOptions = MarkerOptions()
+            .position(latLng)
+            .title(title)
+            .icon(BitmapDescriptorFactory.fromResource(R.drawable.flag_white_30))
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
         return mMap.addMarker(markerOptions)
     }
 
     private fun setMarkerFrom(latLng: LatLng){
-        markerFrom = addMarker(latLng,"Origen: ")
+        markerFrom = addMarkerFrom(latLng,"Origen")
     }
 
     private fun setMarkerTo(latLng: LatLng){
-        markerTo = addMarker(latLng,"Destino: ")
+        markerTo = addMarkerTo(latLng,"Destino")
     }
 
 
@@ -359,8 +378,8 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
             val lineoption = PolylineOptions()
             for (i in result.indices){
                 lineoption.addAll(result[i])
-                lineoption.width(10f)
-                lineoption.color(Color.BLUE)
+                lineoption.width(6f)
+                lineoption.color(Color.rgb(0, 255, 185 ))
                 lineoption.geodesic(true)
             }
             mMap.addPolyline(lineoption)

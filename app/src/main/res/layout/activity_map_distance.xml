@@ -15,8 +15,10 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/ic_field"
         android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:text="¿A dónde vamos?"
-        android:textSize="19dp"
+        android:textSize="17dp"
         android:textColor="@color/white"/>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
