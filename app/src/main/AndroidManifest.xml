@@ -29,47 +29,58 @@
         android:theme="@style/Theme.Logint">
         <activity
             android:name=".StoredRoutesActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".TravelSelectionActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".OnRouteActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".InfoActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <service
             android:name=".RecordRoute"
+            android:screenOrientation="portrait"
             android:enabled="true"
             android:exported="true" />
 
         <activity
             android:name=".RecordRouteActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <service
             android:name=".SendLocation"
+            android:screenOrientation="portrait"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="location" />
         <service
             android:name=".RecordRoute"
+            android:screenOrientation="portrait"
             android:enabled="true"
             android:exported="true" />
 
         <activity
             android:name=".ModifyContact"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".MapDistanceActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ContactActivity"
             android:exported="true" />
         <activity
             android:name=".TravelInfo"
+            android:screenOrientation="portrait"
             android:exported="true" />
 
         <meta-data
@@ -78,31 +89,36 @@
 
         <activity
             android:name=".MainPanel"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".DeleteAccountActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".UpdatePasswordActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".AccountRecoveryActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".CheckEmail"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".SignUp"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:theme="@style/Theme.Main" />
         <activity
-            android:name=".TravelInfo"
-            android:exported="true" />
-        <activity
             android:name=".SignInActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -112,6 +128,7 @@
         </activity>
         <activity
             android:name=".MapsActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
 
         <receiver android:name=".GeofenceReceiver" />
