@@ -14,7 +14,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:id="@+id/container_route"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/container_record"
@@ -22,8 +22,6 @@
         android:layout_marginLeft="16dp"
         android:background="@drawable/style_glass_reverse"
         android:padding="10dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="30dp"
         tools:context=".TravelSelectionActivity"
         >
 
@@ -60,15 +58,14 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:id="@+id/container_record"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
         android:background="@drawable/style_glass"
         android:padding="10dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="50dp"
         tools:context=".TravelSelectionActivity"
         >
 
