@@ -31,7 +31,7 @@
         <activity
             android:name=".StoredRoutesActivity"
             android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".TravelSelectionActivity"
             android:screenOrientation="portrait"
@@ -82,7 +82,9 @@
         <activity
             android:name=".TravelInfo"
             android:screenOrientation="portrait"
-            android:exported="true" />
+            android:exported="true"
+
+            />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
