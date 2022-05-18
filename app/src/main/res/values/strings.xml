@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Alerta Angel</string>
+    <string name="app_name">SafeSOS</string>
     <string name="title_active_login">Alerta Angel</string>
     <string name="password">Contraseña</string>
     <string name="new_password">Nueva contraseña</string>
