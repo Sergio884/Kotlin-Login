@@ -16,7 +16,7 @@ import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main_panel.*
 
-class StoredRoutesActivity : AppCompatActivity() {
+class TravelInfoActivity : AppCompatActivity() {
 
     lateinit var recyclerView: RecyclerView
     lateinit var locationArrayList: ArrayList<UserLocation>

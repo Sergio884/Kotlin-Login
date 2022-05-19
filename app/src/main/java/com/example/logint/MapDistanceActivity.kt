@@ -34,7 +34,6 @@ import com.google.gson.Gson
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
 import kotlinx.android.synthetic.main.activity_map_distance.*
-import kotlinx.android.synthetic.main.fragment_contacts.*
 
 class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
     private val FROM_REQUEST_CODE = 1
@@ -99,7 +98,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         btn_start_route.setOnClickListener{
-            val intents = Intent(this,TravelInfo::class.java)
+            val intents = Intent(this,StoredTraveledActivity::class.java)
             //intent.putExtra("tiempoTolerancia",tiempoTolerancia)
             startActivity(intents)
         }

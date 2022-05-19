@@ -29,7 +29,7 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         >
         <activity
-            android:name=".StoredRoutesActivity"
+            android:name=".TravelInfoActivity"
             android:screenOrientation="portrait"
             android:exported="true" />
         <activity
@@ -80,7 +80,7 @@
             android:name=".ContactActivity"
             android:exported="true" />
         <activity
-            android:name=".TravelInfo"
+            android:name=".StoredTraveledActivity"
             android:screenOrientation="portrait"
             android:exported="true"
 

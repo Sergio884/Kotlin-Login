@@ -8,7 +8,7 @@
     android:maxHeight="200dp"
     android:layout_marginTop="16dp"
     android:layout_marginBottom="5dp"
-    tools:context=".TravelInfo"
+    tools:context=".StoredTraveledActivity"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
