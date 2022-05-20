@@ -179,12 +179,12 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
             fusedLocationClient.lastLocation.addOnSuccessListener {
                 if(it != null) {
                     with(map) {
-                        val latlng = LatLng(it.latitude, it.longitude)
-                        currentLocation = LatLng(latlng.latitude, latlng.longitude)
+                        currentLocation = LatLng(it.latitude, it.longitude)
                         moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, CAMERA_ZOOM_LEVEL))
                     }
                 }
             }
+            Thread.sleep(500)
         }
     }
 }
