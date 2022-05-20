@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -47,6 +48,7 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        Thread.sleep(500)
 
         /*recordImageView.setOnClickListener {
 
@@ -179,7 +181,7 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
                     with(map) {
                         val latlng = LatLng(it.latitude, it.longitude)
                         currentLocation = LatLng(latlng.latitude, latlng.longitude)
-
+                        moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, CAMERA_ZOOM_LEVEL))
                     }
                 }
             }

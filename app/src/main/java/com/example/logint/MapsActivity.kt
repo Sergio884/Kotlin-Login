@@ -122,7 +122,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     with(map) {
                         val latlng = LatLng(it.latitude, it.longitude)
                         currentLocation = LatLng(latlng.latitude, latlng.longitude)
-                        moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, CAMERA_ZOOM_LEVEL))
+                        moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, CAMERA_ZOOM_LEVEL))
                         /*readData(destino)
                         val URL = getDirectionURL(currentLocation,destinyLocation)
                         GetDirection(URL).execute()*/
