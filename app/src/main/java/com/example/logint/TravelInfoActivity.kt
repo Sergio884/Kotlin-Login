@@ -16,16 +16,19 @@ import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main_panel.*
 
-class TravelInfo : AppCompatActivity() {
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var locationArrayList: ArrayList<UserLocation>
-    private lateinit var myAdapter: LocationAdapter
-    private lateinit var db: FirebaseFirestore
+class TravelInfoActivity : AppCompatActivity() {
+
+    lateinit var recyclerView: RecyclerView
+    lateinit var locationArrayList: ArrayList<UserLocation>
+    lateinit var myAdapter: LocationAdapter
+    lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_travel_info)
-        //println("**********************\n\n\n\n\n**********************\nPene")
+        setContentView(R.layout.activity_stored_routes)
+
+
+
         val etRadioTolerancia: EditText = findViewById(R.id.et_radioTolerancia)
         val etTiempoTolerancia: EditText = findViewById(R.id.et_tiempoTolerancia)
         val tvIrARecorrido: TextView = findViewById(R.id.tv_irARecorrido)
@@ -42,17 +45,9 @@ class TravelInfo : AppCompatActivity() {
             //intent.putExtra("tiempoTolerancia",tiempoTolerancia)
             startActivity(intents)
         }
-        //*****************************************Nav Bottom
-
-    }
 
 
 
     }
 
-
-
-
-
-
-
+}

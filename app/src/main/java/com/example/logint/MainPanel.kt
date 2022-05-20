@@ -70,6 +70,7 @@ class MainPanel : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_panel)
 
+        GlobalClass.course = 1
         auth = Firebase.auth
         val user = auth.currentUser
         val profile: ImageView= findViewById(R.id.profilePhoto)

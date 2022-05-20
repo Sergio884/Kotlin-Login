@@ -29,9 +29,9 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         >
         <activity
-            android:name=".StoredRoutesActivity"
+            android:name=".TravelInfoActivity"
             android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".TravelSelectionActivity"
             android:screenOrientation="portrait"
@@ -80,9 +80,11 @@
             android:name=".ContactActivity"
             android:exported="true" />
         <activity
-            android:name=".TravelInfo"
+            android:name=".StoredTraveledActivity"
             android:screenOrientation="portrait"
-            android:exported="true" />
+            android:exported="true"
+
+            />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

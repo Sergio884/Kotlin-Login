@@ -8,18 +8,22 @@
     android:maxHeight="200dp"
     android:layout_marginTop="16dp"
     android:layout_marginBottom="5dp"
+    tools:context=".StoredTraveledActivity"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/contenedor_location_info"
         tools:ignore="MissingConstraints"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/style_background_main"
+        android:background="@drawable/style_border_white"
         android:padding="16dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         >
 
         <ImageView
-            android:id="@+id/icon_users"
+            android:id="@+id/icon_locations"
             android:layout_width="56dp"
             android:layout_height="56dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +41,7 @@
             android:textColor="@color/white"
             android:textSize="24dp"
             app:layout_constraintEnd_toStartOf="@+id/points_menu"
-            app:layout_constraintStart_toEndOf="@+id/icon_users"
+            app:layout_constraintStart_toEndOf="@+id/icon_locations"
             ></TextView>
 
         <TextView
@@ -58,9 +62,9 @@
             android:layout_width="46dp"
             android:layout_height="46dp"
             android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="@+id/icon_users"
+            app:layout_constraintBottom_toBottomOf="@+id/icon_locations"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/icon_users"
+            app:layout_constraintTop_toTopOf="@+id/icon_locations"
             app:srcCompat="@drawable/ic_points"
 
             ></ImageView>

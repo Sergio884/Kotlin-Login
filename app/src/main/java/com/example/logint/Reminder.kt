@@ -4,5 +4,5 @@ data class Reminder(    // Aqui podemos añadir lo que queramos, por ejemplo tie
     var key: String = "",
     var lat: Double = 0.0,
     var lng: Double = 0.0,
-    var time: String = ""
+    var time: String = "",
 )
