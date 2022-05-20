@@ -20,6 +20,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import kotlinx.android.synthetic.main.activity_contact.*
@@ -30,7 +31,7 @@ import kotlinx.android.synthetic.main.activity_record_route.*
 import kotlinx.android.synthetic.main.activity_record_route.map
 
 class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
-    private lateinit var mMap: GoogleMap
+    private lateinit var map: GoogleMap
     lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var currentLocation: LatLng
 
@@ -42,6 +43,9 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
         if(isMyServiceRunning(RecordRoute::class.java)==true){
             //imageBool = recordAnimation(recordImageView,R.raw.routefinder,imageBool)
         }
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         /*recordImageView.setOnClickListener {
@@ -119,12 +123,12 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-        mMap.setMinZoomPreference(10f)
-        mMap.setMaxZoomPreference(17f)
+        map = googleMap
+        map.setMinZoomPreference(10f)
+        map.setMaxZoomPreference(17f)
         // Add a marker in Sydney and move the camera
 
-        mMap.uiSettings.isZoomControlsEnabled = true
+        map.uiSettings.isZoomControlsEnabled = true
 
 
         try {
@@ -168,7 +172,7 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
                 // for ActivityCompat#requestPermissions for more details.
                 return
             }
-            mMap.isMyLocationEnabled = true
+            map.isMyLocationEnabled = true
             // Obtener la ultimas ubicacion conocida
             fusedLocationClient.lastLocation.addOnSuccessListener {
                 if(it != null) {
