@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main_panel.*
@@ -67,6 +68,7 @@ class TravelSelectionActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
 
     }
 
