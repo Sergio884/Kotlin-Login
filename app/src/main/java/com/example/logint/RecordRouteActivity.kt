@@ -184,7 +184,6 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                 }
             }
-            Thread.sleep(500)
         }
     }
 }
