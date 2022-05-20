@@ -3,29 +3,48 @@ package com.example.logint
 import android.Manifest
 import android.app.ActivityManager
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.airbnb.lottie.LottieAnimationView
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import kotlinx.android.synthetic.main.activity_contact.*
 import kotlinx.android.synthetic.main.activity_main_panel.*
 import kotlinx.android.synthetic.main.activity_main_panel.bottomNavigationView
+import kotlinx.android.synthetic.main.activity_map_distance.*
 import kotlinx.android.synthetic.main.activity_record_route.*
+import kotlinx.android.synthetic.main.activity_record_route.map
 
-class RecordRouteActivity : AppCompatActivity() {
+class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
+    private lateinit var mMap: GoogleMap
+    lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var currentLocation: LatLng
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_record_route)
         var imageBool = false
 
         if(isMyServiceRunning(RecordRoute::class.java)==true){
-            imageBool = recordAnimation(recordImageView,R.raw.routefinder,imageBool)
+            //imageBool = recordAnimation(recordImageView,R.raw.routefinder,imageBool)
         }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        recordImageView.setOnClickListener {
+        /*recordImageView.setOnClickListener {
 
             if(isMyServiceRunning(RecordRoute::class.java)==false){
                 imageBool = recordAnimation(recordImageView,R.raw.routefinder,imageBool)
@@ -50,7 +69,7 @@ class RecordRouteActivity : AppCompatActivity() {
             }
 
 
-        }
+        }*/
 
 
 
@@ -58,36 +77,9 @@ class RecordRouteActivity : AppCompatActivity() {
 
 
         //****************************** Nav Bar *************************************
-        bottomNavigationView.setOnItemSelectedListener {
-            when(it.itemId){
-                R.id.navigation_contactos->{
-                    val intentContactos= Intent(this,ContactActivity::class.java)
-                    startActivity(intentContactos)
-                    true
-                }
-                R.id.navigation_home->{
-                    val intentHome= Intent(this,MainPanel::class.java)
-                    startActivity(intentHome)
-                    true
-                }
-                R.id.navigation_ajustes ->{
-                    val intentAjustes = Intent(this,MainActivity::class.java)
-                    startActivity(intentAjustes)
-                    true
-                }
-                R.id.navigation_informacion ->{
-                    val intentInfo = Intent(this,InfoActivity::class.java)
-                    startActivity(intentInfo)
-                    true
-                }
-
-
-                else -> false
-            }
-        }
     }
 
-    private fun recordAnimation(imageView: LottieAnimationView,animation: Int,image: Boolean):Boolean{
+    /*private fun recordAnimation(imageView: LottieAnimationView,animation: Int,image: Boolean):Boolean{
         if(!image){
             imageView.setAnimation(animation)
             imageView.repeatCount = 99999999
@@ -100,7 +92,7 @@ class RecordRouteActivity : AppCompatActivity() {
 
         }
         return !image
-    }
+    }*/
 
     private val locationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()){ isGranted ->
         if(isGranted) println("acepto") //Toast.makeText(this, "acepto", Toast.LENGTH_SHORT).show()
@@ -116,5 +108,77 @@ class RecordRouteActivity : AppCompatActivity() {
             }
         }
         return false
+    }
+
+    private fun isLocationPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            applicationContext, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+            applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        mMap.setMinZoomPreference(10f)
+        mMap.setMaxZoomPreference(17f)
+        // Add a marker in Sydney and move the camera
+
+        mMap.uiSettings.isZoomControlsEnabled = true
+
+
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            googleMap.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    this, R.raw.style));
+
+        } catch (e: Resources.NotFoundException) {
+            //Log.e(TAG, "Can't find style. Error: ", e)
+        }
+        if(!isLocationPermissionGranted()){
+            val permissions = mutableListOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                permissions.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+            }
+            ActivityCompat.requestPermissions(
+                this,
+                permissions.toTypedArray(),
+                LOCATION_REQUEST_CODE
+            )
+        } else {    //Si ya teniamos acceso a la ubicacion
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return
+            }
+            mMap.isMyLocationEnabled = true
+            // Obtener la ultimas ubicacion conocida
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                if(it != null) {
+                    with(map) {
+                        val latlng = LatLng(it.latitude, it.longitude)
+                        currentLocation = LatLng(latlng.latitude, latlng.longitude)
+
+                    }
+                }
+            }
+        }
     }
 }

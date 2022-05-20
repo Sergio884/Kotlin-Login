@@ -71,9 +71,8 @@ class ShutdownReceiver: BroadcastReceiver() { // GeofenceReceiver extiende Broad
 
 
                 }
+
             }
-
-
 
     }
 
