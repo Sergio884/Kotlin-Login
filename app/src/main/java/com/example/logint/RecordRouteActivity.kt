@@ -30,6 +30,10 @@ import kotlinx.android.synthetic.main.activity_main_panel.bottomNavigationView
 import kotlinx.android.synthetic.main.activity_map_distance.*
 import kotlinx.android.synthetic.main.activity_record_route.*
 import kotlinx.android.synthetic.main.activity_record_route.map
+import com.google.android.gms.maps.CameraUpdate
+
+
+
 
 class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
@@ -180,7 +184,8 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
                 if(it != null) {
                     with(map) {
                         currentLocation = LatLng(it.latitude, it.longitude)
-                        moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, CAMERA_ZOOM_LEVEL))
+                        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLocation, CAMERA_ZOOM_LEVEL)
+                        map.animateCamera(cameraUpdate)
                     }
                 }
             }
