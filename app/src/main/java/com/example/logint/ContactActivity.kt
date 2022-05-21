@@ -40,7 +40,7 @@ class ContactActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact)
 
-//        var nombreUsuario: TextView = findViewById(R.id.name_contact)
+  //        var nombreUsuario: TextView = findViewById(R.id.name_contact)
   //      var numberContact: TextView = findViewById(R.id.number_contact)
         val addContacts: ImageView = findViewById(R.id.add_contacts)
 

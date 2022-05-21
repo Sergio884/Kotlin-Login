@@ -133,6 +133,7 @@ class MainPanel : AppCompatActivity() {
         }
         if(isMyServiceRunning(RecordRoute::class.java)==true){
             val intentRecord = Intent(this,RecordRouteActivity::class.java)
+            intentRecord.putExtra("runing",true)
             startActivity(intentRecord)
         }
 
@@ -169,8 +170,17 @@ class MainPanel : AppCompatActivity() {
         }
 
         tv_grabarRuta.setOnClickListener {
-            val intent = Intent(this,RecordRouteActivity::class.java)
-            startActivity(intent)
+
+            if(isMyServiceRunning(RecordRoute::class.java)==true){
+                val intentRecord = Intent(this,RecordRouteActivity::class.java)
+                intentRecord.putExtra("runing",true)
+                startActivity(intentRecord)
+            }
+            else{
+                val intent = Intent(this,RecordRouteActivity::class.java)
+                startActivity(intent)
+            }
+
 
         }
     }

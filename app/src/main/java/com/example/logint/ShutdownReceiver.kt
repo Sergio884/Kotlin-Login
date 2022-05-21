@@ -35,8 +35,6 @@ class ShutdownReceiver: BroadcastReceiver() { // GeofenceReceiver extiende Broad
                 hilo.start()
                 print("Enviaremos la Ubicación")
                 fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
-
-
                 if (ActivityCompat.checkSelfPermission(
                         context!!,
                         Manifest.permission.ACCESS_FINE_LOCATION

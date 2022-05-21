@@ -32,6 +32,11 @@ import kotlinx.android.synthetic.main.activity_record_route.map
 import com.google.android.gms.maps.CameraUpdate
 import android.location.LocationManager
 import android.os.Looper
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.marginBottom
+import com.example.logint.R.drawable
 import com.google.android.gms.location.*
 
 
@@ -46,7 +51,18 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_record_route)
-        var imageBool = false
+        var buttonBool = false
+        var parameters = this.intent.extras
+
+        if (parameters != null) {
+            buttonBool = parameters.getBoolean("runing")
+            cambiarButton(buttonBool)
+            et_nombreRuta.visibility= View.GONE
+            tv_instrucciones.visibility = View.GONE
+            tv_tituloGrabarRuta.setText(R.string.grabando_ruta)
+
+        }
+
         verificarPermisos()
         if(isMyServiceRunning(RecordRoute::class.java)==true){
             //imageBool = recordAnimation(recordImageView,R.raw.routefinder,imageBool)
@@ -57,38 +73,40 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         Thread.sleep(500)
 
-        /*recordImageView.setOnClickListener {
+        record_Route.setOnClickListener {
 
             if(isMyServiceRunning(RecordRoute::class.java)==false){
-                imageBool = recordAnimation(recordImageView,R.raw.routefinder,imageBool)
+                //imageBool = recordAnimation(recordImageView,R.raw.routefinder,imageBool)
+                buttonBool = true
+                cambiarButton(buttonBool)
+                et_nombreRuta.visibility= View.GONE
+                tv_instrucciones.visibility = View.GONE
+                tv_tituloGrabarRuta.setText(R.string.grabando_ruta)
                 et_nombreRuta.isFocusable = false
                 et_nombreRuta.isEnabled = false
                 et_nombreRuta.isCursorVisible = false
-                et_nombreRuta.setBackgroundResource(R.drawable.ic_field_none)
+                et_nombreRuta.setBackgroundResource(drawable.ic_field_none)
                 et_nombreRuta.setOnKeyListener(null)
-
                 locationPermission.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
                 locationPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
                 locationPermission.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
                 val intentRecord = Intent(this,RecordRoute::class.java)
                 intentRecord.putExtra("nameRoute", et_nombreRuta.text.toString())
                 startService(intentRecord)
-
             }else{
-                imageBool = recordAnimation(recordImageView,R.raw.routefinder,imageBool)
+                buttonBool = false
+                cambiarButton(buttonBool)
+                // imageBool = recordAnimation(recordImageView,R.raw.routefinder,imageBool)
                 val intentRecord = Intent(this,RecordRoute::class.java)
                 stopService(intentRecord)
-
+                val intentTravelSelectionActivity = Intent(this,TravelSelectionActivity::class.java)
+                Toast.makeText(this, "Tu ruta a sido guardada con éxito !!", Toast.LENGTH_LONG).show()
+                startActivity(intentTravelSelectionActivity)
             }
 
 
-        }*/
+        }
 
-
-        //Actualizar Ubicación
-
-
-        //****************************** Nav Bar *************************************
     }
 
     /*private fun recordAnimation(imageView: LottieAnimationView,animation: Int,image: Boolean):Boolean{
@@ -247,8 +265,8 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             //////
             val locationRequest = LocationRequest.create().apply {
-                interval = 1000
-                fastestInterval = 500
+                interval = 10000
+                fastestInterval = 1000
                 priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             }
             locationCallback = object : LocationCallback() {
@@ -277,5 +295,17 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    fun cambiarButton(buttonBool: Boolean){
+        if(buttonBool){
+            record_Route.setImageResource(R.drawable.ic_stop)
+            record_Route.setBackgroundResource(R.drawable.style_cancel_btn)
+        }else{
+            record_Route.setImageResource(R.drawable.ic_play)
+            record_Route.setBackgroundResource(R.drawable.style_button_background)
+        }
+    }
+
 
 }
+
+

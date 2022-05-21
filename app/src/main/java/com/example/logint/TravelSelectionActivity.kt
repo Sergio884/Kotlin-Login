@@ -101,21 +101,28 @@ class TravelSelectionActivity : AppCompatActivity() {
                                     //println("JajaHola ++"+dc.document.get("lat"))
                                     var result: String = null.toString()
                                     val geoCoder = Geocoder(this@TravelSelectionActivity)
-                                    val addressList = geoCoder.getFromLocation(lat, lng, 1)
-                                    if ((addressList != null && addressList.size > 0)) {
-                                        val address = addressList.get(0)
-                                        val sb = StringBuilder()
-                                        for (i in 0 until address.maxAddressLineIndex) {
-                                            sb.append(address.getAddressLine(i)).append(", ")
+                                    try {
+                                        val addressList = geoCoder.getFromLocation(lat, lng, 1)
+                                        if ((addressList != null && addressList.size > 0)) {
+                                            val address = addressList.get(0)
+                                            val sb = StringBuilder()
+                                            for (i in 0 until address.maxAddressLineIndex) {
+                                                sb.append(address.getAddressLine(i)).append(", ")
+                                            }
+                                            sb.append(address.locality).append(", ")
+                                            sb.append(address.postalCode).append(", ")
+                                            sb.append(address.countryName).append(".")
+                                            result = sb.toString()
                                         }
-                                        sb.append(address.locality).append(", ")
-                                        sb.append(address.postalCode).append(", ")
-                                        sb.append(address.countryName).append(".")
-                                        result = sb.toString()
+                                        //println("JajaHolad xdxd"+document.id)
+                                        //println("JajaHola --"+result)
+                                        locationArrayList.add(UserLocation(result, document.id))
                                     }
-                                    //println("JajaHolad xdxd"+document.id)
-                                    //println("JajaHola --"+result)
-                                    locationArrayList.add(UserLocation(result, document.id))
+                                    catch (e:java.io.IOException){
+                                        Log.d("Error","Hay un error en Geocoder",e.fillInStackTrace())
+                                    }
+
+
 
                                 }
                             }

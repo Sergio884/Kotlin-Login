@@ -37,6 +37,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="20dp"
         tools:ignore="InvalidId"
         ></TextView>
 
@@ -63,27 +64,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_instrucciones"
         app:layout_constraintBottom_toTopOf="@id/map"
-
         />
 
     <ImageView
-        android:id="@+id/textView"
+        android:id="@+id/record_Route"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:background="@drawable/style_button_background"
-        app:srcCompat="@drawable/ic_pause"
+        app:srcCompat="@drawable/ic_play"
         android:padding="10dp"
         android:textColor="@color/white"
         android:textSize="18dp"
         android:textStyle="bold"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginLeft="80dp"
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-
-     tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints" />
 
     <!--<com.airbnb.lottie.LottieAnimationView
         android:id="@+id/recordImageView"
@@ -107,11 +106,12 @@
         tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         tools:ignore="MissingConstraints"
-        app:layout_constraintBottom_toTopOf="@id/textView"
+        app:layout_constraintBottom_toTopOf="@+id/record_Route"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_nombreRuta"
         android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
         >
 
     </fragment>
