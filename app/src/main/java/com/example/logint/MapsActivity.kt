@@ -120,9 +120,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             fusedLocationClient.lastLocation.addOnSuccessListener {
                 if(it != null) {
                     with(map) {
-                        val latlng = LatLng(it.latitude, it.longitude)
-                        currentLocation = LatLng(latlng.latitude, latlng.longitude)
-                        moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, CAMERA_ZOOM_LEVEL))
+                        currentLocation = LatLng(it.latitude, it.longitude)
+                        moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, CAMERA_ZOOM_LEVEL))
                         /*readData(destino)
                         val URL = getDirectionURL(currentLocation,destinyLocation)
                         GetDirection(URL).execute()*/
