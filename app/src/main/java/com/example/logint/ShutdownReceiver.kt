@@ -26,6 +26,7 @@ class ShutdownReceiver: BroadcastReceiver() { // GeofenceReceiver extiende Broad
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
+        print("siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiuuuuu")
             if (GlobalClass.course < 1){
                 print("No enviaremos la Ubicación")
             }

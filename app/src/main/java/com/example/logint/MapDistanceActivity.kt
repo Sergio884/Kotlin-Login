@@ -300,8 +300,9 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
                     .radius(GEOFENCE_RADIUS.toDouble())
             )
             //map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, CAMERA_ZOOM_LEVEL))
-            destinyLocation = LatLng(latlng.latitude, latlng.longitude)
-            val URL = getDirectionURL(currentLocation, destinyLocation!!)
+            toLatLng = LatLng(latlng.latitude, latlng.longitude)
+            fromLatLng = currentLocation
+            val URL = getDirectionURL()
             GetDirection(URL).execute()
             val database = Firebase.database
             val reference = database.getReference("reminders")
