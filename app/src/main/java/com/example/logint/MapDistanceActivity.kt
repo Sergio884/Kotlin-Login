@@ -25,12 +25,16 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
+import com.google.maps.android.PolyUtil.isLocationOnPath
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
 import kotlinx.android.synthetic.main.activity_map_distance.*
@@ -45,6 +49,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
     private var markerTo : Marker? = null
     private var fromLatLng: LatLng? = null
     private var toLatLng: LatLng? = null
+    private var destinyLocation: LatLng? = null
     private lateinit var currentLocation: LatLng
     lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -69,6 +74,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
             bicycling.isSelected = false
             changeTravelMode()
         }
+
 
         transit.setOnClickListener {
             travelMode = "transit"
@@ -108,8 +114,6 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
         setupPlace()
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-
 
     }
 
@@ -278,6 +282,36 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
+        SetLongClick(mMap)
+    }
+
+    private fun SetLongClick(map: GoogleMap){
+        map.setOnMapClickListener { latlng ->
+            map.clear()
+            map.addMarker(  //Marcador de la posicion
+                MarkerOptions().position(latlng).title("Posicion Actual")
+            ).showInfoWindow()
+            map.addCircle(  // Circulo
+                CircleOptions()
+                    .center(latlng)
+                    .strokeColor(Color.argb(50,70,70,70))
+                    .fillColor(Color.argb(70,150,150,150))
+                    .radius(GEOFENCE_RADIUS.toDouble())
+            )
+            //map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, CAMERA_ZOOM_LEVEL))
+            toLatLng = LatLng(latlng.latitude, latlng.longitude)
+            fromLatLng = currentLocation
+            val URL = getDirectionURL()
+            GetDirection(URL).execute()
+            val database = Firebase.database
+            val reference = database.getReference("reminders")
+            val key = reference.push().key
+            if(key != null){
+                val reminder = Reminder(key, latlng.latitude, latlng.longitude) //Objeto de la base de datos
+                reference.child(key).setValue(reminder)
+            }
+
+        }
     }
     private fun isLocationPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -336,10 +370,15 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
             options.add(it.end_location.toLatLng())
         }
 
-        lasPolyline = mMap.addPolyline(options)
+       lasPolyline = mMap.addPolyline(options)
+
     }
 
     private fun latLngToString(latLng: LatLng)= "${latLng.latitude},${latLng.longitude}"
+
+    fun getDirectionURL(origin:LatLng,dest:LatLng) : String{
+        return "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&sensor=false&mode=${travelMode}&key=AIzaSyAGKhhjhbxvZft5yaeMKC3v0UbAkUPxoKM"
+    }
 
     fun getDirectionURL() : String{
         val from = fromLatLng?.let { latLngToString(it) }
@@ -356,6 +395,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
             val response = client.newCall(request).execute()
             val data = response.body()!!.string()
             Log.d("GoogleMap" , " data : $data")
+
             val result =  ArrayList<List<LatLng>>()
             try{
                 val respObj = Gson().fromJson(data,GoogleMapDTO::class.java)
@@ -366,9 +406,21 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
                     path.addAll(decodePolyline(respObj.routes[0].legs[0].steps[i].polyline.points))
                 }
                 result.add(path)
+                //19.47991613867424, -99.1377547739467 outside
+                //19.3615, -99.1514 inside eje central
+                val outside = LatLng(19.47991613867424, -99.1377547739467)
+                val inside = LatLng(19.3615, -99.1514)
+
+                Log.d("SS" , "***************************************************************************************")
+                if(isLocationOnPath(outside, path.toList(),true,300.0)){
+                    Log.d("SS" , "Siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiu")
+                }else{
+                    Log.d("SS" , " Noooooooooooooooooooooooooooooooooooooooui")
+                }
             }catch (e:Exception){
                 e.printStackTrace()
             }
+
             return result
         }
 
