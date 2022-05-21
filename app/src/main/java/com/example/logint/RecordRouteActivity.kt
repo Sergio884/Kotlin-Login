@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.location.LocationListener
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,8 +17,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.airbnb.lottie.LottieAnimationView
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -31,20 +30,24 @@ import kotlinx.android.synthetic.main.activity_map_distance.*
 import kotlinx.android.synthetic.main.activity_record_route.*
 import kotlinx.android.synthetic.main.activity_record_route.map
 import com.google.android.gms.maps.CameraUpdate
-
-
+import android.location.LocationManager
+import android.os.Looper
+import com.google.android.gms.location.*
 
 
 class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var currentLocation: LatLng
-
+    private lateinit var locationCallback: LocationCallback
+    private val CODIGO_PERMISOS_UBICACION_SEGUNDO_PLANO = 2106
+    private val LOG_TAG = "EnviarUbicacion"
+    private var haConcedidoPermisos = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_record_route)
         var imageBool = false
-
+        verificarPermisos()
         if(isMyServiceRunning(RecordRoute::class.java)==true){
             //imageBool = recordAnimation(recordImageView,R.raw.routefinder,imageBool)
         }
@@ -82,8 +85,7 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
         }*/
 
 
-
-
+        //Actualizar Ubicación
 
 
         //****************************** Nav Bar *************************************
@@ -178,17 +180,102 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
                 // for ActivityCompat#requestPermissions for more details.
                 return
             }
-            map.isMyLocationEnabled = true
-            // Obtener la ultimas ubicacion conocida
-            fusedLocationClient.lastLocation.addOnSuccessListener {
-                if(it != null) {
-                    with(map) {
-                        currentLocation = LatLng(it.latitude, it.longitude)
-                        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLocation, CAMERA_ZOOM_LEVEL)
-                        map.animateCamera(cameraUpdate)
+            else{
+                map.isMyLocationEnabled = true
+                // Obtener la ultimas ubicacion conocida
+                fusedLocationClient.lastLocation.addOnSuccessListener {
+                    if(it != null) {
+                        with(map) {
+                            currentLocation = LatLng(it.latitude, it.longitude)
+                            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLocation, CAMERA_ZOOM_LEVEL)
+                            map.animateCamera(cameraUpdate)
+                        }
                     }
                 }
             }
+
         }
     }
+
+    private fun verificarPermisos() {
+        val permisos = arrayListOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+        )
+        // Segundo plano para Android Q
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            permisos.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+        }
+        val permisosComoArray = permisos.toTypedArray()
+        if (tienePermisos(permisosComoArray)) {
+            haConcedidoPermisos = true
+            onPermisosConcedidos()
+            Log.d(LOG_TAG, "Los permisos ya fueron concedidos")
+        } else {
+            solicitarPermisos(permisosComoArray)
+        }
+    }
+
+
+    private fun solicitarPermisos(permisos: Array<String>) {
+        Log.d(LOG_TAG, "Solicitando permisos...")
+        requestPermissions(
+            permisos,
+            2106
+        )
+    }
+
+    private fun tienePermisos(permisos: Array<String>): Boolean {
+        return permisos.all {
+            return ContextCompat.checkSelfPermission(
+                this,
+                it
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    fun onPermisosConcedidos() {
+        // Hasta aquí sabemos que los permisos ya están concedidos
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        try {
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                if (it != null) {
+                    print("Ubicación ${it}")
+                } else {
+                    Log.d(LOG_TAG, "No se pudo obtener la ubicación")
+                }
+            }
+            //////
+            val locationRequest = LocationRequest.create().apply {
+                interval = 1000
+                fastestInterval = 500
+                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            }
+            locationCallback = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult?) {
+                    locationResult ?: return
+                    Log.d(LOG_TAG, "Se recibió una actualización")
+                    for (location in locationResult.locations) {
+                        if(location != null) {
+                            with(map) {
+                                currentLocation = LatLng(location.latitude, location.longitude)
+                                val cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLocation, CAMERA_ZOOM_LEVEL)
+                                map.animateCamera(cameraUpdate)
+                            }
+                        }
+                    }
+                }
+            }
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+        } catch (e: SecurityException) {
+            Log.d(LOG_TAG, "Tal vez no solicitaste permiso antes")
+        }
+
+    }
+
+
 }
