@@ -44,7 +44,7 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var currentLocation: LatLng
-    private lateinit var locationCallback: LocationCallback
+        private lateinit var locationCallback: LocationCallback
     private val CODIGO_PERMISOS_UBICACION_SEGUNDO_PLANO = 2106
     private val LOG_TAG = "EnviarUbicacion"
     private var haConcedidoPermisos = false
