@@ -25,7 +25,7 @@ class StoredTraveledActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_travel_info)
-        locationArrayList = (intent.getSerializableExtra("locationList") as ArrayList<UserLocation>?)!!
+        locationArrayList = intent.getSerializableExtra("locationList") as ArrayList<UserLocation>
         initRecyclerView()
     }
 

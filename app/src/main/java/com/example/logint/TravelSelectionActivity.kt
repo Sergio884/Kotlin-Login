@@ -21,7 +21,6 @@ class TravelSelectionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_travel_selection)
-
         EventChangeListener()
         Thread.sleep(500)
         //**************************************Pertenece al Grabado de rutas
@@ -131,6 +130,16 @@ class TravelSelectionActivity : AppCompatActivity() {
 
                 //myAdapter.notifyDataSetChanged()
             }
+        }
+
+    }
+
+    class HiloTravell(pun: TravelSelectionActivity) : Thread (){
+
+        override fun run() {
+            super.run()
+
+
         }
 
     }

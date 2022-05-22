@@ -180,8 +180,6 @@ class MainPanel : AppCompatActivity() {
                 val intent = Intent(this,RecordRouteActivity::class.java)
                 startActivity(intent)
             }
-
-
         }
     }
 
