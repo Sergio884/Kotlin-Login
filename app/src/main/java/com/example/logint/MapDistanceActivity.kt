@@ -10,6 +10,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Build
+import android.os.Parcelable
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
@@ -25,7 +26,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
-import com.google.android.gms.maps.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
@@ -52,6 +52,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
     private var destinyLocation: LatLng? = null
     private lateinit var currentLocation: LatLng
     lateinit var fusedLocationClient: FusedLocationProviderClient
+    var pathPolyLine : ArrayList<PathLocation> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,8 +105,12 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         btn_start_route.setOnClickListener{
-            val intents = Intent(this,StoredTraveledActivity::class.java)
-            //intent.putExtra("tiempoTolerancia",tiempoTolerancia)
+            val intents = Intent(this,TravelInfoActivity::class.java)
+            //var bundle:Bundle = Bundle()
+            //bundle.putParcelableArrayList("coordinates",pathPolyLine)
+            Log.d("PO" , "llena"+pathPolyLine.toString())
+            intents.putParcelableArrayListExtra("path",pathPolyLine)
+            //intents.putExtra("tiempoTolerancia",tiempoTolerancia)
             startActivity(intents)
         }
 
@@ -180,7 +185,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
                     setMarkerTo(it)
                     val URL = getDirectionURL()
                     Log.d("GoogleMap", "URL : $URL")
-                    GetDirection(URL).execute()
+                    GetDirection(URL,this).execute()
                 }
             }
         return
@@ -192,7 +197,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.clear()
         val URL = getDirectionURL()
         Log.d("GoogleMap", "URL : $URL")
-        GetDirection(URL).execute()
+        GetDirection(URL,this).execute()
     }
 
     private fun autocompleteProccess(resultCode: Int,data: Intent?, callback: (Place)->Unit){
@@ -302,7 +307,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
             toLatLng = LatLng(latlng.latitude, latlng.longitude)
             fromLatLng = currentLocation
             val URL = getDirectionURL()
-            GetDirection(URL).execute()
+            GetDirection(URL,this).execute()
             val database = Firebase.database
             val reference = database.getReference("reminders")
             val key = reference.push().key
@@ -388,7 +393,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
         return "https://maps.googleapis.com/maps/api/directions/json?origin=${from}&destination=${to}&sensor=false&mode=${travelMode}&key=AIzaSyAGKhhjhbxvZft5yaeMKC3v0UbAkUPxoKM"
     }
 
-    private inner class GetDirection(val url : String) : AsyncTask<Void, Void, List<List<LatLng>>>(){
+    private inner class GetDirection(val url : String,val pun :MapDistanceActivity) : AsyncTask<Void, Void, List<List<LatLng>>>(){
         override fun doInBackground(vararg params: Void?): List<List<LatLng>> {
             val client = OkHttpClient()
             val request = Request.Builder().url(url).build()
@@ -410,11 +415,20 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
                 //19.3615, -99.1514 inside eje central
                 val outside = LatLng(19.47991613867424, -99.1377547739467)
                 val inside = LatLng(19.3615, -99.1514)
+                //pathPolyLine = PathLocation(path.clone() as ArrayList<LatLng>)
+                path.forEach { it ->
+                    pun.pathPolyLine.add(PathLocation(it))
+                    //pun.pathPolyLine.add(PathLocation(it.latitude.toString(),it.longitude.toString()))
+                }
+                Log.d("SS" , "Siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiu"+pathPolyLine)
 
                 Log.d("SS" , "***************************************************************************************")
                 if(isLocationOnPath(outside, path.toList(),true,300.0)){
+
+                   // Log.d("PO" , "Siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiu"+pathPolyLine.toString())
                     Log.d("SS" , "Siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiu")
                 }else{
+                   // Log.d("PO" , "Siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiu"+pathPolyLine.toString())
                     Log.d("SS" , " Noooooooooooooooooooooooooooooooooooooooui")
                 }
             }catch (e:Exception){

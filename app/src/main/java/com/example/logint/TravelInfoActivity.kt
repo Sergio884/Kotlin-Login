@@ -1,31 +1,43 @@
 package com.example.logint
 
 import android.content.Intent
-import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
+import android.view.View
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.ktx.auth
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.*
-import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_main_panel.*
+import kotlin.collections.ArrayList as ArrayList
 
 class TravelInfoActivity : AppCompatActivity() {
 
     lateinit var recyclerView: RecyclerView
-    lateinit var locationArrayList: ArrayList<UserLocation>
+    private lateinit var pathPolyLine: ArrayList<PathLocation>
     lateinit var myAdapter: LocationAdapter
     lateinit var db: FirebaseFirestore
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stored_routes)
+        //pathPolyLine = intent.getParcelableArrayListExtra("coordinates")!!
+
+        //pathPolyLine = intent.getSerializableExtra("PathLocation") as ArrayList<PathLocation>
+        pathPolyLine = intent.getParcelableArrayListExtra("path")!!
+        pathPolyLine.forEach {
+            //Log.d("Coordinates","lat:"+it.lat+" long:"+it.long)
+            Log.d("Coordinates",it.position.toString())
+
+        }
+
+
+
+
+        //pathPolyLine = coordinates?.getParcelableArrayList<LatLng>("coordinates") as ArrayList<LatLng>
 
 
 
@@ -38,13 +50,38 @@ class TravelInfoActivity : AppCompatActivity() {
         etRadioTolerancia.setText(radioTolerancia)
         etTiempoTolerancia.setText(tiempoTolerancia)
         val stringcito = "caca"
+
         tvIrARecorrido.setOnClickListener {
             val intents = Intent(this, OnRouteActivity::class.java)
-            intents.putExtra("radioTolerancia", stringcito)
+            intents.putExtra("radioTolerancia", etRadioTolerancia.text.toString().toInt())
+            intents.putExtra("tiempoTolerancia",etTiempoTolerancia.text.toString().toInt())
+            intents.putParcelableArrayListExtra("path",pathPolyLine)
+
 
             //intent.putExtra("tiempoTolerancia",tiempoTolerancia)
             startActivity(intents)
         }
+
+        /*etRadioTolerancia.setOnKeyListener ( View.OnKeyListener { v, keycode, keyEvent ->
+            if (keyEvent.action == KeyEvent.ACTION_UP) {
+                var tolerancia = etRadioTolerancia.text.toString()
+                if(tolerancia.toInt() > 1000){
+                    var tam = etRadioTolerancia.text.toString().length
+                    var i =0
+                    var cambio = ""
+                    tolerancia.forEach {
+                        if (i < tam)
+                        cambio=cambio+it.toString()
+                    }
+
+                    etRadioTolerancia.setText(cambio)
+
+                }
+                return@OnKeyListener true
+            }
+            false
+
+        } )*/
 
 
 
