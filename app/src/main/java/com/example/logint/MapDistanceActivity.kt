@@ -412,7 +412,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
                 val inside = LatLng(19.3615, -99.1514)
 
                 Log.d("SS" , "***************************************************************************************")
-                if(isLocationOnPath(outside, path.toList(),true,300.0)){
+                if(isLocationOnPath(outside, path.toList(),true,320.0)){
                     Log.d("SS" , "Siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiu")
                 }else{
                     Log.d("SS" , " Noooooooooooooooooooooooooooooooooooooooui")
