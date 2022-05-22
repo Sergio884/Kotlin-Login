@@ -40,11 +40,19 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_on_route)
 
         pathPolyLine = intent.getParcelableArrayListExtra("path")!!
-        pathPolyLine.forEach {
-            //Log.d("Coordinates","lat:"+it.lat+" long:"+it.long)
-            Log.d("Coordinates",it.position.toString())
 
+        if(pathPolyLine.isNotEmpty())
+            pathPolyLine.forEach {
+                //Log.d("Coordinates","lat:"+it.lat+" long:"+it.long)
+
+                GlobalClass.polyLine.add(it.position)
+
+            }
+
+        GlobalClass.polyLine.forEach {
+            Log.d("Coordinates",GlobalClass.polyLine.toString())
         }
+
         var radioTolerancia  = intent.getIntExtra("radioTolerancia",50)
         var tiempoTolerancia  = intent.getIntExtra("tiempoTolerancia",5)
 

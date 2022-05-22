@@ -1,5 +1,6 @@
 package com.example.logint
 import android.app.Application
+import com.google.android.gms.maps.model.LatLng
 
 class GlobalClass : Application() {
 
@@ -8,6 +9,7 @@ class GlobalClass : Application() {
 
     companion object {
         var course = 0
+        var polyLine : ArrayList<LatLng> = ArrayList()
     }
 
     public fun getBandera(): Int{

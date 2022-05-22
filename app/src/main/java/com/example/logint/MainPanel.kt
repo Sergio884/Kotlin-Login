@@ -85,6 +85,9 @@ class MainPanel : AppCompatActivity() {
         var tv_fijarDestino:TextView=findViewById(R.id.tv_fijarDestino)
 
 
+
+
+
         var contactsFragment = ContactsFragment()
         //****************************** Nav Bar *************************************
         bottomNavigationView.setOnItemSelectedListener {

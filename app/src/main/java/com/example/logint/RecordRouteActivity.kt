@@ -63,6 +63,7 @@ class RecordRouteActivity : AppCompatActivity(), OnMapReadyCallback {
 
         }
 
+
         verificarPermisos()
         if(isMyServiceRunning(RecordRoute::class.java)==true){
             //imageBool = recordAnimation(recordImageView,R.raw.routefinder,imageBool)

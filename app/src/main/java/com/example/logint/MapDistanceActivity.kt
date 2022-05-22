@@ -54,6 +54,8 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
     lateinit var fusedLocationClient: FusedLocationProviderClient
     var pathPolyLine : ArrayList<PathLocation> = ArrayList()
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map_distance)
