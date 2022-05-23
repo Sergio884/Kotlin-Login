@@ -124,31 +124,6 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    private fun fetchLocation(){
-        val task = fusedLocationClient.lastLocation
-
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            //    this.fusedLocationClient.flushLocations()
-            ActivityCompat.requestPermissions(this,arrayOf( android.Manifest.permission.ACCESS_FINE_LOCATION),101)
-            return
-        }
-        task.addOnSuccessListener {
-            if(it!=null){
-                Toast.makeText(this,"${it.latitude},${it.longitude}",Toast.LENGTH_SHORT).show()
-                val toPosition = LatLng(it.latitude, it.longitude)
-                fromLatLng = toPosition
-                setMarkerFrom(toPosition)
-
-            }
-        }
-    }
 
     private fun setupMap(){
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -295,9 +270,6 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun SetLongClick(map: GoogleMap){
         map.setOnMapClickListener { latlng ->
             map.clear()
-            map.addMarker(  //Marcador de la posicion
-                MarkerOptions().position(latlng).title("Posicion Actual")
-            ).showInfoWindow()
             map.addCircle(  // Circulo
                 CircleOptions()
                     .center(latlng)
@@ -310,14 +282,6 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
             fromLatLng = currentLocation
             val URL = getDirectionURL()
             GetDirection(URL,this).execute()
-            val database = Firebase.database
-            val reference = database.getReference("reminders")
-            val key = reference.push().key
-            if(key != null){
-                val reminder = Reminder(key, latlng.latitude, latlng.longitude) //Objeto de la base de datos
-                reference.child(key).setValue(reminder)
-            }
-
         }
     }
     private fun isLocationPermissionGranted(): Boolean {
@@ -357,35 +321,8 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-    private fun displayTravelInfo(distanceResponse: DistanceResponse){
-        drawRoute(distanceResponse.steps)
-    }
-
-    private var lasPolyline:Polyline? = null
-    private fun drawRoute(steps : List<Step>){
-        Log.d(TAG,"drawRoute")
-        lasPolyline?.remove()
-        if(steps==null || steps.isEmpty()){
-            Log.d(TAG,"No se puede dibujar la ruta ya que no hay pasos")
-        }
-
-        val options = PolylineOptions().clickable(true)
-
-        options.add(steps[0].start_location.toLatLng())
-
-        steps.forEach{
-            options.add(it.end_location.toLatLng())
-        }
-
-       lasPolyline = mMap.addPolyline(options)
-
-    }
 
     private fun latLngToString(latLng: LatLng)= "${latLng.latitude},${latLng.longitude}"
-
-    fun getDirectionURL(origin:LatLng,dest:LatLng) : String{
-        return "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&sensor=false&mode=${travelMode}&key=AIzaSyAGKhhjhbxvZft5yaeMKC3v0UbAkUPxoKM"
-    }
 
     fun getDirectionURL() : String{
         val from = fromLatLng?.let { latLngToString(it) }
@@ -418,6 +355,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
                 val outside = LatLng(19.47991613867424, -99.1377547739467)
                 val inside = LatLng(19.3615, -99.1514)
                 //pathPolyLine = PathLocation(path.clone() as ArrayList<LatLng>)
+                GlobalClass.polyLine.clear()
                 path.forEach { it ->
                     pun.pathPolyLine.add(PathLocation(it))
                     //pun.pathPolyLine.add(PathLocation(it.latitude.toString(),it.longitude.toString()))

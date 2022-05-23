@@ -49,9 +49,6 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
 
             }
 
-        GlobalClass.polyLine.forEach {
-            Log.d("Coordinates",GlobalClass.polyLine.toString())
-        }
 
         var radioTolerancia  = intent.getIntExtra("radioTolerancia",50)
         var tiempoTolerancia  = intent.getIntExtra("tiempoTolerancia",5)
@@ -65,7 +62,7 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        Thread.sleep(500)
+        //Thread.sleep(500)
 
     }
 
@@ -80,10 +77,19 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        map.clear()
         map.setMinZoomPreference(10f)
         map.setMaxZoomPreference(17f)
         // Add a marker in Sydney and move the camera
+        val optionsPolyLine = PolylineOptions()
 
+        GlobalClass.polyLine.forEach{
+            optionsPolyLine.add(it)
+            optionsPolyLine.width(6f)
+            optionsPolyLine.color(Color.rgb(0, 255, 185 ))
+        }
+
+        map.addPolyline(optionsPolyLine)
 
         map.uiSettings.isZoomControlsEnabled = true
 
@@ -199,7 +205,7 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
             //////
             val locationRequest = LocationRequest.create().apply {
                 interval = 10000
-                fastestInterval = 1000
+                fastestInterval = 20000
                 priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             }
             locationCallback = object : LocationCallback() {
@@ -226,97 +232,5 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.d(LOG_TAG, "Tal vez no solicitaste permiso antes")
         }
 
-    }
-
-
-
-    private inner class GetDirection(val url : String,val pun :MapDistanceActivity) : AsyncTask<Void, Void, List<List<LatLng>>>(){
-        override fun doInBackground(vararg params: Void?): List<List<LatLng>> {
-            val client = OkHttpClient()
-            val request = Request.Builder().url(url).build()
-            val response = client.newCall(request).execute()
-            val data = response.body()!!.string()
-            Log.d("GoogleMap" , " data : $data")
-
-            val result =  ArrayList<List<LatLng>>()
-            try{
-                val respObj = Gson().fromJson(data,GoogleMapDTO::class.java)
-
-                val path =  ArrayList<LatLng>()
-
-                for (i in 0..(respObj.routes[0].legs[0].steps.size-1)){
-                    path.addAll(decodePolyline(respObj.routes[0].legs[0].steps[i].polyline.points))
-                }
-                result.add(path)
-                //19.47991613867424, -99.1377547739467 outside
-                //19.3615, -99.1514 inside eje central
-                val outside = LatLng(19.47991613867424, -99.1377547739467)
-                val inside = LatLng(19.3615, -99.1514)
-                //pathPolyLine = PathLocation(path.clone() as ArrayList<LatLng>)
-                path.forEach { it ->
-                    pun.pathPolyLine.add(PathLocation(it))
-                    //pun.pathPolyLine.add(PathLocation(it.latitude.toString(),it.longitude.toString()))
-                }
-                Log.d("SS" , "Siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiu"+pathPolyLine)
-
-                Log.d("SS" , "***************************************************************************************")
-                if(PolyUtil.isLocationOnPath(outside, path.toList(), true, 320.0)){
-                    Log.d("SS" , "Siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiu")
-                }else{
-                    Log.d("SS" , " Noooooooooooooooooooooooooooooooooooooooui")
-                }
-            }catch (e:Exception){
-                e.printStackTrace()
-            }
-
-            return result
-        }
-
-        override fun onPostExecute(result: List<List<LatLng>>) {
-            val lineoption = PolylineOptions()
-            for (i in result.indices){
-                lineoption.addAll(result[i])
-                lineoption.width(6f)
-                lineoption.color(Color.rgb(0, 255, 185 ))
-                lineoption.geodesic(true)
-            }
-            map.addPolyline(lineoption)
-        }
-    }
-
-    public fun decodePolyline(encoded: String): List<LatLng> {
-        val poly = ArrayList<LatLng>()
-        var index = 0
-        val len = encoded.length
-        var lat = 0
-        var lng = 0
-
-        while (index < len) {
-            var b: Int
-            var shift = 0
-            var result = 0
-            do {
-                b = encoded[index++].toInt() - 63
-                result = result or (b and 0x1f shl shift)
-                shift += 5
-            } while (b >= 0x20)
-            val dlat = if (result and 1 != 0) (result shr 1).inv() else result shr 1
-            lat += dlat
-
-            shift = 0
-            result = 0
-            do {
-                b = encoded[index++].toInt() - 63
-                result = result or (b and 0x1f shl shift)
-                shift += 5
-            } while (b >= 0x20)
-            val dlng = if (result and 1 != 0) (result shr 1).inv() else result shr 1
-            lng += dlng
-
-            val latLng = LatLng((lat.toDouble() / 1E5),(lng.toDouble() / 1E5))
-            poly.add(latLng)
-        }
-
-        return poly
     }
 }
