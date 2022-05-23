@@ -1,6 +1,8 @@
 package com.example.logint
 
 import android.Manifest
+import android.app.ActivityManager
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Color
@@ -24,6 +26,7 @@ import com.google.gson.Gson
 import com.google.maps.android.PolyUtil
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
+import kotlinx.android.synthetic.main.activity_on_route.*
 
 class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
@@ -48,21 +51,30 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
                 GlobalClass.polyLine.add(it.position)
 
             }
-
-
         var radioTolerancia  = intent.getIntExtra("radioTolerancia",50)
         var tiempoTolerancia  = intent.getIntExtra("tiempoTolerancia",5)
 
         Log.d("radioTolerancia: ",""+radioTolerancia.toString())
         Log.d("tiempoTolerancia: ",tiempoTolerancia.toString())
-
-
         verificarPermisos()
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        //Thread.sleep(500)
+
+
+        if(isMyServiceRunning(OnRoute::class.java) == false){
+            val intentOnRoute = Intent(this,OnRoute::class.java)
+            intentOnRoute.putExtra("radioTolerancia",radioTolerancia)
+            intentOnRoute.putExtra("tiempoTolerancia",tiempoTolerancia)
+            startService(intentOnRoute)
+        }
+
+        textView2.setOnClickListener {
+            val intentOnRoute = Intent(this,OnRoute::class.java)
+            stopService(intentOnRoute)
+        }
+
 
     }
 
@@ -126,13 +138,7 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+
                 return
             }
             else{
@@ -232,5 +238,15 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.d(LOG_TAG, "Tal vez no solicitaste permiso antes")
         }
 
+    }
+
+    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
     }
 }
