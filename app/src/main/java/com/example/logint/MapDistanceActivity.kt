@@ -112,6 +112,9 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
             //bundle.putParcelableArrayList("coordinates",pathPolyLine)
             Log.d("PO" , "llena"+pathPolyLine.toString())
             intents.putParcelableArrayListExtra("path",pathPolyLine)
+            intents.putExtra("latitud", toLatLng!!.latitude)
+            intents.putExtra("longitud",toLatLng!!.longitude)
+
             //intents.putExtra("tiempoTolerancia",tiempoTolerancia)
             startActivity(intents)
         }

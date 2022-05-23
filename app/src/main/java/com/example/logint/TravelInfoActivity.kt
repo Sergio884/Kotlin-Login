@@ -34,6 +34,10 @@ class TravelInfoActivity : AppCompatActivity() {
 
         }
 
+        val latitud = intent.getDoubleExtra("latitud",19.47991613867424)
+        val longitud = intent.getDoubleExtra("longitud",-99.1377547739467)
+
+
 
 
 
@@ -55,6 +59,8 @@ class TravelInfoActivity : AppCompatActivity() {
             val intents = Intent(this, OnRouteActivity::class.java)
             intents.putExtra("radioTolerancia", etRadioTolerancia.text.toString().toInt())
             intents.putExtra("tiempoTolerancia",etTiempoTolerancia.text.toString().toInt())
+            intents.putExtra("latitud", latitud)
+            intents.putExtra("longitud",longitud)
             intents.putParcelableArrayListExtra("path",pathPolyLine)
 
 

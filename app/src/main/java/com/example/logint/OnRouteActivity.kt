@@ -53,6 +53,8 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         var radioTolerancia  = intent.getIntExtra("radioTolerancia",50)
         var tiempoTolerancia  = intent.getIntExtra("tiempoTolerancia",5)
+        val latitud = intent.getDoubleExtra("latitud",19.47991613867424)
+        val longitud = intent.getDoubleExtra("longitud",-99.1377547739467)
 
         Log.d("radioTolerancia: ",""+radioTolerancia.toString())
         Log.d("tiempoTolerancia: ",tiempoTolerancia.toString())
@@ -67,6 +69,8 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
             val intentOnRoute = Intent(this,OnRoute::class.java)
             intentOnRoute.putExtra("radioTolerancia",radioTolerancia)
             intentOnRoute.putExtra("tiempoTolerancia",tiempoTolerancia)
+            intentOnRoute.putExtra("latitud", latitud)
+            intentOnRoute.putExtra("longitud",longitud)
             startService(intentOnRoute)
         }
 

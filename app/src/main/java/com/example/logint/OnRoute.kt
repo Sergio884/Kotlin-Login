@@ -1,6 +1,7 @@
 package com.example.logint
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -16,15 +17,16 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.maps.android.PolyUtil
 import com.google.android.gms.maps.model.LatLng
+
+
+
 
 class OnRoute : Service() {
 
@@ -38,6 +40,8 @@ class OnRoute : Service() {
     var  radioTolerancia=50
     var  tiempoTolerancia =5
     lateinit var intentSOS : Intent
+    var latitud = 19.47991613867424
+    var longitud = -99.1377547739467
 
 
     override fun onBind(intent: Intent): IBinder {
@@ -46,6 +50,7 @@ class OnRoute : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -64,9 +69,13 @@ class OnRoute : Service() {
         if (intent != null) {
              radioTolerancia  = intent.getIntExtra("radioTolerancia",50)
              tiempoTolerancia  = intent.getIntExtra("tiempoTolerancia",5)
+             latitud = intent.getDoubleExtra("latitud",19.47991613867424)
+             longitud = intent.getDoubleExtra("longitud",-99.1377547739467)
 
         }
-        println("El valor del intent es: *************************************** "+nameRoute)
+
+
+        //println("El valor del intent es: *************************************** "+nameRoute)
         hilo= OnRoute.HiloRoute(this)
         hilo.start()
         return START_STICKY
@@ -88,13 +97,14 @@ class OnRoute : Service() {
     fun alertSOS(){
 
         val intentSOS = Intent(this,SendLocation::class.java)
-        //val intentRedirection = Intent(this,MainPanel::class.java)
+        val intentRedirection = Intent(this,MainPanel::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intentSOS)
 
         }else{
             startService(intentSOS)
         }
+        startActivity(intentRedirection)
         val intentKill = Intent(this,OnRoute::class.java)
         stopService(intentKill)
 
@@ -109,6 +119,42 @@ class OnRoute : Service() {
         )
         notificationManager.createNotificationChannel(chanel)
     }
+
+    /*@SuppressLint("MissingPermission")
+    private fun createGeofence(location: LatLng, geofencingClient: GeofencingClient){
+        val geofence = Geofence.Builder()
+            .setRequestId(GEOFENCE_ID)
+            .setCircularRegion(location.latitude, location.longitude, GEOFENCE_RADIUS.toFloat())
+            .setExpirationDuration(GEOFENCE_EXPIRATION.toLong())
+            .setTransitionTypes(
+                Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_DWELL
+            ).setLoiteringDelay(GEOFENCE_DWELL_DELAY)
+            .build()
+
+        val geofenceRequest = GeofencingRequest.Builder()
+            .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+            .addGeofence(geofence)
+            .build()
+
+        val intent = Intent(this, GeofenceReceiver::class.java)
+            .putExtra("message", "Geofence detectada")
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+
+                geofencingClient.addGeofences(geofenceRequest, pendingIntent)
+
+        } else {    // Si no es android 10 o mayor
+                geofencingClient.addGeofences(geofenceRequest, pendingIntent)
+        }
+
+    }*/
 
     class HiloRoute(puntero : OnRoute):Thread(){
         private lateinit var locationCallback: LocationCallback
@@ -165,7 +211,9 @@ class OnRoute : Service() {
                                 location.latitude,
                                 location.longitude
                             )
-
+                            if(distance(location.latitude,location.longitude,pun.latitud,pun.longitud)>100.0){
+                                Log.d("SS" , "Llegamoooooooooooooooooooooooooooooooooooooosss")
+                            }
                             if(PolyUtil.isLocationOnPath(position, GlobalClass.polyLine.toList(), true, pun.radioTolerancia.toDouble())){
                                 toleranciaAux = 0
                                 Log.d("SS" , "Siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiu")
@@ -219,6 +267,29 @@ class OnRoute : Service() {
             }
 
         }
+
+        private fun distance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+            val theta = lon1 - lon2
+            var dist = (Math.sin(deg2rad(lat1))
+                    * Math.sin(deg2rad(lat2))
+                    + (Math.cos(deg2rad(lat1))
+                    * Math.cos(deg2rad(lat2))
+                    * Math.cos(deg2rad(theta))))
+            dist = Math.acos(dist)
+            dist = rad2deg(dist)
+            dist = dist * 60 * 1.1515
+            return dist
+        }
+
+        private fun deg2rad(deg: Double): Double {
+            return deg * Math.PI / 180.0
+        }
+
+        private fun rad2deg(rad: Double): Double {
+            return rad * 180.0 / Math.PI
+        }
+
+
     }
 
 
