@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.IBinder
 import android.os.Looper
+import android.telephony.SmsManager
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -36,6 +37,7 @@ class OnRoute : Service() {
     private var nameRoute=""
     var  radioTolerancia=50
     var  tiempoTolerancia =5
+    lateinit var intentSOS : Intent
 
 
     override fun onBind(intent: Intent): IBinder {
@@ -83,8 +85,20 @@ class OnRoute : Service() {
         PendingIntent.FLAG_UPDATE_CURRENT
     )
 
-    public fun setNameRoute(nameRoute :String){
-        this.nameRoute=nameRoute
+    fun alertSOS(){
+
+        val intentSOS = Intent(this,SendLocation::class.java)
+        //val intentRedirection = Intent(this,MainPanel::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intentSOS)
+
+        }else{
+            startService(intentSOS)
+        }
+        val intentKill = Intent(this,OnRoute::class.java)
+        stopService(intentKill)
+
+
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChanel(notificationManager: NotificationManager){
@@ -100,6 +114,10 @@ class OnRoute : Service() {
         private lateinit var locationCallback: LocationCallback
         var pun = puntero
         var contador = 0
+        var tiempoTolerancia = pun.tiempoTolerancia*60
+        var toleranciaAux = 0
+        var alerta = false
+
         override fun run() {
             super.run()
             outSideDetection()
@@ -148,9 +166,21 @@ class OnRoute : Service() {
                                 location.longitude
                             )
 
-                            if(PolyUtil.isLocationOnPath(position, GlobalClass.polyLine.toList(), true, 100.0)){
+                            if(PolyUtil.isLocationOnPath(position, GlobalClass.polyLine.toList(), true, pun.radioTolerancia.toDouble())){
+                                toleranciaAux = 0
                                 Log.d("SS" , "Siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiu")
                             }else{
+                                toleranciaAux += 5
+                                if(toleranciaAux >= tiempoTolerancia){
+                                    if(alerta == false){
+                                        sendSMS()
+                                        pun.alertSOS()
+                                        Log.d("SS" , "Auxilioooooooooooooooooooooooooo")
+                                        alerta = true
+                                    }
+
+
+                                }
                                 Log.d("SS" , " Noooooooooooooooooooooooooooooooooooooooui")
                             }
                         }
@@ -159,6 +189,35 @@ class OnRoute : Service() {
 
                 }
             }
+        }
+
+        private fun sendSMS(){
+            val auth = Firebase.auth
+            val db = FirebaseFirestore.getInstance()
+            val user = auth.currentUser
+            val docs = db.collection("contacts-${user!!.uid}")
+            val uid :String = user!!.uid
+            val informacion = "¡ALERTA DE EMERGENCIA!\n "+user.displayName.toString()+" se encuentra en peligro te compartimos un link con el cual podras acceder a su ubicacion".replace("ñ","n").replace("á","a").replace("é","e").replace("í","i").replace("ó","o")
+            val url = "safesos.online/mapa.php?u=${uid}&n="+user.displayName.toString()
+            print(url)
+            docs.get().addOnSuccessListener { documents ->
+                for(document in documents){
+                    //Log.d("contacto: ", "${document.id} => ${document.data}")
+                    println("${document.id.toString()} ${document.data.toString()}")
+                    val sms = SmsManager.getDefault()
+                    sms.sendTextMessage(document.id.toString(),null,informacion,null,null)
+                    sms.sendTextMessage(document.id.toString(),null,url,null,null)
+                    /*val sendWhats = Intent(Intent.ACTION_SEND)
+                    sendWhats.type = "text/plain"
+                    sendWhats.setPackage("com.whatsapp")
+                    sendWhats.putExtra("jid", "525587355557" + "@s.whatsapp.net");
+                    sendWhats.putExtra(Intent.EXTRA_TEXT,"Prueba Api");
+                    startActivity(sendWhats);*/
+
+
+                }
+            }
+
         }
     }
 
