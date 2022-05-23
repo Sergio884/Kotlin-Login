@@ -339,6 +339,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
             val response = client.newCall(request).execute()
             val data = response.body()!!.string()
             Log.d("GoogleMap" , " data : $data")
+            pun.pathPolyLine.clear()
 
             val result =  ArrayList<List<LatLng>>()
             try{
@@ -355,12 +356,11 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
                 val outside = LatLng(19.47991613867424, -99.1377547739467)
                 val inside = LatLng(19.3615, -99.1514)
                 //pathPolyLine = PathLocation(path.clone() as ArrayList<LatLng>)
-                GlobalClass.polyLine.clear()
+                //GlobalClass.polyLine.clear()
                 path.forEach { it ->
                     pun.pathPolyLine.add(PathLocation(it))
                     //pun.pathPolyLine.add(PathLocation(it.latitude.toString(),it.longitude.toString()))
                 }
-                Log.d("SS" , "Siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiu"+pathPolyLine)
 
                 Log.d("SS" , "***************************************************************************************")
                 if(isLocationOnPath(outside, path.toList(),true,320.0)){
