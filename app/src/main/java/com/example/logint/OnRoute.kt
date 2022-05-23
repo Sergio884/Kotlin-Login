@@ -9,6 +9,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Build
 import android.os.IBinder
 import android.os.Looper
@@ -211,7 +212,13 @@ class OnRoute : Service() {
                                 location.latitude,
                                 location.longitude
                             )
-                            if(distance(location.latitude,location.longitude,pun.latitud,pun.longitud)>100.0){
+
+                            val finalLocation = Location("FinalPoint")
+                            finalLocation.latitude  =pun.latitud
+                            finalLocation.longitude = pun.longitud
+                            //Log.d("SS" , location.distanceTo(finalLocation).toString())
+
+                            if(location.distanceTo(finalLocation)<200.0){
                                 Log.d("SS" , "Llegamoooooooooooooooooooooooooooooooooooooosss")
                             }
                             if(PolyUtil.isLocationOnPath(position, GlobalClass.polyLine.toList(), true, pun.radioTolerancia.toDouble())){
@@ -268,26 +275,7 @@ class OnRoute : Service() {
 
         }
 
-        private fun distance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
-            val theta = lon1 - lon2
-            var dist = (Math.sin(deg2rad(lat1))
-                    * Math.sin(deg2rad(lat2))
-                    + (Math.cos(deg2rad(lat1))
-                    * Math.cos(deg2rad(lat2))
-                    * Math.cos(deg2rad(theta))))
-            dist = Math.acos(dist)
-            dist = rad2deg(dist)
-            dist = dist * 60 * 1.1515
-            return dist
-        }
 
-        private fun deg2rad(deg: Double): Double {
-            return deg * Math.PI / 180.0
-        }
-
-        private fun rad2deg(rad: Double): Double {
-            return rad * 180.0 / Math.PI
-        }
 
 
     }
