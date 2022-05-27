@@ -39,7 +39,7 @@ import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
 import kotlinx.android.synthetic.main.activity_map_distance.*
 
-class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener {
     private val FROM_REQUEST_CODE = 1
     private val TO_REQUEST_CODE = 2
     private val TAG = "MapsDistance"
@@ -107,16 +107,21 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         btn_start_route.setOnClickListener{
-            val intents = Intent(this,TravelInfoActivity::class.java)
-            //var bundle:Bundle = Bundle()
-            //bundle.putParcelableArrayList("coordinates",pathPolyLine)
-            Log.d("PO" , "llena"+pathPolyLine.toString())
-            intents.putParcelableArrayListExtra("path",pathPolyLine)
-            intents.putExtra("latitud", toLatLng!!.latitude)
-            intents.putExtra("longitud",toLatLng!!.longitude)
+            if(pathPolyLine.isNotEmpty()){
+                val intents = Intent(this,TravelInfoActivity::class.java)
+                //var bundle:Bundle = Bundle()
+                //bundle.putParcelableArrayList("coordinates",pathPolyLine)
+                Log.d("PO" , "llena"+pathPolyLine.toString())
+                intents.putParcelableArrayListExtra("path",pathPolyLine)
+                intents.putExtra("latitud", toLatLng!!.latitude)
+                intents.putExtra("longitud",toLatLng!!.longitude)
 
-            //intents.putExtra("tiempoTolerancia",tiempoTolerancia)
-            startActivity(intents)
+                //intents.putExtra("tiempoTolerancia",tiempoTolerancia)
+                startActivity(intents)
+            }else{
+                Toast.makeText(this, "selecciona una ruta", Toast.LENGTH_SHORT).show()
+            }
+            
         }
 
         setupMap()
@@ -159,15 +164,15 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
         if (requestCode == TO_REQUEST_CODE)
             mMap.clear()
         autocompleteProccess(resultCode,data){ place ->
-                //tvDestiny.text = "Destino : ${place.address}"
-                place.latLng?.let{
-                    toLatLng = it
-                    setMarkerTo(it)
-                    val URL = getDirectionURL()
-                    Log.d("GoogleMap", "URL : $URL")
-                    GetDirection(URL,this).execute()
-                }
+            //tvDestiny.text = "Destino : ${place.address}"
+            place.latLng?.let{
+                toLatLng = it
+                setMarkerTo(it)
+                val URL = getDirectionURL()
+                Log.d("GoogleMap", "URL : $URL")
+                GetDirection(URL,this).execute()
             }
+        }
         return
 
         super.onActivityResult(requestCode, resultCode, data)
@@ -210,16 +215,15 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setMinZoomPreference(10f)
         mMap.setMaxZoomPreference(17f)
         // Add a marker in Sydney and move the camera
-
         mMap.uiSettings.isZoomControlsEnabled = true
-
+        mMap.setOnMyLocationButtonClickListener(this)
 
         try {
             // Customise the styling of the base map using a JSON object defined
             // in a raw resource file.
             googleMap.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                        this, R.raw.style));
+                MapStyleOptions.loadRawResourceStyle(
+                    this, R.raw.style));
 
         } catch (e: Resources.NotFoundException) {
             Log.e(TAG, "Can't find style. Error: ", e)
@@ -355,22 +359,9 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
                     path.addAll(decodePolyline(respObj.routes[0].legs[0].steps[i].polyline.points))
                 }
                 result.add(path)
-                //19.47991613867424, -99.1377547739467 outside
-                //19.3615, -99.1514 inside eje central
-                val outside = LatLng(19.47991613867424, -99.1377547739467)
-                val inside = LatLng(19.3615, -99.1514)
-                //pathPolyLine = PathLocation(path.clone() as ArrayList<LatLng>)
-                //GlobalClass.polyLine.clear()
                 path.forEach { it ->
                     pun.pathPolyLine.add(PathLocation(it))
                     //pun.pathPolyLine.add(PathLocation(it.latitude.toString(),it.longitude.toString()))
-                }
-
-                Log.d("SS" , "***************************************************************************************")
-                if(isLocationOnPath(outside, path.toList(),true,320.0)){
-                    Log.d("SS" , "Siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiu")
-                }else{
-                    Log.d("SS" , " Noooooooooooooooooooooooooooooooooooooooui")
                 }
             }catch (e:Exception){
                 e.printStackTrace()
@@ -425,6 +416,40 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         return poly
+    }
+
+    override fun onMyLocationButtonClick(): Boolean {
+        pathPolyLine.clear()
+        btnDestiny.text = "¿A dónde vamos?"
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return true
+        }
+        fusedLocationClient.lastLocation.addOnSuccessListener {
+            Log.d("LOCATION: " , "Probandooooooooooooooo")
+            if(it != null) {
+                with(map) {
+                    currentLocation = LatLng(it.latitude, it.longitude)
+                    fromLatLng = currentLocation
+                    mMap.clear()
+                    setMarkerFrom(currentLocation)
+                }
+            }
+        }
+        return true
     }
 
 }
