@@ -49,15 +49,19 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.lang.Exception
 import java.util.*
 import android.app.ActivityManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.os.Build
 import android.util.Log
 import android.view.KeyEvent
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import kotlinx.android.synthetic.main.activity_contact.*
 import kotlinx.android.synthetic.main.activity_main_panel.bottomNavigationView
 
 
-class MainPanel : AppCompatActivity() {
+class MainPanel : AppCompatActivity(){
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityMainBinding
     private var globalClass =  GlobalClass()
@@ -74,6 +78,17 @@ class MainPanel : AppCompatActivity() {
         auth = Firebase.auth
         val user = auth.currentUser
         val profile: ImageView= findViewById(R.id.profilePhoto)
+        var notificationGoal : Boolean = false
+
+        if (intent != null) {
+            notificationGoal = intent.getBooleanExtra("ruteGooal",false)
+
+        }
+//        Comprobamos notificacion
+        if (notificationGoal == true){
+            goalNotification()
+
+        }
 
         Glide
             .with(this)
@@ -139,6 +154,11 @@ class MainPanel : AppCompatActivity() {
             intentRecord.putExtra("runing",true)
             startActivity(intentRecord)
         }
+        if(isMyServiceRunning(OnRoute::class.java)==true){
+            val intentOnRoute = Intent(this,OnRouteActivity::class.java)
+            //intentOnRoute.putParcelableArrayListExtra("path",GlobalClass.polyLine)
+            startActivity(intentOnRoute)
+        }
 
 
         imageButtonSOS.setOnClickListener {
@@ -187,7 +207,9 @@ class MainPanel : AppCompatActivity() {
     }
 
 
-        //Navegar entre Fragmentos
+
+
+    //Navegar entre Fragmentos
     private fun setCurrentFragment(fragment: Fragment){
         supportFragmentManager.beginTransaction().apply{
             replace(R.id.container_view,fragment)
@@ -239,6 +261,36 @@ class MainPanel : AppCompatActivity() {
             }
             return false
         }
+
+
+    fun goalNotification(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChanel()
+        }
+        val notificationBuilder = NotificationCompat.Builder(this,"Tracking")//NotificationCompat.Builder(Intent(this,MainPanel::class.java),"Tracking")
+            //.setAutoCancel(false)
+            //.setOngoing(true)
+            .setSmallIcon(R.drawable.ic_logo)
+            .setContentTitle("¡ Llegamos a tu destino !")
+            .setContentText("Recuerda siempre llevar SafeSOS con tigo")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .build()
+
+        val notificationManager = NotificationManagerCompat.from(this)
+        notificationManager.notify(1,notificationBuilder)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChanel(){
+        val chanel = NotificationChannel(
+            "Tracking",
+            "Tracking Route",
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        //val canal = notificationManager.createNotificationChannel(chanel)
+        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.createNotificationChannel(chanel)
+    }
 
 
 

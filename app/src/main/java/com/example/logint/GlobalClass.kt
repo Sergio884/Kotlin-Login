@@ -10,6 +10,7 @@ class GlobalClass : Application() {
     companion object {
         var course = 0
         var polyLine : ArrayList<LatLng> = ArrayList()
+
     }
 
     public fun getBandera(): Int{

@@ -111,6 +111,15 @@ class OnRoute : Service() {
 
 
     }
+    fun goalSOS(){
+        val intentKill = Intent(this,OnRoute::class.java)
+        stopService(intentKill)
+        /*val intentRedirection = Intent(this,MainPanel::class.java)
+        intentRedirection.putExtra("ruteGooal",true)
+        startActivity(intentRedirection)*/
+
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChanel(notificationManager: NotificationManager){
         val chanel = NotificationChannel(
@@ -169,10 +178,7 @@ class OnRoute : Service() {
             super.run()
             outSideDetection()
         }
-
-
         fun outSideDetection(){
-            //sendSMS()
             if (ActivityCompat.checkSelfPermission(
                     pun,
                     Manifest.permission.ACCESS_FINE_LOCATION
@@ -219,24 +225,26 @@ class OnRoute : Service() {
                             //Log.d("SS" , location.distanceTo(finalLocation).toString())
 
                             if(location.distanceTo(finalLocation)<200.0){
-                                Log.d("SS" , "Llegamoooooooooooooooooooooooooooooooooooooosss")
+                                Log.d("Destino" , "Llegamos al destino")
+                                pun.goalSOS()
+
                             }
                             if(PolyUtil.isLocationOnPath(position, GlobalClass.polyLine.toList(), true, pun.radioTolerancia.toDouble())){
                                 toleranciaAux = 0
-                                Log.d("SS" , "Siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiu")
+                                Log.d("Recorrido" , "Recorrido en marcha")
                             }else{
                                 toleranciaAux += 5
                                 if(toleranciaAux >= tiempoTolerancia){
                                     if(alerta == false){
                                         sendSMS()
                                         pun.alertSOS()
-                                        Log.d("SS" , "Auxilioooooooooooooooooooooooooo")
+                                        Log.d("Enviar Alerta" , "Enviando Alerta")
                                         alerta = true
                                     }
 
 
                                 }
-                                Log.d("SS" , " Noooooooooooooooooooooooooooooooooooooooui")
+                                Log.d("Salir" , "No se encuentra dentro del recorrido")
                             }
                         }
 
