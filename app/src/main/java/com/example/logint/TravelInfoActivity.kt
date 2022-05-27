@@ -7,10 +7,12 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.*
+import kotlinx.android.synthetic.main.activity_stored_routes.*
 import kotlin.collections.ArrayList as ArrayList
 
 class TravelInfoActivity : AppCompatActivity() {
@@ -25,7 +27,6 @@ class TravelInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stored_routes)
         //pathPolyLine = intent.getParcelableArrayListExtra("coordinates")!!
-
         //pathPolyLine = intent.getSerializableExtra("PathLocation") as ArrayList<PathLocation>
         pathPolyLine = intent.getParcelableArrayListExtra("path")!!
         pathPolyLine.forEach {
@@ -33,22 +34,13 @@ class TravelInfoActivity : AppCompatActivity() {
             Log.d("Coordinates",it.position.toString())
 
         }
-
         val latitud = intent.getDoubleExtra("latitud",19.47991613867424)
         val longitud = intent.getDoubleExtra("longitud",-99.1377547739467)
-
-
-
-
-
         //pathPolyLine = coordinates?.getParcelableArrayList<LatLng>("coordinates") as ArrayList<LatLng>
-
-
-
         val etRadioTolerancia: EditText = findViewById(R.id.et_radioTolerancia)
         val etTiempoTolerancia: EditText = findViewById(R.id.et_tiempoTolerancia)
         val tvIrARecorrido: TextView = findViewById(R.id.tv_irARecorrido)
-
+        val etRadioLlegada: EditText = findViewById(R.id.et_radioLlegada)
         val radioTolerancia = intent.getStringExtra("name")
         val tiempoTolerancia = intent.getStringExtra("number")
         etRadioTolerancia.setText(radioTolerancia)
@@ -56,16 +48,22 @@ class TravelInfoActivity : AppCompatActivity() {
         val stringcito = "caca"
 
         tvIrARecorrido.setOnClickListener {
-            val intents = Intent(this, OnRouteActivity::class.java)
-            intents.putExtra("radioTolerancia", etRadioTolerancia.text.toString().toInt())
-            intents.putExtra("tiempoTolerancia",etTiempoTolerancia.text.toString().toInt())
-            intents.putExtra("latitud", latitud)
-            intents.putExtra("longitud",longitud)
-            intents.putParcelableArrayListExtra("path",pathPolyLine)
 
+            if(etRadioTolerancia.text.toString() != "" && etTiempoTolerancia.text.toString() != "" && etRadioLlegada.text.toString() != ""){
+                val intents = Intent(this, OnRouteActivity::class.java)
+                intents.putExtra("radioTolerancia", etRadioTolerancia.text.toString().toInt())
+                intents.putExtra("tiempoTolerancia",etTiempoTolerancia.text.toString().toInt())
+                intents.putExtra("radioLlegada",etRadioLlegada.text.toString().toInt())
+                intents.putExtra("latitud", latitud)
+                intents.putExtra("longitud",longitud)
+                intents.putParcelableArrayListExtra("path",pathPolyLine)
+                //intent.putExtra("tiempoTolerancia",tiempoTolerancia)
+                startActivity(intents)
+            }
+            else{
+                Toast.makeText(this, "Debes de llenar todos los campos", Toast.LENGTH_LONG).show()
+            }
 
-            //intent.putExtra("tiempoTolerancia",tiempoTolerancia)
-            startActivity(intents)
         }
 
         /*etRadioTolerancia.setOnKeyListener ( View.OnKeyListener { v, keycode, keyEvent ->
