@@ -65,8 +65,6 @@ class MainPanel : AppCompatActivity(){
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityMainBinding
     private var globalClass =  GlobalClass()
-
-
     val PERMISSION_ID = 1
 
 

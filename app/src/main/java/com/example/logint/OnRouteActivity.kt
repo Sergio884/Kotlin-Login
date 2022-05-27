@@ -41,6 +41,7 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
     var tiempoTolerancia =0
     var latitud = 19.47991613867424
     var longitud =-99.1377547739467
+    var radioLlegada = 50
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,11 +50,13 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
 
         if (intent != null){
             try{
+
                 pathPolyLine = intent.getParcelableArrayListExtra("path")!!
                 radioTolerancia  = intent.getIntExtra("radioTolerancia",50)
                 tiempoTolerancia  = intent.getIntExtra("tiempoTolerancia",5)
                 latitud = intent.getDoubleExtra("latitud",19.47991613867424)
                 longitud = intent.getDoubleExtra("longitud",-99.1377547739467)
+                radioLlegada =intent.getIntExtra("radioLlegada",50)
                 if(pathPolyLine.isNotEmpty())
                     pathPolyLine.forEach {
                         //Log.d("Coordinates","lat:"+it.lat+" long:"+it.long)
@@ -67,13 +70,20 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
 
+        if(GlobalClass.playPause==0){
+            textView.setImageResource(R.drawable.ic_pause)
 
+        }
+        else{
+            textView.setImageResource(R.drawable.ic_play)
+        }
 
 
         if(isMyServiceRunning(OnRoute::class.java) == false){
             val intentOnRoute = Intent(this,OnRoute::class.java)
             intentOnRoute.putExtra("radioTolerancia",radioTolerancia)
             intentOnRoute.putExtra("tiempoTolerancia",tiempoTolerancia)
+            intentOnRoute.putExtra("radioLlegada",radioLlegada)
             intentOnRoute.putExtra("latitud", latitud)
             intentOnRoute.putExtra("longitud",longitud)
             startService(intentOnRoute)
@@ -90,13 +100,27 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
         textView2.setOnClickListener {
             val intentOnRoute = Intent(this,OnRoute::class.java)
             stopService(intentOnRoute)
+            GlobalClass.polyLine.clear()
             val intentRedirection = Intent(this,MainPanel::class.java)
             intentRedirection.putExtra("ruteGooal",true)
             startActivity(intentRedirection)
         }
 
 
+        textView.setOnClickListener {
+            if(GlobalClass.playPause==0){
+                GlobalClass.playPause = 1
+                textView.setImageResource(R.drawable.ic_play)
+            }
+            else{
+                GlobalClass.playPause = 0
+                textView.setImageResource(R.drawable.ic_pause)
+            }
+        }
+
+
     }
+
 
     private fun isLocationPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -120,7 +144,6 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
             optionsPolyLine.width(6f)
             optionsPolyLine.color(Color.rgb(0, 255, 185 ))
         }
-
         map.addPolyline(optionsPolyLine)
 
         map.uiSettings.isZoomControlsEnabled = true

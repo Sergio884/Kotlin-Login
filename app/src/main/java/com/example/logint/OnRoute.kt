@@ -25,8 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.maps.android.PolyUtil
 import com.google.android.gms.maps.model.LatLng
-
-
+import com.google.firebase.database.ktx.database
+import java.time.Instant
+import java.time.ZoneId
 
 
 class OnRoute : Service() {
@@ -43,6 +44,7 @@ class OnRoute : Service() {
     lateinit var intentSOS : Intent
     var latitud = 19.47991613867424
     var longitud = -99.1377547739467
+    var radioLlegada = 50
 
 
     override fun onBind(intent: Intent): IBinder {
@@ -70,8 +72,10 @@ class OnRoute : Service() {
         if (intent != null) {
              radioTolerancia  = intent.getIntExtra("radioTolerancia",50)
              tiempoTolerancia  = intent.getIntExtra("tiempoTolerancia",5)
+             radioLlegada = intent.getIntExtra("radioLlegada",50)
              latitud = intent.getDoubleExtra("latitud",19.47991613867424)
              longitud = intent.getDoubleExtra("longitud",-99.1377547739467)
+
 
         }
 
@@ -173,6 +177,11 @@ class OnRoute : Service() {
         var tiempoTolerancia = pun.tiempoTolerancia*60
         var toleranciaAux = 0
         var alerta = false
+        var distance = Location("lastLocation")
+        val database = Firebase.database//("http://10.0.2.2:9002?ns=tttt-d4047")
+        val auth = Firebase.auth
+        val user = auth.currentUser
+        val reference = database.getReference("users")
 
         override fun run() {
             super.run()
@@ -209,48 +218,77 @@ class OnRoute : Service() {
                         mLocationCallBack,
                         Looper.getMainLooper()
                     )*/
-                    pun.mFusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
-                        val location = task.result
-                        if (location != null) {
-                            println("Latitudddd = ${location.latitude} Longitudddd = ${location.longitude} ")
+                    if(GlobalClass.playPause == 0){
+                        pun.mFusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
+                            val location = task.result
+                            if (location != null) {
+                                println("Latitudddd = ${location.latitude} Longitudddd = ${location.longitude} ")
 
-                            val position = LatLng(
-                                location.latitude,
-                                location.longitude
-                            )
+                                if(contador ==5){
+                                    distance.latitude = location.latitude
+                                    distance.longitude = location.longitude
+                                }
 
-                            val finalLocation = Location("FinalPoint")
-                            finalLocation.latitude  =pun.latitud
-                            finalLocation.longitude = pun.longitud
-                            //Log.d("SS" , location.distanceTo(finalLocation).toString())
+                                if(distance.distanceTo(location)>20){
+                                    sendCordenates(location)
+                                    distance.latitude = location.latitude
+                                    distance.longitude = location.longitude
+                                }
 
-                            if(location.distanceTo(finalLocation)<200.0){
-                                Log.d("Destino" , "Llegamos al destino")
-                                pun.goalSOS()
+                                val position = LatLng(
+                                    location.latitude,
+                                    location.longitude
+                                )
 
-                            }
-                            if(PolyUtil.isLocationOnPath(position, GlobalClass.polyLine.toList(), true, pun.radioTolerancia.toDouble())){
-                                toleranciaAux = 0
-                                Log.d("Recorrido" , "Recorrido en marcha")
-                            }else{
-                                toleranciaAux += 5
-                                if(toleranciaAux >= tiempoTolerancia){
-                                    if(alerta == false){
-                                        sendSMS()
-                                        pun.alertSOS()
-                                        Log.d("Enviar Alerta" , "Enviando Alerta")
-                                        alerta = true
-                                    }
+                                val finalLocation = Location("FinalPoint")
+                                finalLocation.latitude  =pun.latitud
+                                finalLocation.longitude = pun.longitud
+                                //Log.d("SS" , location.distanceTo(finalLocation).toString())
 
+                                if(location.distanceTo(finalLocation)<pun.radioLlegada){
+                                    Log.d("Destino" , "Llegamos al destino")
+                                    GlobalClass.polyLine.clear()
+                                    pun.goalSOS()
 
                                 }
-                                Log.d("Salir" , "No se encuentra dentro del recorrido")
-                            }
-                        }
+                                if(PolyUtil.isLocationOnPath(position, GlobalClass.polyLine.toList(), true, pun.radioTolerancia.toDouble())){
+                                    toleranciaAux = 0
+                                    Log.d("Recorrido" , "Recorrido en marcha")
+                                }else{
+                                    toleranciaAux += 5
+                                    if(toleranciaAux >= tiempoTolerancia){
+                                        if(alerta == false){
+                                            sendSMS()
+                                            pun.alertSOS()
+                                            Log.d("Enviar Alerta" , "Enviando Alerta")
+                                            alerta = true
+                                        }
 
+
+                                    }
+                                    Log.d("Salir" , "No se encuentra dentro del recorrido")
+                                }
+                            }
+
+                        }
                     }
 
+
                 }
+            }
+        }
+
+        private fun sendCordenates(location: Location){
+            //val key = reference.push().key
+            if (user != null) {
+                val reminder =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        Reminder("1", location.latitude, location.longitude,
+                            Instant.now().atZone(ZoneId.of("Mexico/General")).toString())
+                    } else {
+                        Reminder("1", location.latitude, location.longitude,"00-00-00T00:00:00")
+                    }
+                reference.child(user.uid).setValue(reminder)
             }
         }
 

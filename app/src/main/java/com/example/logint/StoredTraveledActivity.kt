@@ -34,7 +34,16 @@ class StoredTraveledActivity : AppCompatActivity() {
             //intent.putExtra("locationList",locationArrayList)
             //           intent.putParcelableArrayListExtra("locationList",locationArrayList)
             //startActivity(intent)
-            println("JajaHola"+myAdapter.getSelected())
+            if(myAdapter.getSelected() == null){
+                Toast.makeText(
+                    this@StoredTraveledActivity,
+                    "Seleccione un viaje guardado",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else {
+                println("JajaHola" + myAdapter.getSelected())
+            }
             //Toast.makeText(this, "Muy bien selecciona una ruta guardada", Toast.LENGTH_SHORT).show()
         }
     }
