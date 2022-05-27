@@ -37,32 +37,37 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var locationCallback: LocationCallback
     private val CODIGO_PERMISOS_UBICACION_SEGUNDO_PLANO = 2106
     private lateinit var pathPolyLine: ArrayList<PathLocation>
+    private var  radioTolerancia = 0
+    var tiempoTolerancia =0
+    var latitud = 19.47991613867424
+    var longitud =-99.1377547739467
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_on_route)
 
-        pathPolyLine = intent.getParcelableArrayListExtra("path")!!
 
-        if(pathPolyLine.isNotEmpty())
-            pathPolyLine.forEach {
-                //Log.d("Coordinates","lat:"+it.lat+" long:"+it.long)
+        if (intent != null){
+            try{
+                pathPolyLine = intent.getParcelableArrayListExtra("path")!!
+                radioTolerancia  = intent.getIntExtra("radioTolerancia",50)
+                tiempoTolerancia  = intent.getIntExtra("tiempoTolerancia",5)
+                latitud = intent.getDoubleExtra("latitud",19.47991613867424)
+                longitud = intent.getDoubleExtra("longitud",-99.1377547739467)
+                if(pathPolyLine.isNotEmpty())
+                    pathPolyLine.forEach {
+                        //Log.d("Coordinates","lat:"+it.lat+" long:"+it.long)
 
-                GlobalClass.polyLine.add(it.position)
-
+                        GlobalClass.polyLine.add(it.position)
+                    }
+            }catch (e: java.lang.NullPointerException){
+                e.printStackTrace()
             }
-        var radioTolerancia  = intent.getIntExtra("radioTolerancia",50)
-        var tiempoTolerancia  = intent.getIntExtra("tiempoTolerancia",5)
-        val latitud = intent.getDoubleExtra("latitud",19.47991613867424)
-        val longitud = intent.getDoubleExtra("longitud",-99.1377547739467)
 
-        Log.d("radioTolerancia: ",""+radioTolerancia.toString())
-        Log.d("tiempoTolerancia: ",tiempoTolerancia.toString())
-        verificarPermisos()
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        }
+
+
+
 
 
         if(isMyServiceRunning(OnRoute::class.java) == false){
@@ -74,9 +79,20 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
             startService(intentOnRoute)
         }
 
+        Log.d("radioTolerancia: ",""+radioTolerancia.toString())
+        Log.d("tiempoTolerancia: ",tiempoTolerancia.toString())
+        verificarPermisos()
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         textView2.setOnClickListener {
             val intentOnRoute = Intent(this,OnRoute::class.java)
             stopService(intentOnRoute)
+            val intentRedirection = Intent(this,MainPanel::class.java)
+            intentRedirection.putExtra("ruteGooal",true)
+            startActivity(intentRedirection)
         }
 
 

@@ -287,6 +287,7 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback {
             GetDirection(URL,this).execute()
         }
     }
+
     private fun isLocationPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
             applicationContext, Manifest.permission.ACCESS_FINE_LOCATION

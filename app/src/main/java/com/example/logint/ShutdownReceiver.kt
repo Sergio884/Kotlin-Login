@@ -26,12 +26,12 @@ class ShutdownReceiver: BroadcastReceiver() { // GeofenceReceiver extiende Broad
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        print("siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiuuuuu")
+        //print("siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiuuuuu")
+        Log.d("SSA" , "BIENNN")
             if (GlobalClass.course < 1){
                 print("No enviaremos la Ubicación")
             }
             else{
-
                 hilo= Hilo()
                 hilo.start()
                 print("Enviaremos la Ubicación")
@@ -47,7 +47,6 @@ class ShutdownReceiver: BroadcastReceiver() { // GeofenceReceiver extiende Broad
                     return
                 }
                 fusedLocationClient.lastLocation.addOnSuccessListener { location : Location ->
-
                     //println("Latitudddd = ${location.latitude} Longitudddd = ${location.longitude}  curso = ${GlobalClass.course}")
                     val database =
                         Firebase.database//("http://10.0.2.2:9002?ns=tttt-d4047")
@@ -64,15 +63,9 @@ class ShutdownReceiver: BroadcastReceiver() { // GeofenceReceiver extiende Broad
                                 Reminder("1", location.latitude, location.longitude,"00-00-00T00:00:00")
                             }
                         reference.child(user.uid).setValue(reminder)
-
                     }
-
-
-
                 }
-
             }
-
     }
 
     class Hilo():Thread(){

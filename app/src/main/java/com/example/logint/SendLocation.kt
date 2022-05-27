@@ -25,6 +25,7 @@ import android.os.SystemClock.sleep
 import android.provider.Settings
 import android.telephony.SmsManager
 import android.util.Log
+import android.view.KeyEvent
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -63,6 +64,8 @@ class SendLocation : Service() {
         super.onCreate()
     }*/
 
+
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -83,9 +86,12 @@ class SendLocation : Service() {
             startForeground(1,notificationBuilder.build())
 
 
+
+
             hilo= Hilo(this)
             hilo.start()
             return START_STICKY
+
     }
 
     override fun onDestroy() {
@@ -262,4 +268,6 @@ class SendLocation : Service() {
 
         }
     }
+
+
 }
