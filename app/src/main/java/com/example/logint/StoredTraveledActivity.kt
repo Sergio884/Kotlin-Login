@@ -42,10 +42,10 @@ class StoredTraveledActivity : AppCompatActivity() {
                 ).show()
             }
             else {
-                Thread.sleep(1000)
-                getFireStorePoints(myAdapter.getSelected()!!)
+                pathPolyLine = myAdapter.getSelectedPath()!!
+                toLatLng = myAdapter.getSelectedPathLastPoint()!!
                 val intent = Intent(this,TravelInfoActivity::class.java)
-                Log.d("PO" , "llena"+pathPolyLine.toString())
+
                 intent.putParcelableArrayListExtra("path",pathPolyLine)
                 intent.putExtra("latitud", toLatLng!!.latitude)
                 intent.putExtra("longitud",toLatLng!!.longitude)
@@ -59,6 +59,7 @@ class StoredTraveledActivity : AppCompatActivity() {
     fun initRecyclerView(){
         recycleView.layoutManager = LinearLayoutManager(this)
         val adapter = LocationAdapter(locationArrayList,this)
+
         recycleView.adapter = adapter
         //Toast.makeText(this, "Muy bien selecciona una ruta guardada", Toast.LENGTH_SHORT).show()
         adapter.notifyDataSetChanged()
@@ -87,57 +88,10 @@ class StoredTraveledActivity : AppCompatActivity() {
             }
         }.show()
     }
-
-    private fun getFireStorePoints(route: String){
-
-        var auth = Firebase.auth
-        val user = auth.currentUser
-        db = FirebaseFirestore.getInstance()
-        db.collection("routes-"+"${user!!.uid}").get().addOnSuccessListener{ result ->
-            result.forEach { document ->
-
-                //locationArrayList.add(UserLocation(document.id, ""))//get().addOnSuccessListener{ result ->
-                db.collection("users/"+"${user!!.uid}/"+"routes/"+route+"/"+route).orderBy("idNumber",
-                    Query.Direction.ASCENDING)
-                    .addSnapshotListener(object: EventListener<QuerySnapshot> {
-                        override fun onEvent(
-                            value: QuerySnapshot?,
-                            error: FirebaseFirestoreException?
-                        ) {
-                            if(error!=null) {
-                                Log.e("Firestore error", error.message.toString())
-                            }
-                            var tam = value?.size()
-                            var contador = 0
-                            for(dc: DocumentChange in value?.documentChanges!!){
-                                println("JajaHola "+contador)
-                                contador++
-                                if(dc.type == DocumentChange.Type.ADDED){
-                                    val lat = dc.document.get("lat").toString().toDouble()
-                                    val lng = dc.document.get("lng").toString().toDouble()
-                                    pathPolyLine.add(PathLocation(
-                                        LatLng(dc.document.get("lat").toString().toDouble(),
-                                        dc.document.get("lng").toString().toDouble())
-                                    ))
-                                    if (tam != null) {
-                                        if(contador == tam-1){
-                                            println("JajaHola Si entro")
-                                            toLatLng = LatLng(lat,lng)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    })
-
-                //myAdapter.notifyDataSetChanged()
-            }
-        }
-
-    }
+}
 
 
-    }
+
 
 
 

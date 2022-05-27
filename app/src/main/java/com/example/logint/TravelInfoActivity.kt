@@ -45,7 +45,6 @@ class TravelInfoActivity : AppCompatActivity() {
         val tiempoTolerancia = intent.getStringExtra("number")
         etRadioTolerancia.setText(radioTolerancia)
         etTiempoTolerancia.setText(tiempoTolerancia)
-        val stringcito = "caca"
 
         tvIrARecorrido.setOnClickListener {
 
