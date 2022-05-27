@@ -42,10 +42,11 @@ class StoredTraveledActivity : AppCompatActivity() {
                 ).show()
             }
             else {
-                Thread.sleep(1000)
+
                 getFireStorePoints(myAdapter.getSelected()!!)
                 val intent = Intent(this,TravelInfoActivity::class.java)
                 Log.d("PO" , "llena"+pathPolyLine.toString())
+                Thread.sleep(1000)
                 intent.putParcelableArrayListExtra("path",pathPolyLine)
                 intent.putExtra("latitud", toLatLng!!.latitude)
                 intent.putExtra("longitud",toLatLng!!.longitude)
@@ -93,9 +94,9 @@ class StoredTraveledActivity : AppCompatActivity() {
         var auth = Firebase.auth
         val user = auth.currentUser
         db = FirebaseFirestore.getInstance()
+        Log.d("ruta","cuentaaaaaaaaaaaaaaaaaaaaaaaaa")
         db.collection("routes-"+"${user!!.uid}").get().addOnSuccessListener{ result ->
             result.forEach { document ->
-
                 //locationArrayList.add(UserLocation(document.id, ""))//get().addOnSuccessListener{ result ->
                 db.collection("users/"+"${user!!.uid}/"+"routes/"+route+"/"+route).orderBy("idNumber",
                     Query.Direction.ASCENDING)
@@ -110,7 +111,7 @@ class StoredTraveledActivity : AppCompatActivity() {
                             var tam = value?.size()
                             var contador = 0
                             for(dc: DocumentChange in value?.documentChanges!!){
-                                println("JajaHola "+contador)
+                                Log.d("ruta","cuentaaaaaaaaaaaaaaaaaaaaaaaaa")
                                 contador++
                                 if(dc.type == DocumentChange.Type.ADDED){
                                     val lat = dc.document.get("lat").toString().toDouble()
@@ -121,7 +122,7 @@ class StoredTraveledActivity : AppCompatActivity() {
                                     ))
                                     if (tam != null) {
                                         if(contador == tam-1){
-                                            println("JajaHola Si entro")
+                                            Log.d("ruta","entrooooooooooooooooooooo")
                                             toLatLng = LatLng(lat,lng)
                                         }
                                     }
