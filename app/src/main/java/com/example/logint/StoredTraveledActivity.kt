@@ -1,6 +1,7 @@
 package com.example.logint
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
@@ -22,6 +24,8 @@ class StoredTraveledActivity : AppCompatActivity() {
     private lateinit var locationArrayList: ArrayList<UserLocation>
     private lateinit var myAdapter: LocationAdapter
     private lateinit var db: FirebaseFirestore
+    var pathPolyLine : ArrayList<PathLocation> = ArrayList()
+    private lateinit var toLatLng: LatLng
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,10 +34,6 @@ class StoredTraveledActivity : AppCompatActivity() {
         locationArrayList = (intent.getSerializableExtra("locationList") as ArrayList<UserLocation>?)!!
         initRecyclerView()
         tv_irARecorrido.setOnClickListener{
-            //val intent = Intent(this,StoredTraveledActivity::class.java)
-            //intent.putExtra("locationList",locationArrayList)
-            //           intent.putParcelableArrayListExtra("locationList",locationArrayList)
-            //startActivity(intent)
             if(myAdapter.getSelected() == null){
                 Toast.makeText(
                     this@StoredTraveledActivity,
@@ -42,7 +42,15 @@ class StoredTraveledActivity : AppCompatActivity() {
                 ).show()
             }
             else {
-                println("JajaHola" + myAdapter.getSelected())
+                Thread.sleep(1000)
+                getFireStorePoints(myAdapter.getSelected()!!)
+                val intent = Intent(this,TravelInfoActivity::class.java)
+                Log.d("PO" , "llena"+pathPolyLine.toString())
+                intent.putParcelableArrayListExtra("path",pathPolyLine)
+                intent.putExtra("latitud", toLatLng!!.latitude)
+                intent.putExtra("longitud",toLatLng!!.longitude)
+
+                startActivity(intent)
             }
             //Toast.makeText(this, "Muy bien selecciona una ruta guardada", Toast.LENGTH_SHORT).show()
         }
@@ -78,6 +86,54 @@ class StoredTraveledActivity : AppCompatActivity() {
                 }
             }
         }.show()
+    }
+
+    private fun getFireStorePoints(route: String){
+
+        var auth = Firebase.auth
+        val user = auth.currentUser
+        db = FirebaseFirestore.getInstance()
+        db.collection("routes-"+"${user!!.uid}").get().addOnSuccessListener{ result ->
+            result.forEach { document ->
+
+                //locationArrayList.add(UserLocation(document.id, ""))//get().addOnSuccessListener{ result ->
+                db.collection("users/"+"${user!!.uid}/"+"routes/"+route+"/"+route).orderBy("idNumber",
+                    Query.Direction.ASCENDING)
+                    .addSnapshotListener(object: EventListener<QuerySnapshot> {
+                        override fun onEvent(
+                            value: QuerySnapshot?,
+                            error: FirebaseFirestoreException?
+                        ) {
+                            if(error!=null) {
+                                Log.e("Firestore error", error.message.toString())
+                            }
+                            var tam = value?.size()
+                            var contador = 0
+                            for(dc: DocumentChange in value?.documentChanges!!){
+                                println("JajaHola "+contador)
+                                contador++
+                                if(dc.type == DocumentChange.Type.ADDED){
+                                    val lat = dc.document.get("lat").toString().toDouble()
+                                    val lng = dc.document.get("lng").toString().toDouble()
+                                    pathPolyLine.add(PathLocation(
+                                        LatLng(dc.document.get("lat").toString().toDouble(),
+                                        dc.document.get("lng").toString().toDouble())
+                                    ))
+                                    if (tam != null) {
+                                        if(contador == tam-1){
+                                            println("JajaHola Si entro")
+                                            toLatLng = LatLng(lat,lng)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+
+                //myAdapter.notifyDataSetChanged()
+            }
+        }
+
     }
 
 
