@@ -1,5 +1,6 @@
 package com.example.logint
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.location.Geocoder
@@ -108,10 +109,11 @@ class LocationAdapter(val locationList: ArrayList<UserLocation>,val act: Activit
         //var location: TextView = itemView.findViewById(R.id.location)
         //var location_name: TextView = itemView.findViewById(R.id.location_name)
 
+        @SuppressLint("ResourceAsColor")
         fun render(location: UserLocation, selectedItem: Int){
             itemView.location.text = location.location
             itemView.location_name.text = location.location_name
-
+            itemView.setBackgroundResource(R.drawable.style_border_white)
             if(checkedPosition == -1){
                 //checkedPosition = 0
                 //itemView.setBackgroundResource(R.drawable.style_border_green)
@@ -123,8 +125,15 @@ class LocationAdapter(val locationList: ArrayList<UserLocation>,val act: Activit
                     pathPolyLine = ArrayList()
                     toLatLng = LatLng(0.0, 0.0)
                     checkedPosition = selectedItem
-                    previousItemView.setBackgroundResource(0)
+                    previousItemView.setBackgroundResource(R.drawable.style_border_white)
+                    previousItemView.location_name.setTextColor(ContextCompat.getColor(it.context,R.color.white))
+                    previousItemView.location.setTextColor(ContextCompat.getColor(it.context,R.color.white))
+                    previousItemView.icon_locations.setImageResource(R.drawable.ic_location)
+
+                    itemView.icon_locations.setImageResource(R.drawable.ic_location_green)
                     itemView.setBackgroundResource(R.drawable.style_border_green)
+                    itemView.location_name.setTextColor(ContextCompat.getColor(it.context,R.color.Green))
+                    itemView.location.setTextColor(ContextCompat.getColor(it.context,R.color.Green))
                     getFireStorePoints(location.location_name)
                 }
                 previousItemView = itemView

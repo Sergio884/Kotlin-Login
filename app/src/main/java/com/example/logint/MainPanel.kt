@@ -59,6 +59,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import kotlinx.android.synthetic.main.activity_contact.*
 import kotlinx.android.synthetic.main.activity_main_panel.bottomNavigationView
+import java.lang.NullPointerException
 
 
 class MainPanel : AppCompatActivity(){
@@ -145,6 +146,15 @@ class MainPanel : AppCompatActivity(){
 
         if( isMyServiceRunning(SendLocation::class.java) == true){
             imageButtonSOS.setImageResource(R.drawable.ic_sos_green)
+            if(isMyServiceRunning(OnRoute::class.java)==true){
+                try{
+                    val intentKill = Intent(this,OnRoute::class.java)
+                    stopService(intentKill)
+                }catch (e:NullPointerException){
+                    e.printStackTrace()
+                }
+            }
+
 
         }
         if(isMyServiceRunning(RecordRoute::class.java)==true){

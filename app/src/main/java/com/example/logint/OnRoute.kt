@@ -26,6 +26,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.maps.android.PolyUtil
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.ktx.database
+import java.lang.NullPointerException
 import java.time.Instant
 import java.time.ZoneId
 
@@ -102,14 +103,26 @@ class OnRoute : Service() {
     fun alertSOS(){
 
         val intentSOS = Intent(this,SendLocation::class.java)
-        val intentRedirection = Intent(this,MainPanel::class.java)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intentSOS)
+            try{
+                val intentRedirection = Intent(this,MainPanel::class.java)
+                startActivity(intentRedirection)
+            }catch(e:NullPointerException){
+
+            }
 
         }else{
             startService(intentSOS)
+            try{
+                val intentRedirection = Intent(this,MainPanel::class.java)
+                startActivity(intentRedirection)
+            }catch(e:NullPointerException){
+
+            }
         }
-        startActivity(intentRedirection)
+
         val intentKill = Intent(this,OnRoute::class.java)
         stopService(intentKill)
 
@@ -118,9 +131,9 @@ class OnRoute : Service() {
     fun goalSOS(){
         val intentKill = Intent(this,OnRoute::class.java)
         stopService(intentKill)
-        /*val intentRedirection = Intent(this,MainPanel::class.java)
+        val intentRedirection = Intent(this,MainPanel::class.java)
         intentRedirection.putExtra("ruteGooal",true)
-        startActivity(intentRedirection)*/
+        startActivity(intentRedirection)
 
     }
 

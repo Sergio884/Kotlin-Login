@@ -1,5 +1,6 @@
 package com.example.logint
 
+import android.app.ActivityManager
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.*
+import kotlinx.android.synthetic.main.activity_main_panel.*
 import kotlinx.android.synthetic.main.activity_stored_routes.*
 import kotlin.collections.ArrayList as ArrayList
 
@@ -28,6 +30,11 @@ class TravelInfoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_stored_routes)
         //pathPolyLine = intent.getParcelableArrayListExtra("coordinates")!!
         //pathPolyLine = intent.getSerializableExtra("PathLocation") as ArrayList<PathLocation>
+        if( isMyServiceRunning(SendLocation::class.java) == true){
+            val intents = Intent(this,MainPanel::class.java)
+            startActivity(intents)
+
+        }
         pathPolyLine = intent.getParcelableArrayListExtra("path")!!
         pathPolyLine.forEach {
             //Log.d("Coordinates","lat:"+it.lat+" long:"+it.long)
@@ -88,6 +95,16 @@ class TravelInfoActivity : AppCompatActivity() {
 
 
 
+    }
+
+    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
     }
 
 }
