@@ -22,7 +22,7 @@ class TravelSelectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_travel_selection)
         EventChangeListener()
-        Thread.sleep(500)
+        Thread.sleep(1000)
         //**************************************Pertenece al Grabado de rutas
         container_route.setOnClickListener{
             val intent = Intent(this,StoredTraveledActivity::class.java)

@@ -54,8 +54,8 @@ class LocationAdapter(val locationList: ArrayList<UserLocation>,val act: Activit
             itemView.location_name.text = location.location_name
 
             if(checkedPosition == -1){
-                checkedPosition = 0
-                itemView.setBackgroundResource(R.drawable.style_border_green)
+                //checkedPosition = 0
+                //itemView.setBackgroundResource(R.drawable.style_border_green)
                 previousItemView = itemView
             }
 
@@ -95,6 +95,16 @@ class LocationAdapter(val locationList: ArrayList<UserLocation>,val act: Activit
                                             it.reference.delete()
                                         }
                                     }
+                                itemView.visibility = View.GONE
+                                val params: ViewGroup.LayoutParams =
+                                    itemView.getLayoutParams()
+                                params.height = 0
+                                params.width = 0
+                                itemView.setLayoutParams(params)
+                                if(checkedPosition == selectedItem){
+                                    previousItemView.setBackgroundResource(0)
+                                    checkedPosition = -1
+                                }
                                 true
                             }
                             else -> false
