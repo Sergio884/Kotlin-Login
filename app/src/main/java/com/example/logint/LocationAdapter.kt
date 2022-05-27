@@ -11,6 +11,7 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
@@ -22,6 +23,8 @@ import kotlinx.android.synthetic.main.item_location.view.location_name
 class LocationAdapter(val locationList: ArrayList<UserLocation>,val act: Activity): RecyclerView.Adapter<LocationAdapter.MyViewHolder>() {
     private var checkedPosition = -1
     private lateinit var previousItemView: View
+    var pathPolyLine : ArrayList<PathLocation> = ArrayList()
+    lateinit var toLatLng: LatLng
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView  = LayoutInflater.from(parent.context)
@@ -40,9 +43,65 @@ class LocationAdapter(val locationList: ArrayList<UserLocation>,val act: Activit
     }
 
     fun getSelected(): String? {
+        if (checkedPosition !== -1) {
+            return locationList[checkedPosition].location_name
+        } else return null
+    }
+
+    fun getSelectedPath(): ArrayList<PathLocation>? {
         return if (checkedPosition !== -1) {
-            locationList[checkedPosition].location_name
+            return pathPolyLine
         } else null
+    }
+
+    fun getSelectedPathLastPoint(): LatLng? {
+        return if (checkedPosition !== -1) {
+            return toLatLng
+        } else null
+    }
+
+    private fun getFireStorePoints(route: String?){
+
+        var auth = Firebase.auth
+        val user = auth.currentUser
+        var db = FirebaseFirestore.getInstance()
+
+        //locationArrayList.add(UserLocation(document.id, ""))//get().addOnSuccessListener{ result ->
+        db.collection("users/"+"${user!!.uid}/"+"routes/"+route+"/"+route).orderBy("idNumber",
+            Query.Direction.ASCENDING)
+            .addSnapshotListener(object: EventListener<QuerySnapshot> {
+                override fun onEvent(
+                    value: QuerySnapshot?,
+                    error: FirebaseFirestoreException?
+                ) {
+                    if(error!=null) {
+                        Log.e("Firestore error", error.message.toString())
+                    }
+                    var tam = value?.size()
+                    var contador = 0
+                    println("JajaHola "+route)
+                    for(dc: DocumentChange in value?.documentChanges!!){
+                        if(dc.type == DocumentChange.Type.ADDED){
+                            val lat = dc.document.get("lat").toString().toDouble()
+                            val lng = dc.document.get("lng").toString().toDouble()
+                            pathPolyLine.add(PathLocation(
+                                LatLng(dc.document.get("lat").toString().toDouble(),
+                                    dc.document.get("lng").toString().toDouble())
+                            ))
+                            if (tam != null) {
+                                if(contador == tam-1){
+                                    toLatLng = LatLng(lat,lng)
+                                    println("JajaHola el LatLng es "+toLatLng)
+                                }
+                            }
+                            contador++
+                        }
+                    }
+                }
+            })
+
+        //myAdapter.notifyDataSetChanged()
+
     }
 
     public inner class MyViewHolder(private val itemView: View, private val act: Activity): RecyclerView.ViewHolder(itemView){
@@ -61,9 +120,12 @@ class LocationAdapter(val locationList: ArrayList<UserLocation>,val act: Activit
 
             itemView.setOnClickListener{
                 if(checkedPosition != selectedItem){
+                    pathPolyLine = ArrayList()
+                    toLatLng = LatLng(0.0, 0.0)
                     checkedPosition = selectedItem
                     previousItemView.setBackgroundResource(0)
                     itemView.setBackgroundResource(R.drawable.style_border_green)
+                    getFireStorePoints(location.location_name)
                 }
                 previousItemView = itemView
             }
