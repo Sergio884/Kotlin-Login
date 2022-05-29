@@ -27,10 +27,14 @@
         android:roundIcon="@mipmap/safesos5_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity
+            android:name=".SecurityZoneActivity"
+            android:exported="false" />
+
         <service
             android:name=".OnRoute"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity
             android:name=".TravelInfoActivity"
@@ -48,7 +52,6 @@
             android:name=".InfoActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".RecordRouteActivity"
             android:exported="false"
@@ -136,10 +139,9 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
-<!--                <action android:name="android.intent.action.ACTION_SHUTDOWN" />-->
-<!--                <action android:name="android.intent.action.QUICKBOOT_POWEROFF" />-->
+                <!-- <action android:name="android.intent.action.ACTION_SHUTDOWN" /> -->
+                <!-- <action android:name="android.intent.action.QUICKBOOT_POWEROFF" /> -->
             </intent-filter>
-
         </receiver>
     </application>
 
