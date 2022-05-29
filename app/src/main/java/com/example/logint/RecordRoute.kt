@@ -16,11 +16,14 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import java.lang.Exception
+import java.time.Instant
+import java.time.ZoneId
 
 class RecordRoute : Service() {
 
@@ -99,6 +102,10 @@ class RecordRoute : Service() {
         private lateinit var locationCallback: LocationCallback
         var pun = puntero
         var contador = 0
+        val database = Firebase.database//("http://10.0.2.2:9002?ns=tttt-d4047")
+        val auth = Firebase.auth
+        val users = auth.currentUser
+        val reference = database.getReference("users")
         override fun run() {
             super.run()
             sendRouteLocation()
@@ -109,6 +116,8 @@ class RecordRoute : Service() {
             var auth = Firebase.auth;
             val db = FirebaseFirestore.getInstance();
             val user = auth.currentUser;
+            var latlongAnt = Location("distancia")
+
             db.collection("routes-"+user!!.uid.toString()).document(pun.getNameRoute()).set(
                 hashMapOf("name" to pun.getNameRoute())
             )
@@ -147,6 +156,13 @@ class RecordRoute : Service() {
                     pun.mFusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
                         val location = task.result
                         if (location != null) {
+
+                            if(contador==5){
+                                latlongAnt = location
+                            }
+
+                            if(location.distanceTo(latlongAnt)>20){
+                                latlongAnt = location
                                 println("Latitudddd = ${location.latitude} Longitudddd = ${location.longitude} y nombre:${pun.getNameRoute()}")
                                 var auth = Firebase.auth
                                 val db = FirebaseFirestore.getInstance()
@@ -159,22 +175,28 @@ class RecordRoute : Service() {
                                 document(""+idLatLngRoute).
                                 set(hashMapOf("lat" to "${location.latitude}","lng" to "${location.longitude}","segundos" to contador,"idNumber" to idLatLngRoute))
                                 idLatLngRoute = idLatLngRoute +1
-
-
-
+                                sendCordenates(location)
+                            }
                                /* collection(""+idLatLngRoute).
                                 document(""+idLatLngRoute).set(hashMapOf("lat" to "${location.latitude}","lng" to "${location.longitude}"))
                                 idLatLngRoute = idLatLngRoute +1*/
-
                         }
-
-
                     }
-
-
-
-
                 }
+            }
+        }
+
+        private fun sendCordenates(location: Location){
+            //val key = reference.push().key
+            if (users != null) {
+                val reminder =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        Reminder("1", location.latitude, location.longitude,
+                            Instant.now().atZone(ZoneId.of("Mexico/General")).toString())
+                    } else {
+                        Reminder("1", location.latitude, location.longitude,"00-00-00T00:00:00")
+                    }
+                reference.child(users.uid).setValue(reminder)
             }
         }
 

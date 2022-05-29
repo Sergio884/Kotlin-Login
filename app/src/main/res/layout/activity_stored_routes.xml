@@ -16,7 +16,7 @@
         android:textColor="@color/white"
         android:textSize="28dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,7 +26,7 @@
         android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:text="Digite la tolerancia en metros de la cual se puede salir de su ruta"
         app:layout_constraintTop_toBottomOf="@+id/tv_tituloDatosViaje"
         android:textColor="@color/white"
@@ -63,7 +63,7 @@
         android:id="@+id/textView10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:text="Digite la tolerancia en minutos de la cual se puede salir de su ruta"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="20dp"
@@ -99,14 +99,15 @@
         android:id="@+id/tv_radioLlegada"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Digite la el radio de llegada"
+        android:layout_marginTop="40dp"
+        android:text="Digite el radio de llegada en metros"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="20dp"
         android:textColor="@color/white"
         android:textSize="16dp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/et_tiempoTolerancia"
+
         />
 
     <EditText
@@ -126,6 +127,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_radioLlegada"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+
         android:hint="Digita el radio de llegada Ej:100"
         android:inputType="phone"
         android:digits="0123456789"
@@ -139,6 +141,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="50dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/style_button_background"
         android:gravity="center"
         android:padding="15dp"
@@ -146,7 +149,7 @@
         android:textColor="@color/white"
         android:textSize="18dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_radioLlegada"
         />
 
 
