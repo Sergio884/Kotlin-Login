@@ -3,23 +3,11 @@ import android.Manifest
 import menu_bottom.ContactsFragment
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.View
 import android.widget.*
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.example.logint.databinding.ActivityMainBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -27,37 +15,18 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main_panel.*
 
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationManager
-import android.net.Uri
-import android.os.Looper
-import android.provider.Settings
 import android.telephony.SmsManager
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.NonNull
-import androidx.core.app.ActivityCompat.requestPermissions
-import androidx.core.content.ContextCompat
-import androidx.core.location.LocationManagerCompat.isLocationEnabled
 //import com.marjasoft.ejgps.databinding.ActivityMainBinding
-import com.google.android.gms.location.*
 import com.google.firebase.firestore.FirebaseFirestore
-import java.lang.Exception
-import java.util.*
 import android.app.ActivityManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-import android.util.Log
-import android.view.KeyEvent
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import kotlinx.android.synthetic.main.activity_contact.*
 import kotlinx.android.synthetic.main.activity_main_panel.bottomNavigationView
 import java.lang.NullPointerException
 
@@ -211,6 +180,13 @@ class MainPanel : AppCompatActivity(){
                 val intent = Intent(this,RecordRouteActivity::class.java)
                 startActivity(intent)
             }
+        }
+
+        tv_zona_segura.setOnClickListener {
+            val intentZone = Intent(this,SecurityZoneActivity::class.java)
+
+            startActivity(intentZone)
+
         }
     }
 

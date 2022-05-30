@@ -109,6 +109,21 @@
             android:textSize="18dp"
             android:textStyle="bold"
             tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/tv_zona_segura"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/style_button_background"
+            android:drawableStart="@drawable/ic_security"
+            android:drawablePadding="10dp"
+            android:padding="15dp"
+            android:text="Establecer zona segura"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            tools:ignore="MissingConstraints" />
     </LinearLayout>
 
     <!-- <com.google.android.material.bottomnavigation.BottomNavigationView
