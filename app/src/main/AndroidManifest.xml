@@ -27,6 +27,11 @@
         android:roundIcon="@mipmap/safesos5_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
+        <service
+            android:name=".SecurityZone"
+            android:enabled="true"
+            android:exported="true"/>
+
         <activity
             android:name=".SecurityZoneActivity"
             android:exported="false" />

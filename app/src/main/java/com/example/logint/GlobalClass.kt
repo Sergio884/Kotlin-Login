@@ -11,6 +11,7 @@ class GlobalClass : Application() {
         var course = 0
         var polyLine : ArrayList<LatLng> = ArrayList()
         var playPause = 0
+        var radio = 50
     }
 
     public fun getBandera(): Int{

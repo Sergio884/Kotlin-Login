@@ -136,6 +136,12 @@ class MainPanel : AppCompatActivity(){
             //intentOnRoute.putParcelableArrayListExtra("path",GlobalClass.polyLine)
             startActivity(intentOnRoute)
         }
+        if(isMyServiceRunning(SecurityZone::class.java)==true){
+            val intentZone = Intent(this,SecurityZoneActivity::class.java)
+            startActivity(intentZone)
+
+
+        }
 
 
         imageButtonSOS.setOnClickListener {

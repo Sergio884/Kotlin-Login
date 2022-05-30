@@ -119,7 +119,7 @@
             android:drawableStart="@drawable/ic_security"
             android:drawablePadding="10dp"
             android:padding="15dp"
-            android:text="Establecer zona segura"
+            android:text="Zona segura"
             android:textColor="@color/white"
             android:textSize="18dp"
             android:textStyle="bold"

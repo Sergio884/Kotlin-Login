@@ -235,8 +235,8 @@ class OnRoute : Service() {
                         pun.mFusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
                             val location = task.result
                             if (location != null) {
-                                println("Latitudddd = ${location.latitude} Longitudddd = ${location.longitude} ")
 
+                                println("Latitudddd = ${location.latitude} Longitudddd = ${location.longitude} ")
                                 if(contador ==5){
                                     distance.latitude = location.latitude
                                     distance.longitude = location.longitude
