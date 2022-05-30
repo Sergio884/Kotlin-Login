@@ -24,7 +24,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:contentDescription="@string/all"
-            app:srcCompat="@drawable/ic_logo"
+            app:srcCompat="@mipmap/safesos4_foreground"
             tools:ignore="VectorDrawableCompat" />
 
         <TextView
