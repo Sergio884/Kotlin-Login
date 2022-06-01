@@ -272,6 +272,7 @@ class OnRoute : Service() {
                                     if(toleranciaAux >= tiempoTolerancia){
                                         if(alerta == false){
                                             sendSMS()
+                                            Thread.sleep(3000)
                                             pun.alertSOS()
                                             Log.d("Enviar Alerta" , "Enviando Alerta")
                                             alerta = true

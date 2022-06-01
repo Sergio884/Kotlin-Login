@@ -46,7 +46,7 @@ class StoredTraveledActivity : AppCompatActivity() {
                 pathPolyLine = myAdapter.getSelectedPath()!!
                 toLatLng = myAdapter.getSelectedPathLastPoint()!!
                 val intent = Intent(this,TravelInfoActivity::class.java)
-
+                
 
                 intent.putParcelableArrayListExtra("path",pathPolyLine)
                 intent.putExtra("latitud", toLatLng!!.latitude)

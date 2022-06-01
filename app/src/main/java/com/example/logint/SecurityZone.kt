@@ -164,6 +164,7 @@ class SecurityZone : Service() {
                             Log.d("Location","Latitudddd = ${location.latitude} Longitudddd = ${location.longitude} ")
                             if(location.distanceTo(pun.locationZone)>pun.radio){
                                 sendSMS()
+                                Thread.sleep(3000)
                                 pun.banderaStop=0
                                 GlobalClass.radio = 50
                                 pun.alertSOS()
