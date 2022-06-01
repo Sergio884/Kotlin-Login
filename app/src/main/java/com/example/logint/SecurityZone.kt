@@ -34,6 +34,7 @@ class SecurityZone : Service() {
     private var nameRoute=""
     var locationZone = Location("Zone")
     var radio = 50
+    var enviarSMS = 0
 
     override fun onBind(intent: Intent): IBinder {
         TODO("Return the communication channel to the service.")
@@ -90,40 +91,40 @@ class SecurityZone : Service() {
     )
 
     fun alertSOS(){
-
         val intentSOS = Intent(this,SendLocation::class.java)
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intentSOS)
         }else{
             startService(intentSOS)
         }
-
         val intentKill = Intent(this,SecurityZone::class.java)
         stopService(intentKill)
-
-
     }
 
     private fun sendSMS(){
-        val auth = Firebase.auth
-        val db = FirebaseFirestore.getInstance()
-        val user = auth.currentUser
-        val docs = db.collection("contacts-${user!!.uid}")
-        val uid :String = user!!.uid
-        val informacion = "¡ALERTA DE EMERGENCIA!\n "+user.displayName.toString()+" se encuentra en peligro te compartimos un link con el cual podras acceder a su ubicacion".replace("ñ","n").replace("á","a").replace("é","e").replace("í","i").replace("ó","o")
-        val url = "safesos.online/mapa.php?u=${uid}&n="+user.displayName.toString()
-        print(url)
-        docs.get().addOnSuccessListener { documents ->
-            for(document in documents){
-                //Log.d("contacto: ", "${document.id} => ${document.data}")
-                println("${document.id.toString()} ${document.data.toString()}")
-                val sms = SmsManager.getDefault()
-                sms.sendTextMessage(document.id.toString(),null,informacion,null,null)
-                sms.sendTextMessage(document.id.toString(),null,url,null,null)
+        if(enviarSMS == 0){
+            val auth = Firebase.auth
+            val db = FirebaseFirestore.getInstance()
+            val user = auth.currentUser
+            val docs = db.collection("contacts-${user!!.uid}")
+            val uid :String = user!!.uid
+            val informacion = "¡ALERTA DE EMERGENCIA!\n "+user.displayName.toString()+" se encuentra en peligro te compartimos un link con el cual podras acceder a su ubicacion".replace("ñ","n").replace("á","a").replace("é","e").replace("í","i").replace("ó","o")
+            val url = "safesos.online/mapa.php?u=${uid}&n="+user.displayName.toString()
+            print(url)
+            Log.d("Mensajeeee :","Pasooooooooooooooooooooooooooo")
+            docs.get().addOnSuccessListener { documents ->
+                for(document in documents){
+                    //Log.d("contacto: ", "${document.id} => ${document.data}")
+                    println("${document.id.toString()} ${document.data.toString()}")
+                    val sms = SmsManager.getDefault()
+                    sms.sendTextMessage(document.id.toString(),null,informacion,null,null)
+                    sms.sendTextMessage(document.id.toString(),null,url,null,null)
 
+                }
             }
+            enviarSMS =1
         }
+
 
     }
 

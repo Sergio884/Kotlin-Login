@@ -258,7 +258,6 @@ class OnRoute : Service() {
                                             pun.banderaStop = 0
                                         }
 
-
                                     }
                                     Log.d("Salir" , "No se encuentra dentro del recorrido")
                                 }
@@ -266,8 +265,6 @@ class OnRoute : Service() {
 
                         }
                     }
-
-
                 }
             }
         }
