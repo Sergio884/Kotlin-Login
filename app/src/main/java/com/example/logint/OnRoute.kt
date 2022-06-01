@@ -107,22 +107,20 @@ class OnRoute : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intentSOS)
             try{
-                val intentRedirection = Intent(this,MainPanel::class.java)
-                startActivity(intentRedirection)
+                //val intentRedirection = Intent(this,MainPanel::class.java)
+                //startActivity(intentRedirection)
             }catch(e:NullPointerException){
 
             }
-
         }else{
             startService(intentSOS)
             try{
-                val intentRedirection = Intent(this,MainPanel::class.java)
-                startActivity(intentRedirection)
+                //val intentRedirection = Intent(this,MainPanel::class.java)
+                //startActivity(intentRedirection)
             }catch(e:NullPointerException){
 
             }
         }
-
         val intentKill = Intent(this,OnRoute::class.java)
         stopService(intentKill)
 
@@ -163,7 +161,6 @@ class OnRoute : Service() {
                 sms.sendTextMessage(document.id.toString(),null,url,null,null)
             }
         }
-
     }
 
     class HiloRoute(puntero : OnRoute):Thread(){
