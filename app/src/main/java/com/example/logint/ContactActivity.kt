@@ -111,6 +111,7 @@ class ContactActivity : AppCompatActivity(){
 
         }
 
+        bottomNavigationView.selectedItemId = R.id.navigation_contactos
         bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.navigation_contactos->{

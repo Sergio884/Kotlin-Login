@@ -42,11 +42,14 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
     var latitud = 19.47991613867424
     var longitud =-99.1377547739467
     var radioLlegada = 50
+    var banderaStop = 1
+    val hilo : Hilo = Hilo(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_on_route)
 
+       hilo.start()
 
         if (intent != null){
             try{
@@ -121,6 +124,13 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(GlobalClass.redirectionRoute == 1){
+            GlobalClass.redirectionRoute = 0
+            llevarMainPanel()
+        }
+    }
 
     private fun isLocationPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -291,5 +301,31 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
         return false
+    }
+
+    fun llevarMainPanel(){
+        banderaStop = 0
+        GlobalClass.redirectionRoute = 0
+        val intents = Intent(this,MainPanel::class.java)
+        intents.putExtra("ruteGooal",true)
+        startActivity(intents)
+    }
+
+    class Hilo(pun: OnRouteActivity):Thread(){
+        val pun = pun
+        override fun run(){
+            super.run()
+
+            while(pun.banderaStop==1){
+                Thread.sleep(1000)
+                Log.d("redirection:"," seguimientooooooooo  "+GlobalClass.redirectionRoute)
+                if(GlobalClass.redirectionRoute == 1){
+                    pun.llevarMainPanel()
+                }
+
+            }
+
+        }
+
     }
 }

@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_contact.*
+import kotlinx.android.synthetic.main.activity_contact.bottomNavigationView
+import kotlinx.android.synthetic.main.activity_main_panel.*
 
 class InfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -11,7 +13,7 @@ class InfoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_info)
 
 
-
+        bottomNavigationView.selectedItemId = R.id.navigation_informacion
 
         //****************************** Nav Bar *************************************
         bottomNavigationView.setOnItemSelectedListener {

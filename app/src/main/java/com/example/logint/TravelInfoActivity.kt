@@ -30,6 +30,14 @@ class TravelInfoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_stored_routes)
         //pathPolyLine = intent.getParcelableArrayListExtra("coordinates")!!
         //pathPolyLine = intent.getSerializableExtra("PathLocation") as ArrayList<PathLocation>
+
+        if(GlobalClass.redirectionRoute == 1){
+            GlobalClass.redirectionRoute = 0
+            val intentRedirection = Intent(this,MainPanel::class.java)
+            intentRedirection.putExtra("ruteGooal",true)
+            startActivity(intentRedirection)
+        }
+
         if( isMyServiceRunning(SendLocation::class.java) == true){
             val intents = Intent(this,MainPanel::class.java)
             startActivity(intents)
@@ -97,6 +105,15 @@ class TravelInfoActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+//        if(GlobalClass.redirectionRoute == 1){
+//            GlobalClass.redirectionRoute = 0
+//            val intentRedirection = Intent(this,MainPanel::class.java)
+//            intentRedirection.putExtra("ruteGooal",true)
+//            startActivity(intentRedirection)
+//        }
+    }
     private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
         val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
         for (service in manager.getRunningServices(Int.MAX_VALUE)) {

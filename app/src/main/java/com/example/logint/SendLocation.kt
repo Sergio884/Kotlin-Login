@@ -59,13 +59,6 @@ class SendLocation : Service() {
 
     }
 
-    /*
-    override fun onCreate() {
-        super.onCreate()
-    }*/
-
-
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -73,13 +66,11 @@ class SendLocation : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChanel(notificationManager)
         }
-
-
         val notificationBuilder = NotificationCompat.Builder(this,"Tracking")
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setSmallIcon(R.drawable.ic_logo)
-                .setContentTitle("Transmitiendo Recorrido")
+                .setContentTitle("Transmitiendo tu trayecto")
                 .setContentText("Enviando tus cordenadas")
                 .setContentIntent(getMainActivityPendingIntent())
 

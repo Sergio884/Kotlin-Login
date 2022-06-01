@@ -48,6 +48,7 @@ class MainPanel : AppCompatActivity(){
         val profile: ImageView= findViewById(R.id.profilePhoto)
         var notificationGoal : Boolean = false
 
+
         if (intent != null) {
             notificationGoal = intent.getBooleanExtra("ruteGooal",false)
 
@@ -101,6 +102,8 @@ class MainPanel : AppCompatActivity(){
             }
         }
 
+
+
         tv_fijarDestino.setOnClickListener {
             val intent = Intent(this,TravelSelectionActivity::class.java)
             startActivity(intent)
@@ -123,6 +126,25 @@ class MainPanel : AppCompatActivity(){
                     e.printStackTrace()
                 }
             }
+            if(isMyServiceRunning(SecurityZone::class.java)==true){
+                try{
+                    val intentKill = Intent(this,SecurityZone::class.java)
+                    stopService(intentKill)
+                }catch (e:NullPointerException){
+                    e.printStackTrace()
+                }
+
+            }
+            if(isMyServiceRunning(RecordRoute::class.java)==true){
+                try{
+                    val intentKill = Intent(this,RecordRoute::class.java)
+                    stopService(intentKill)
+                }catch (e:NullPointerException){
+                    e.printStackTrace()
+                }
+
+            }
+
 
 
         }

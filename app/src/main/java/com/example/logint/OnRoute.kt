@@ -129,11 +129,9 @@ class OnRoute : Service() {
 
     }
     fun goalSOS(){
+        GlobalClass.redirectionRoute = 1
         val intentKill = Intent(this,OnRoute::class.java)
         stopService(intentKill)
-        val intentRedirection = Intent(this,MainPanel::class.java)
-        intentRedirection.putExtra("ruteGooal",true)
-        startActivity(intentRedirection)
 
     }
 

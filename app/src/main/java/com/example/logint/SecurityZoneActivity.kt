@@ -42,6 +42,8 @@ class SecurityZoneActivity : AppCompatActivity(),OnMapReadyCallback {
     lateinit var circle: Circle;
     var zom_level = 17f
     var radio = GlobalClass.radio
+    val hilo : Hilo = SecurityZoneActivity.Hilo(this)
+    var banderaStop = 1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +52,10 @@ class SecurityZoneActivity : AppCompatActivity(),OnMapReadyCallback {
         var buttonBool = false
 
 
+        if(verificarSendLocation()){
+            llevarMainPanel()
+        }
+        hilo.start()
         verificarPermisos()
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map_zone) as SupportMapFragment
@@ -89,7 +95,7 @@ class SecurityZoneActivity : AppCompatActivity(),OnMapReadyCallback {
                     radio = (p1*5)
                     GlobalClass.radio=radio
                     if(radio < 50){
-                        radio = 50
+                        //radio = 50
                     }
                     metros_texto.text = radio.toString()+" metros"
                     circle.radius = radio.toDouble();
@@ -331,6 +337,48 @@ class SecurityZoneActivity : AppCompatActivity(),OnMapReadyCallback {
             )
         } catch (e: SecurityException) {
             Log.d(LOG_TAG, "Tal vez no solicitaste permiso antes")
+        }
+
+    }
+
+    fun verificarSendLocation():Boolean{
+        if(isMyServiceRunning(SendLocation::class.java) == true){
+
+            if(isMyServiceRunning(SecurityZone::class.java)==true){
+                try{
+                    val intentKill = Intent(this,SecurityZone::class.java)
+                    stopService(intentKill)
+                }catch (e:NullPointerException){
+                    e.printStackTrace()
+                }
+
+            }
+
+
+            return true
+        }
+        return false
+    }
+
+    fun llevarMainPanel(){
+        banderaStop = 0
+        val intents = Intent(this,MainPanel::class.java)
+        startActivity(intents)
+    }
+
+    class Hilo(pun: SecurityZoneActivity):Thread(){
+        val pun = pun
+        override fun run(){
+            super.run()
+
+            while(pun.banderaStop==1){
+                Thread.sleep(1000)
+                if(pun.verificarSendLocation()){
+                    pun.llevarMainPanel()
+                }
+
+            }
+
         }
 
     }

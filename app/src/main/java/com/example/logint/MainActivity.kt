@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         updateUI()
 
+        bottomNavigationView.selectedItemId = R.id.navigation_ajustes
         //****************************** Nav Bar *************************************
         bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){

@@ -95,21 +95,8 @@ class SecurityZone : Service() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intentSOS)
-            try{
-                val intentRedirection = Intent(this,MainPanel::class.java)
-                startActivity(intentRedirection)
-            }catch(e: NullPointerException){
-                e.printStackTrace()
-            }
-
         }else{
             startService(intentSOS)
-            try{
-                val intentRedirection = Intent(this,MainPanel::class.java)
-                startActivity(intentRedirection)
-            }catch(e: NullPointerException){
-                e.printStackTrace()
-            }
         }
 
         val intentKill = Intent(this,SecurityZone::class.java)
