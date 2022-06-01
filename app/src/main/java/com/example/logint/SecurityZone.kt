@@ -105,6 +105,28 @@ class SecurityZone : Service() {
 
     }
 
+    private fun sendSMS(){
+        val auth = Firebase.auth
+        val db = FirebaseFirestore.getInstance()
+        val user = auth.currentUser
+        val docs = db.collection("contacts-${user!!.uid}")
+        val uid :String = user!!.uid
+        val informacion = "¡ALERTA DE EMERGENCIA!\n "+user.displayName.toString()+" se encuentra en peligro te compartimos un link con el cual podras acceder a su ubicacion".replace("ñ","n").replace("á","a").replace("é","e").replace("í","i").replace("ó","o")
+        val url = "safesos.online/mapa.php?u=${uid}&n="+user.displayName.toString()
+        print(url)
+        docs.get().addOnSuccessListener { documents ->
+            for(document in documents){
+                //Log.d("contacto: ", "${document.id} => ${document.data}")
+                println("${document.id.toString()} ${document.data.toString()}")
+                val sms = SmsManager.getDefault()
+                sms.sendTextMessage(document.id.toString(),null,informacion,null,null)
+                sms.sendTextMessage(document.id.toString(),null,url,null,null)
+
+            }
+        }
+
+    }
+
     class Hilo(puntero:SecurityZone):Thread(){
 
         var pun = puntero
@@ -150,8 +172,8 @@ class SecurityZone : Service() {
                         if (location != null) {
                             Log.d("Location","Latitudddd = ${location.latitude} Longitudddd = ${location.longitude} ")
                             if(location.distanceTo(pun.locationZone)>pun.radio){
-                                sendSMS()
-                                Thread.sleep(3000)
+                                pun.sendSMS()
+                                sleep(3000)
                                 pun.banderaStop=0
                                 GlobalClass.radio = 50
                                 pun.alertSOS()
@@ -167,27 +189,7 @@ class SecurityZone : Service() {
             }
         }
 
-        private fun sendSMS(){
-            val auth = Firebase.auth
-            val db = FirebaseFirestore.getInstance()
-            val user = auth.currentUser
-            val docs = db.collection("contacts-${user!!.uid}")
-            val uid :String = user!!.uid
-            val informacion = "¡ALERTA DE EMERGENCIA!\n "+user.displayName.toString()+" se encuentra en peligro te compartimos un link con el cual podras acceder a su ubicacion".replace("ñ","n").replace("á","a").replace("é","e").replace("í","i").replace("ó","o")
-            val url = "safesos.online/mapa.php?u=${uid}&n="+user.displayName.toString()
-            print(url)
-            docs.get().addOnSuccessListener { documents ->
-                for(document in documents){
-                    //Log.d("contacto: ", "${document.id} => ${document.data}")
-                    println("${document.id.toString()} ${document.data.toString()}")
-                    val sms = SmsManager.getDefault()
-                    sms.sendTextMessage(document.id.toString(),null,informacion,null,null)
-                    sms.sendTextMessage(document.id.toString(),null,url,null,null)
 
-                }
-            }
-
-        }
     }
 
 }

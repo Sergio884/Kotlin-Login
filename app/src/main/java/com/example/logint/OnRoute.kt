@@ -123,14 +123,12 @@ class OnRoute : Service() {
         }
         val intentKill = Intent(this,OnRoute::class.java)
         stopService(intentKill)
-
-
     }
+
     fun goalSOS(){
         GlobalClass.redirectionRoute = 1
         val intentKill = Intent(this,OnRoute::class.java)
         stopService(intentKill)
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -253,7 +251,7 @@ class OnRoute : Service() {
                                     if(toleranciaAux >= tiempoTolerancia){
                                         if(alerta == false){
                                             pun.sendSMS()
-                                            Thread.sleep(5000)
+                                            sleep(3000)
                                             pun.alertSOS()
                                             Log.d("Enviar Alerta" , "Enviando Alerta")
                                             alerta = true
