@@ -161,7 +161,7 @@ class RecordRoute : Service() {
                                 latlongAnt = location
                             }
 
-                            if(location.distanceTo(latlongAnt)>20){
+                            if(location.distanceTo(latlongAnt)>10){
                                 latlongAnt = location
                                 println("Latitudddd = ${location.latitude} Longitudddd = ${location.longitude} y nombre:${pun.getNameRoute()}")
                                 var auth = Firebase.auth
