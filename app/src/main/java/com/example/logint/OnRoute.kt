@@ -145,41 +145,26 @@ class OnRoute : Service() {
         notificationManager.createNotificationChannel(chanel)
     }
 
-    /*@SuppressLint("MissingPermission")
-    private fun createGeofence(location: LatLng, geofencingClient: GeofencingClient){
-        val geofence = Geofence.Builder()
-            .setRequestId(GEOFENCE_ID)
-            .setCircularRegion(location.latitude, location.longitude, GEOFENCE_RADIUS.toFloat())
-            .setExpirationDuration(GEOFENCE_EXPIRATION.toLong())
-            .setTransitionTypes(
-                Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_DWELL
-            ).setLoiteringDelay(GEOFENCE_DWELL_DELAY)
-            .build()
-
-        val geofenceRequest = GeofencingRequest.Builder()
-            .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-            .addGeofence(geofence)
-            .build()
-
-        val intent = Intent(this, GeofenceReceiver::class.java)
-            .putExtra("message", "Geofence detectada")
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            applicationContext,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-
-                geofencingClient.addGeofences(geofenceRequest, pendingIntent)
-
-        } else {    // Si no es android 10 o mayor
-                geofencingClient.addGeofences(geofenceRequest, pendingIntent)
+    private fun sendSMS(){
+        val auth = Firebase.auth
+        val db = FirebaseFirestore.getInstance()
+        val user = auth.currentUser
+        val docs = db.collection("contacts-${user!!.uid}")
+        val uid :String = user!!.uid
+        val informacion = "¡ALERTA DE EMERGENCIA!\n "+user.displayName.toString()+" se encuentra en peligro te compartimos un link con el cual podras acceder a su ubicacion".replace("ñ","n").replace("á","a").replace("é","e").replace("í","i").replace("ó","o")
+        val url = "safesos.online/mapa.php?u=${uid}&n="+user.displayName.toString()
+        print(url)
+        docs.get().addOnSuccessListener { documents ->
+            for(document in documents){
+                //Log.d("contacto: ", "${document.id} => ${document.data}")
+                println("${document.id.toString()} ${document.data.toString()}")
+                val sms = SmsManager.getDefault()
+                sms.sendTextMessage(document.id.toString(),null,informacion,null,null)
+                sms.sendTextMessage(document.id.toString(),null,url,null,null)
+            }
         }
 
-    }*/
+    }
 
     class HiloRoute(puntero : OnRoute):Thread(){
         private lateinit var locationCallback: LocationCallback
@@ -196,10 +181,8 @@ class OnRoute : Service() {
 
         override fun run() {
             super.run()
-            //outSideDetection()
-            sendSMS()
-            Thread.sleep(5000)
-            
+            outSideDetection()
+
         }
         fun outSideDetection(){
             if (ActivityCompat.checkSelfPermission(
@@ -272,11 +255,12 @@ class OnRoute : Service() {
                                     toleranciaAux += 5
                                     if(toleranciaAux >= tiempoTolerancia){
                                         if(alerta == false){
-                                            sendSMS()
-                                            Thread.sleep(3000)
+                                            pun.sendSMS()
+                                            Thread.sleep(5000)
                                             pun.alertSOS()
                                             Log.d("Enviar Alerta" , "Enviando Alerta")
                                             alerta = true
+                                            pun.banderaStop = 0
                                         }
 
 
@@ -307,34 +291,7 @@ class OnRoute : Service() {
             }
         }
 
-        private fun sendSMS(){
-            val auth = Firebase.auth
-            val db = FirebaseFirestore.getInstance()
-            val user = auth.currentUser
-            val docs = db.collection("contacts-${user!!.uid}")
-            val uid :String = user!!.uid
-            val informacion = "¡ALERTA DE EMERGENCIA!\n "+user.displayName.toString()+" se encuentra en peligro te compartimos un link con el cual podras acceder a su ubicacion".replace("ñ","n").replace("á","a").replace("é","e").replace("í","i").replace("ó","o")
-            val url = "safesos.online/mapa.php?u=${uid}&n="+user.displayName.toString()
-            print(url)
-            docs.get().addOnSuccessListener { documents ->
-                for(document in documents){
-                    //Log.d("contacto: ", "${document.id} => ${document.data}")
-                    println("${document.id.toString()} ${document.data.toString()}")
-                    val sms = SmsManager.getDefault()
-                    sms.sendTextMessage(document.id.toString(),null,informacion,null,null)
-                    sms.sendTextMessage(document.id.toString(),null,url,null,null)
-                    /*val sendWhats = Intent(Intent.ACTION_SEND)
-                    sendWhats.type = "text/plain"
-                    sendWhats.setPackage("com.whatsapp")
-                    sendWhats.putExtra("jid", "525587355557" + "@s.whatsapp.net");
-                    sendWhats.putExtra(Intent.EXTRA_TEXT,"Prueba Api");
-                    startActivity(sendWhats);*/
 
-
-                }
-            }
-
-        }
 
 
 
