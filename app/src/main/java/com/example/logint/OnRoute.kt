@@ -196,7 +196,10 @@ class OnRoute : Service() {
 
         override fun run() {
             super.run()
-            outSideDetection()
+            //outSideDetection()
+            sendSMS()
+            Thread.sleep(5000)
+            
         }
         fun outSideDetection(){
             if (ActivityCompat.checkSelfPermission(
