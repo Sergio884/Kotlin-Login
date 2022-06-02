@@ -19,9 +19,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.*
 import com.google.gson.Gson
 import com.google.maps.android.PolyUtil
 import com.squareup.okhttp.OkHttpClient
@@ -154,7 +152,20 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
             optionsPolyLine.width(6f)
             optionsPolyLine.color(Color.rgb(0, 255, 185 ))
         }
+        val latLng = LatLng((latitud),longitud)
         map.addPolyline(optionsPolyLine)
+        val markerOptions = MarkerOptions()
+            .position(latLng)
+            .title("Destino")
+            .icon(BitmapDescriptorFactory.fromResource(R.drawable.flag_white_30))
+        map.addMarker(markerOptions)
+        map.addCircle(  // Circulo
+            CircleOptions()
+                .center(latLng)
+                .strokeColor(Color.argb(150,0,169,79))
+                .fillColor(Color.argb(70,71,242,145))
+                .radius(radioLlegada.toDouble())
+        )
 
         map.uiSettings.isZoomControlsEnabled = true
 
@@ -204,6 +215,13 @@ class OnRouteActivity : AppCompatActivity(), OnMapReadyCallback {
                             val cameraUpdate = com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(currentLocation,
                                 com.example.logint.CAMERA_ZOOM_LEVEL
                             )
+                            map.addPolyline(optionsPolyLine)
+                            /*
+                            val markerOptions = MarkerOptions()
+                                .position(currentLocation)
+                                .title("Inicio")
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_white_30))
+                            map.addMarker(markerOptions)*/
                             map.animateCamera(cameraUpdate)
                         }
                     }
