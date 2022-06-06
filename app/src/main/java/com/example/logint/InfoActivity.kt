@@ -3,6 +3,7 @@ package com.example.logint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_contact.*
 import kotlinx.android.synthetic.main.activity_contact.bottomNavigationView
 import kotlinx.android.synthetic.main.activity_main_panel.*
@@ -14,6 +15,14 @@ class InfoActivity : AppCompatActivity() {
 
 
         bottomNavigationView.selectedItemId = R.id.navigation_informacion
+
+        val tvInfoT: TextView = findViewById(R.id.textViewInfoT)
+        tvInfoT.append("¿Cómo funciona el envío de alertas?\nLas alertas se pueden mandar presionando el" +
+                "botón de SOS en el inicio de la aplicación, en caso de sentirse en peligro, el usuario" +
+                "presionara el botón y este se pondrá en verde indicando que se mandaron las alertas. Por" +
+                "otro lado, si el usuario esta recorriendo una ruta y sale del radio de tolerancia una " +
+                "cantidad de tiempo mayor a la que ingreso antes de iniciar el recorrido se mandaran alertas." +
+                "\n\n")
 
         //****************************** Nav Bar *************************************
         bottomNavigationView.setOnItemSelectedListener {

@@ -24,4 +24,43 @@
 
         />
 
+    <TextView
+        android:id="@+id/textViewInfo"
+        android:layout_width="391dp"
+        android:layout_height="76dp"
+        android:text="Información"
+        tools:layout_editor_absoluteX="10dp"
+        android:textSize="36dp"
+        android:padding="16dp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingConstraints"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/textViewInfoT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="110dp"
+        android:text="SafeSOS fue desarrollado por:\n
+-Ian Federico Álvarez Garrido\n
+-Kevin Edwin Sandoval Hernández\n
+-Edilberto Sergio Valle Ortiz\n\n
+La aplicación utiliza tecnologías de geolocalización
+para implementar un sistema de alerta que notifique
+a los contactos de confianza del usuario en caso de
+un imprevisto. A continuación se pueden ver  algunas
+preguntas frecuentes acerca de SafeSOS.\n\n"
+        android:scrollbars="vertical"
+        android:textColor="@color/white"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+    tools:layout_editor_absoluteY="16dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -352,16 +352,13 @@ class MapDistanceActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
             val result =  ArrayList<List<LatLng>>()
             try{
                 val respObj = Gson().fromJson(data,GoogleMapDTO::class.java)
-
                 val path =  ArrayList<LatLng>()
-
                 for (i in 0..(respObj.routes[0].legs[0].steps.size-1)){
                     path.addAll(decodePolyline(respObj.routes[0].legs[0].steps[i].polyline.points))
                 }
                 result.add(path)
                 path.forEach { it ->
                     pun.pathPolyLine.add(PathLocation(it))
-                    //pun.pathPolyLine.add(PathLocation(it.latitude.toString(),it.longitude.toString()))
                 }
             }catch (e:Exception){
                 e.printStackTrace()
