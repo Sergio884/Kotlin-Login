@@ -257,11 +257,8 @@ class MainPanel : AppCompatActivity(){
                     sendWhats.putExtra("jid", "525587355557" + "@s.whatsapp.net");
                     sendWhats.putExtra(Intent.EXTRA_TEXT,"Prueba Api");
                     startActivity(sendWhats);*/
-
-
             }
         }
-
     }
 
         private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
