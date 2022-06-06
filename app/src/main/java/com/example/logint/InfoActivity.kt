@@ -7,6 +7,10 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_contact.*
 import kotlinx.android.synthetic.main.activity_contact.bottomNavigationView
 import kotlinx.android.synthetic.main.activity_main_panel.*
+import android.text.method.ScrollingMovementMethod
+
+
+
 
 class InfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +27,7 @@ class InfoActivity : AppCompatActivity() {
                 "otro lado, si el usuario esta recorriendo una ruta y sale del radio de tolerancia una " +
                 "cantidad de tiempo mayor a la que ingreso antes de iniciar el recorrido se mandaran alertas." +
                 "\n\n")
-
+        tvInfoT.setMovementMethod(ScrollingMovementMethod())
         //****************************** Nav Bar *************************************
         bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
