@@ -62,6 +62,7 @@
             android:layout_gravity="center"
             android:paddingRight="64dp"
             android:text="@string/continue_check_email"
+            android:textAllCaps="false"
             android:textColor="@color/white" />
     </LinearLayout>
 

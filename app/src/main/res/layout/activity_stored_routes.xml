@@ -12,7 +12,7 @@
         android:id="@+id/tv_tituloDatosViaje"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Configuración del Viaje"
+        android:text="Configuración del viaje"
         android:textColor="@color/white"
         android:textSize="28dp"
         android:layout_marginLeft="20dp"

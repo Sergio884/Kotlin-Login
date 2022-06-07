@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SafeSOS</string>
-    <string name="title_active_login">Alerta Angel</string>
+    <string name="title_active_login">SafeSOS</string>
     <string name="password">Contraseña</string>
     <string name="new_password">Nueva contraseña</string>
     <string name="current_password">Contraseña actual</string>
@@ -13,12 +13,12 @@
     <string name="link_signup">Regístrate</string>
     <string name="all">TODO</string>
     <string name="user_email">userdefault@gmail.com</string>
-    <string name="user_name">User Default</string>
+    <string name="user_name">User default</string>
     <string name="update_profile">Guardar</string>
     <string name="delete_account">Eliminar cuenta</string>
     <string name="change_password">Cambiar contraseña</string>
     <string name="forget_password">¿Olvidaste tu contraseña?</string>
-    <string name="title_check_email">Verificacion de Email</string>
+    <string name="title_check_email">Verificación de Email</string>
     <string name="subtitle_check_email">Para completar su registro. ¡Por favor! verifica su correo y después de clic en continuar.</string>
     <string name="continue_check_email">Continuar</string>
     <string name="title_account_recovery">Recuperación de la cuenta</string>

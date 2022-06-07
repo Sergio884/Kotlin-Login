@@ -71,7 +71,7 @@ class SendLocation : Service() {
                 .setOngoing(true)
                 .setSmallIcon(R.drawable.ic_logo)
                 .setContentTitle("Transmitiendo tu trayecto")
-                .setContentText("Enviando tus cordenadas")
+                .setContentText("Enviando tus coordenadas")
                 .setContentIntent(getMainActivityPendingIntent())
 
             startForeground(1,notificationBuilder.build())

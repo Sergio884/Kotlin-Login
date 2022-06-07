@@ -51,8 +51,8 @@ class RecordRoute : Service() {
             .setAutoCancel(false)
             .setOngoing(true)
             .setSmallIcon(R.drawable.ic_logo)
-            .setContentTitle("Grabando Recorrido")
-            .setContentText("Enviando tus cordenadas")
+            .setContentTitle("Grabando recorrido")
+            .setContentText("Enviando tus coordenadas")
             .setContentIntent(getMainActivityPendingIntent())
 
         startForeground(1,notificationBuilder.build())

@@ -108,6 +108,7 @@
             android:paddingLeft="64dp"
             android:paddingRight="64dp"
             android:text="@string/login"
+            android:textAllCaps="false"
             android:textColor="@color/white" />
     </LinearLayout>
 

@@ -95,6 +95,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="40dp"
                 android:gravity="center"
+                android:textColor="@color/Grey"
                 android:text="@string/user_email"
                 android:textSize="16sp" />
 
@@ -152,6 +153,8 @@
                 android:ems="10"
                 android:hint="@string/name"
                 android:inputType="textPersonName"
+                android:textColor="@color/black_500"
+                android:textColorHint="@color/Grey"
                 android:maxLength="40"
                 android:padding="16dp" />
 
@@ -165,6 +168,7 @@
                 android:paddingRight="64dp"
                 android:layout_gravity="center"
                 android:text="@string/update_profile"
+                android:textAllCaps="false"
                 android:textColor="@color/white" />
 
 
@@ -181,6 +185,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
+                    android:textColor="@color/Grey"
                     android:text="@string/change_password" />
 
                 <Space
@@ -193,6 +198,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
+                    android:textColor="@color/Grey"
                     android:text="@string/delete_account" />
             </LinearLayout>
         </LinearLayout>

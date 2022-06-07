@@ -18,7 +18,9 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:text="¿A dónde vamos?"
+        android:textAllCaps="false"
         android:textSize="17dp"
+
         android:textColor="@color/white"/>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
@@ -106,6 +108,7 @@
             android:background="@drawable/ic_buttom"
             android:text="Continuar"
             android:textColor="@color/white"
+            android:textAllCaps="false"
             android:textSize="20dp" />
 
     </LinearLayout>

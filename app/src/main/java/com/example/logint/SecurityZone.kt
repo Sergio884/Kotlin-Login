@@ -50,7 +50,7 @@ class SecurityZone : Service() {
             .setAutoCancel(false)
             .setOngoing(true)
             .setSmallIcon(R.drawable.ic_logo)
-            .setContentTitle("Zona Segura")
+            .setContentTitle("Zona segura")
             .setContentText("Registrando tus coordenadas")
             .setContentIntent(getMainActivityPendingIntent())
 
@@ -111,7 +111,7 @@ class SecurityZone : Service() {
             val informacion = "¡ALERTA DE EMERGENCIA!\n "+user.displayName.toString()+" se encuentra en peligro te compartimos un link con el cual podras acceder a su ubicacion".replace("ñ","n").replace("á","a").replace("é","e").replace("í","i").replace("ó","o")
             val url = "safesos.online/mapa.php?u=${uid}&n="+user.displayName.toString()
             print(url)
-            Log.d("Mensajeeee :","Pasooooooooooooooooooooooooooo")
+            //Log.d("Mensajeeee :","Pasooooooooooooooooooooooooooo")
             docs.get().addOnSuccessListener { documents ->
                 for(document in documents){
                     //Log.d("contacto: ", "${document.id} => ${document.data}")

@@ -130,6 +130,7 @@
             android:paddingLeft="64dp"
             android:paddingRight="64dp"
             android:text="@string/signup"
+            android:textAllCaps="false"
             android:textColor="@color/white" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

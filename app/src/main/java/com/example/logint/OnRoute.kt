@@ -65,7 +65,7 @@ class OnRoute : Service() {
             .setOngoing(true)
             .setSmallIcon(R.drawable.ic_logo)
             .setContentTitle("Recorrido en curso")
-            .setContentText("Seguimiento de tus cordenadas")
+            .setContentText("Seguimiento de tus coordenadas")
             .setContentIntent(getMainActivityPendingIntent())
 
         startForeground(1,notificationBuilder.build())

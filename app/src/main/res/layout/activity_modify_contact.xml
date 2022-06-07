@@ -11,7 +11,7 @@
         android:id="@+id/tv_tituloModificar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Modificar Contacto"
+        android:text="Modificar contacto"
         android:textSize="36dp"
         android:padding="16dp"
         android:textColor="@color/white"
@@ -34,7 +34,7 @@
         android:padding="16dp"
         android:textColor="@color/white"
         android:drawablePadding="10dp"
-        android:hint="Nombre de Contacto"
+        android:hint="Nombre de contacto"
         android:textColorHint="@color/white"
         />
 
@@ -64,7 +64,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/style_button_background"
         android:padding="15dp"
-        android:text="Guardar Contacto"
+        android:text="Guardar contacto"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="18dp"

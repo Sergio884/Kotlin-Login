@@ -19,14 +19,14 @@
         <TextView
             android:id="@+id/textView7"
             android:layout_width="match_parent"
-            android:textSize="24sp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="24dp"
-            android:gravity="center"
-            android:textColor="@color/white"
             android:layout_marginRight="24dp"
-            android:text="@string/title_account_recovery" />
+            android:gravity="center"
+            android:text="@string/title_account_recovery"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/textView8"
@@ -68,6 +68,8 @@
             android:paddingRight="64dp"
             android:layout_gravity="center"
             android:text="@string/recovery_account"
-            android:textColor="@color/white" />
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
